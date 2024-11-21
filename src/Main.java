@@ -11,7 +11,7 @@ public class Main {
         int size = 5;
         Program p = new Program(size, 800, 75);
 
-        World w = p.getWorld();
+        World w = p.getWorld();sss
 
         // w.setTile(new Location(0, 0), new <MyClass>());
         // p.setDisplayInformation(<MyClass>.class, new DisplayInformation(<Color>, "<ImageName>"));
