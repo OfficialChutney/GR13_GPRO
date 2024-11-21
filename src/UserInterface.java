@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class UserInterface {
 
 
-    File inputFileDirectory;
+    private File inputFileDirectory;
     public UserInterface() {
         inputFileDirectory = new File("InputFiles");
     }
@@ -41,13 +41,13 @@ public class UserInterface {
 
                     if(!line.isBlank()) {
                         String[] splitted = line.split(" ");
-                        initialConditions.put(splitted[0],splitted[1]);
+                        initialConditions.put(splitted[0].toLowerCase(),splitted[1]);
                     }
 
                 }
 
-                System.out.println("World Size: " + worldSize + " Initial conditions: "+initialConditions.toString());
-
+                Plane plane = new Plane();
+                plane.start(worldSize, initialConditions);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

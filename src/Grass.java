@@ -13,10 +13,11 @@ public class Grass implements Actor, NonBlocking {
     private final World ourWorld;
     private final float chanceToGrow;
 
-    Grass(World ourWorld, Location tileLocation, float chanceToGrow) {
+    Grass(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        this.chanceToGrow = chanceToGrow;
+        chanceToGrow = 0.1f;
+
     }
 
     @Override
