@@ -13,6 +13,7 @@ public class Rabbit implements Actor {
     boolean pregnant;
     boolean lookingForFood;
     boolean goingHome;
+    boolean sleeping;
 
 
     Rabbit() {
