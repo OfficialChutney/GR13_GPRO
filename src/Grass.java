@@ -9,9 +9,9 @@ import java.util.Random;
 
 public class Grass implements Actor, NonBlocking {
 
-    Location tileLocation;
-    World ourWorld;
-    float chanceToGrow;
+    private final Location tileLocation;
+    private final World ourWorld;
+    private final float chanceToGrow;
 
     Grass(World ourWorld, Location tileLocation, float chanceToGrow) {
         this.ourWorld = ourWorld;
@@ -21,7 +21,7 @@ public class Grass implements Actor, NonBlocking {
 
     @Override
     public void act(World world) {
-        spreadGrass(ourWorld,tileLocation,chanceToGrow);
+        spreadGrass(ourWorld,chanceToGrow);
     }
 
     Location getTileLocation() {
@@ -42,7 +42,7 @@ public class Grass implements Actor, NonBlocking {
         return nonBlockingList;
     }
 
-    void spreadGrass(World ourWorld, Location tileLocation, float chanceToGrow) {
+    void spreadGrass(World ourWorld, float chanceToGrow) {
         ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
         Random chance = new Random();
 
