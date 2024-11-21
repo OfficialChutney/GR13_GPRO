@@ -21,7 +21,6 @@ public class UserInterface {
     }
 
     public void startProgram() {
-
         for (File file : inputFileDirectory.listFiles()) {
             try {
                 int worldSize;
@@ -46,6 +45,8 @@ public class UserInterface {
 
                 }
 
+
+                System.out.println(initialConditions.toString());
                 Plane plane = new Plane();
                 plane.start(worldSize, initialConditions);
             } catch (IOException e) {

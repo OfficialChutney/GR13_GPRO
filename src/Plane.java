@@ -1,6 +1,7 @@
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.*;
@@ -39,6 +40,8 @@ public class Plane {
                 int min = Integer.parseInt(valueSplitted[0]);
                 int max = Integer.parseInt(valueSplitted[1]) + 1;
                 value = rd.nextInt(min, max);
+                System.out.println("I am random " + value);
+
             } else {
                 value = Integer.parseInt(valueAsText);
             }
@@ -47,13 +50,13 @@ public class Plane {
 
                 switch (key) {
                     case "rabbit" -> {
-                        createRabbit(value);
+                        //TODO MAKE PHILIP CREATE THE FUCKING RABBIT
                     }
                     case "burrow" -> {
-
+                        createObjectOnTile(RabbitHole.class, value);
                     }
                     case "grass" -> {
-                        createGrass(value);
+                        createObjectOnTile(Grass.class,value);
                     }
                     default -> {
                         System.out.println("could not determine type " + key);
@@ -78,31 +81,56 @@ public class Plane {
     }
 
     private void createGrass(int numberOfGrass) {
-
-        for (int i = 0; i < numberOfGrass; i++) {
-            boolean tileIsEmpty = false;
-            while (!tileIsEmpty) {
-                int x = rd.nextInt(worldSize);
-                int y = rd.nextInt(worldSize);
-                Location locationOfGrass = new Location(x, y);
-                if (world.getTile(locationOfGrass) == null) {
-                    tileIsEmpty = true;
-                    Grass grassToPlace = new Grass(world, locationOfGrass);
-                    world.setTile(locationOfGrass, grassToPlace);
-                }
-
-
-            }
-        }
-
+        createObjectOnTile(Grass.class, numberOfGrass);
     }
 
     private void createRabbit(int numberOfRabbits) {
 
     }
-
     private void createBurrow(int numberOfRabbits) {
 
+    }
+
+    private void createObjectOnTile(Class<?> objectType, int numberOfUnits) {
+        for (int i = 0; i < numberOfUnits; i++) {
+            boolean tileIsEmpty = false;
+            while (!tileIsEmpty) {
+                int x = rd.nextInt(worldSize);
+                int y = rd.nextInt(worldSize);
+                Location locationOfObject = new Location(x, y);
+
+                if(NonBlocking.class.isAssignableFrom(objectType)) {
+
+                    if (!world.containsNonBlocking(locationOfObject)) {
+                        tileIsEmpty = true;
+
+                        if(objectType == Grass.class) {
+                            Grass grassToPlace = new Grass(world, locationOfObject);
+                            world.setTile(locationOfObject, grassToPlace);
+                        } else if(objectType == RabbitHole.class) {
+                            RabbitHole holeToPlace = new RabbitHole(world, locationOfObject);
+                            world.setTile(locationOfObject, holeToPlace);
+                        }
+                    }
+
+                } else {
+
+                    Object objectOnTile = world.getTile(locationOfObject);
+
+                    if(objectOnTile == null || objectOnTile instanceof NonBlocking) {
+                        //TODO Put rabbit creation here.
+                    }
+
+                }
+
+
+
+
+
+
+
+            }
+        }
     }
 
     private void stopProgram() {
@@ -117,8 +145,14 @@ public class Plane {
     }
 
     private void setDisplayInfo() {
+
+        //Set display for Grass
         DisplayInformation grassDisplay = new DisplayInformation(Color.black, "grass");
         program.setDisplayInformation(Grass.class, grassDisplay);
+
+        //Set display for Rabbitholes
+        DisplayInformation rabbitHoleDisplay = new DisplayInformation(Color.orange, "hole-small");
+        program.setDisplayInformation(RabbitHole.class, rabbitHoleDisplay);
     }
 
 
