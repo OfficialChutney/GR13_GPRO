@@ -13,15 +13,16 @@ public class Rabbit implements Actor {
     boolean pregnant;
     boolean lookingForFood;
     boolean goingHome;
+    boolean sleeping;
 
 
-    Rabbit(Sex sex) {
-
+    Rabbit() {
+        this.setSex();
     }
 
     @Override
     public void act(World world) {
-
+        // :\
     }
 
     private void reproduce(World world) {
@@ -33,10 +34,10 @@ public class Rabbit implements Actor {
     }
 
     private void eat(World world) {
-        if(this.isItGrass(world)){
-           Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
-           victim.deleteGrass();
-           this.updateEnergy(4);
+        if (this.isItGrass(world)) {
+            Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
+            victim.deleteGrass();
+            this.updateEnergy(4);
         }
     }
 
@@ -58,7 +59,10 @@ public class Rabbit implements Actor {
         }
 
         Location onTheMove = new Location(movingX, movingY);
-        world.move(this, onTheMove);
+
+        if (world.isTileEmpty(onTheMove)) {
+            world.move(this, onTheMove);
+        }
     }
 
     private void die(World world) {
@@ -66,7 +70,11 @@ public class Rabbit implements Actor {
     }
 
     private void digHole(World world) {
-        //skyd mig :D
+        if (this.myRabbitHole == null) {
+            RabbitHole newHole = new RabbitHole(world, world.getLocation(this));
+            newHole.setHasRabbit(true);
+            this.myRabbitHole = newHole;
+        }
     }
 
     private void sleep(World world) {
@@ -89,9 +97,9 @@ public class Rabbit implements Actor {
     }
 
     private Location findMyHole(World world) {
-        if (this.myRabbitHole == null){
+        if (this.myRabbitHole == null) {
             return null;
-        }else {
+        } else {
             return world.getLocation(this.myRabbitHole);
         }
 
@@ -111,11 +119,27 @@ public class Rabbit implements Actor {
                 if (world.getTile(loc) instanceof Grass) {
                     return loc;
                 }
-                ;
             }
         }
         return null;
     }
+
+
+    private ArrayList<Location> surrondingEmptyLocationsList(World world) {
+        Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
+        return new ArrayList<>(neighbours);
+    }
+
+    private ArrayList<Location> surrondingLocationsList(World world) {
+        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this));
+        return new ArrayList<>(neighbours);
+    }
+
+    private ArrayList<Location> surrondingLocationsList(World world, int range) {
+        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
+        return new ArrayList<>(neighbours);
+    }
+
 
     private boolean isNeighbourMale(World world) {
         ArrayList<Location> neighbours = this.surrondingLocationsList(world);
@@ -130,16 +154,6 @@ public class Rabbit implements Actor {
         return false;
     }
 
-    private ArrayList<Location> surrondingLocationsList(World world) {
-        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this));
-        return new ArrayList<>(neighbours);
-    }
-
-    private ArrayList<Location> surrondingLocationsList(World world, int range) {
-        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
-        return new ArrayList<>(neighbours);
-    }
-
     private void setSex() {
         Random r = new Random();
         switch (r.nextInt(2)) {
@@ -152,5 +166,24 @@ public class Rabbit implements Actor {
         return sex;
     }
 
+    private void birth(World world) {
+        //skyd mig
+    }
+
+
+    private void hide(World world) {
+        if (this.checktime(world) == TimeOfDay.NIGHT) {
+            this.isInRabbitHole = true;
+            world.remove(this);
+        }
+    }
+
+    private void emerge(World world) {
+        this.isInRabbitHole = false;
+        ArrayList<Location> tiles = surrondingEmptyLocationsList(world);
+
+        Random r = new Random();
+        world.setTile(tiles.get(r.nextInt(tiles.size())), this);
+    }
 
 }
