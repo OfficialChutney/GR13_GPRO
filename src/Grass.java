@@ -51,7 +51,7 @@ public class Grass implements Actor, NonBlocking {
             Random randLocation = new Random();
             Location l = emptyNeighbouringTiles.get(randLocation.nextInt(emptyNeighbouringTiles.size()));
 
-            ourWorld.setTile(l, new Grass(ourWorld,l,chanceToGrow));
+            ourWorld.setTile(l, new Grass(ourWorld,l));
         }
 
     }
