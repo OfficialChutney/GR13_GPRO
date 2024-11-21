@@ -15,7 +15,7 @@ public class Main {
 
         // w.setTile(new Location(0, 0), new <MyClass>());
         // p.setDisplayInformation(<MyClass>.class, new DisplayInformation(<Color>, "<ImageName>"));
-
+        // diller
         p.show();
     }
 }
