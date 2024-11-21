@@ -20,11 +20,11 @@ public class Plane {
 
     public Plane() {
         displaySize = 800;
-        delay = 300;
+        delay = 100;
         rd = new Random();
     }
 
-    public void start(int worldSize, HashMap<String, String> initialConditions) {
+    public void startSimulation(int worldSize, HashMap<String, String> initialConditions) {
         this.worldSize = worldSize;
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
@@ -50,7 +50,7 @@ public class Plane {
 
                 switch (key) {
                     case "rabbit" -> {
-                        //TODO MAKE PHILIP CREATE THE FUCKING RABBIT
+                        createObjectOnTile(Rabbit.class, value);
                     }
                     case "burrow" -> {
                         createObjectOnTile(RabbitHole.class, value);
@@ -76,18 +76,7 @@ public class Plane {
             program.simulate();
         }
 
-        stopProgram();
-
-    }
-
-    private void createGrass(int numberOfGrass) {
-        createObjectOnTile(Grass.class, numberOfGrass);
-    }
-
-    private void createRabbit(int numberOfRabbits) {
-
-    }
-    private void createBurrow(int numberOfRabbits) {
+        stopSimulation();
 
     }
 
@@ -118,7 +107,11 @@ public class Plane {
                     Object objectOnTile = world.getTile(locationOfObject);
 
                     if(objectOnTile == null || objectOnTile instanceof NonBlocking) {
-                        //TODO Put rabbit creation here.
+                        tileIsEmpty = true;
+                        if(objectType == Rabbit.class) {
+                            Rabbit rabbit = new Rabbit();
+                            world.setTile(locationOfObject, rabbit);
+                        }
                     }
 
                 }
@@ -133,7 +126,7 @@ public class Plane {
         }
     }
 
-    private void stopProgram() {
+    private void stopSimulation() {
         try {
             Thread.sleep(2000);
 
@@ -153,6 +146,10 @@ public class Plane {
         //Set display for Rabbitholes
         DisplayInformation rabbitHoleDisplay = new DisplayInformation(Color.orange, "hole-small");
         program.setDisplayInformation(RabbitHole.class, rabbitHoleDisplay);
+
+        //Set display for Rabbit
+        DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
+        program.setDisplayInformation(Rabbit.class, rabbitDisplay);
     }
 
 
