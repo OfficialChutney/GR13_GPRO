@@ -1,4 +1,5 @@
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import itumulator.simulator.Actor;
 
@@ -6,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Random;
 
-public class Grass implements Actor {
+public class Grass implements Actor, NonBlocking {
 
     Location tileLocation;
     World ourWorld;
@@ -28,9 +29,17 @@ public class Grass implements Actor {
     }
 
     ArrayList<Location> getEmptyNeighbouringTiles() {
-        Set<Location> neighbours = ourWorld.getEmptySurroundingTiles();
+        Set<Location> neighbours = ourWorld.getSurroundingTiles();
         ArrayList<Location> list = new ArrayList<>(neighbours);
-        return list;
+
+        ArrayList<Location> nonBlockingList = new ArrayList<>();
+        for(Location location : list){
+            if(!ourWorld.containsNonBlocking(location)){
+                nonBlockingList.add(location);
+            }
+        }
+
+        return nonBlockingList;
     }
 
     void spreadGrass(World ourWorld, Location tileLocation, float chanceToGrow) {
