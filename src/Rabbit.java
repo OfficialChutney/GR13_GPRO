@@ -23,14 +23,23 @@ public class Rabbit implements Actor {
 
     @Override
     public void act(World world) {
-        if (this.checktime(world) == TimeOfDay.MORNING) {
+
+        TimeOfDay currentTime = this.checktime(world);
+        System.out.println("TEEEEEEEST JEG KØRER");
+        if (currentTime == TimeOfDay.MORNING) {
+            System.out.println("It is day!");
             if (hiding) {
+                System.out.println("i will emerge");
                 emerge(world);
                 if (pregnant) {
                     birth(world);
                 }
             }
+
+
             this.status = RabbitStatus.LOOKINGFORFOOD;
+
+
             this.pathFinder(world, this.getNearestGrass(world));
             if (this.isItGrass(world)) {
                 this.eat(world);
@@ -41,13 +50,14 @@ public class Rabbit implements Actor {
                 this.reproduce(world);
             }
 
-        } else if (this.checktime(world) == TimeOfDay.EVENING && !hiding) {
+        } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
             this.status = RabbitStatus.GOINGHOME;
             if (this.myRabbitHole == null) {
                 this.digHole(world);
             } else if (this.myRabbitHole != null) {
                 this.pathFinder(world, world.getLocation(myRabbitHole));
             }
+
             if (world.getLocation(this) == world.getLocation(myRabbitHole)) {
                 hide(world);
             }
@@ -58,18 +68,7 @@ public class Rabbit implements Actor {
                 this.die(world);
             }
 
-        } else if (this.checktime(world) == TimeOfDay.EVENING && !hiding) {
-            this.status = RabbitStatus.GOINGHOME;
-            if (this.myRabbitHole == null) {
-                this.digHole(world);
-            } else if (this.myRabbitHole != null) {
-                this.pathFinder(world, this.findMyHole(world));
-            }
-            if (world.getLocation(this) == this.findMyHole(world)) {
-                hide(world);
-            }
-
-        } else if (this.checktime(world) == TimeOfDay.NIGHT && hiding) {
+        } else if (currentTime == TimeOfDay.NIGHT && hiding) {
             this.sleep(world);
         }
     }
@@ -82,6 +81,7 @@ public class Rabbit implements Actor {
         }
     }
 
+    //fejl
     private void eat(World world) {
         if (this.isItGrass(world)) {
             Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
@@ -122,8 +122,10 @@ public class Rabbit implements Actor {
     }
 
     private void digHole(World world) {
+        System.out.println("digging a hole");
         if (this.myRabbitHole == null) {
             RabbitHole newHole = new RabbitHole(world, world.getLocation(this));
+            world.setTile(world.getLocation(this), newHole);
             newHole.setHasRabbit(true);
             this.myRabbitHole = newHole;
         }
@@ -137,16 +139,18 @@ public class Rabbit implements Actor {
         this.energy += num;
     }
 
+
     private TimeOfDay checktime(World world) {
-        if (world.getCurrentTime() > 7) {
+        if (world.getCurrentTime() < 7) {
             return TimeOfDay.MORNING;
-        } else if (world.getCurrentTime() < 7 && world.getCurrentTime() > 10) {
+        } else if (world.getCurrentTime() >= 7 && world.getCurrentTime() < 10) {
             return TimeOfDay.EVENING;
         } else {
             return TimeOfDay.NIGHT;
         }
 
     }
+
 
     private Location findMyHole(World world) {
         if (this.myRabbitHole == null) {
@@ -160,11 +164,11 @@ public class Rabbit implements Actor {
     private boolean isItGrass(World world) {
         Location temp = world.getLocation(this);
 
-        return world.getTile(temp) instanceof Grass;
+        return world.getNonBlocking(temp) instanceof Grass;
     }
 
     private Location getNearestGrass(World world) {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(world, i);
             for (Location loc : temp) {
                 world.containsNonBlocking(loc);
@@ -178,7 +182,11 @@ public class Rabbit implements Actor {
 
 
     private ArrayList<Location> surrondingEmptyLocationsList(World world) {
-        Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
+        return surrondingEmptyLocationsList(world, this);
+    }
+
+    private ArrayList<Location> surrondingEmptyLocationsList(World world, Actor actor) {
+        Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(actor));
         return new ArrayList<>(neighbours);
     }
 
@@ -195,7 +203,6 @@ public class Rabbit implements Actor {
 
     private boolean isNeighbourMale(World world) {
         ArrayList<Location> neighbours = this.surrondingLocationsList(world);
-        ArrayList<Rabbit> rabbits = new ArrayList<>();
         for (Location neighbor : neighbours) {
 
             if (world.getTile(neighbor) instanceof Rabbit rabbit) {
@@ -240,10 +247,8 @@ public class Rabbit implements Actor {
 
     private void emerge(World world) {
         this.isInRabbitHole = false;
-        ArrayList<Location> tiles = surrondingEmptyLocationsList(world);
-
         Random r = new Random();
-        world.setTile(tiles.get(r.nextInt(tiles.size())), this);
+        world.setTile(world.getLocation(myRabbitHole), this);
         this.hiding = false;
         this.ageRabbit();
     }
@@ -254,6 +259,7 @@ public class Rabbit implements Actor {
 
     private void ageRabbit(){
         age++;
+        maxEnergy--;
     }
 
 }
