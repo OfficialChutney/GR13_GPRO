@@ -1,16 +1,11 @@
-import itumulator.simulator.Actor;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import itumulator.world.Location;
-import itumulator.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class UserInterface {
 
@@ -21,7 +16,6 @@ public class UserInterface {
     }
 
     public void startProgram() {
-
         for (File file : inputFileDirectory.listFiles()) {
             try {
                 int worldSize;
@@ -46,13 +40,17 @@ public class UserInterface {
 
                 }
 
+
+                System.out.println(initialConditions.toString());
                 Plane plane = new Plane();
-                plane.start(worldSize, initialConditions);
+                plane.startSimulation(worldSize, initialConditions);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
 
         }
+
+        System.exit(0);
 
 
 
