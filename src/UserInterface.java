@@ -20,7 +20,7 @@ public class UserInterface {
     public void startProgram() {
         int start = 0;
         for (File file : Objects.requireNonNull(inputFileDirectory.listFiles())) {
-            if (start >= 5) {
+            if (start >= 0) {
 
 
                 try {
