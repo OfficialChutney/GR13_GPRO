@@ -16,6 +16,7 @@ public class Plane {
     private int delay;
     private Random rd;
     private int worldSize;
+    private int simulationStepLength;
 
 
     public Plane() {
@@ -73,8 +74,9 @@ public class Plane {
 
         program.show();
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < simulationStepLength; i++) {
             program.simulate();
+            System.out.println(world.getCurrentTime());
         }
 
         stopSimulation();

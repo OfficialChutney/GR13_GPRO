@@ -23,7 +23,11 @@ public class Rabbit implements Actor {
 
     @Override
     public void act(World world) {
-        if (this.checktime(world) == TimeOfDay.MORNING) {
+
+        TimeOfDay currentTime = this.checktime(world);
+        System.out.println("TEEEEEEEST JEG KØRER");
+        if (currentTime == TimeOfDay.MORNING) {
+            System.out.println("It is day!");
             if (hiding) {
                 System.out.println("i will emerge");
                 emerge(world);
@@ -31,7 +35,11 @@ public class Rabbit implements Actor {
                     birth(world);
                 }
             }
+
+
             this.status = RabbitStatus.LOOKINGFORFOOD;
+
+
             this.pathFinder(world, this.getNearestGrass(world));
             if (this.isItGrass(world)) {
                 this.eat(world);
@@ -42,13 +50,14 @@ public class Rabbit implements Actor {
                 this.reproduce(world);
             }
 
-        } else if (this.checktime(world) == TimeOfDay.EVENING && !hiding) {
+        } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
             this.status = RabbitStatus.GOINGHOME;
             if (this.myRabbitHole == null) {
                 this.digHole(world);
             } else if (this.myRabbitHole != null) {
                 this.pathFinder(world, world.getLocation(myRabbitHole));
             }
+
             if (world.getLocation(this) == world.getLocation(myRabbitHole)) {
                 hide(world);
             }
@@ -134,7 +143,7 @@ public class Rabbit implements Actor {
     private TimeOfDay checktime(World world) {
         if (world.getCurrentTime() < 7) {
             return TimeOfDay.MORNING;
-        } else if (world.getCurrentTime() < 7 && world.getCurrentTime() > 10) {
+        } else if (world.getCurrentTime() >= 7 && world.getCurrentTime() < 10) {
             return TimeOfDay.EVENING;
         } else {
             return TimeOfDay.NIGHT;
@@ -173,8 +182,7 @@ public class Rabbit implements Actor {
 
 
     private ArrayList<Location> surrondingEmptyLocationsList(World world) {
-        Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
-        return new ArrayList<>(neighbours);
+        return surrondingEmptyLocationsList(world, this);
     }
 
     private ArrayList<Location> surrondingEmptyLocationsList(World world, Actor actor) {
@@ -195,7 +203,6 @@ public class Rabbit implements Actor {
 
     private boolean isNeighbourMale(World world) {
         ArrayList<Location> neighbours = this.surrondingLocationsList(world);
-        ArrayList<Rabbit> rabbits = new ArrayList<>();
         for (Location neighbor : neighbours) {
 
             if (world.getTile(neighbor) instanceof Rabbit rabbit) {
