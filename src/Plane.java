@@ -1,12 +1,12 @@
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
+import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Plane {
 
@@ -64,8 +64,6 @@ public class Plane {
                         System.out.println("could not determine type " + key);
                     }
                 }
-            } else {
-                System.out.println("Mom i shitted.");
             }
 
 
@@ -76,7 +74,22 @@ public class Plane {
 
         for (int i = 0; i < simulationStepLength; i++) {
             program.simulate();
-            System.out.println(world.getCurrentTime());
+            System.out.println("Step: "+world.getCurrentTime());
+
+
+
+            //Denne kode henter alle kaniner og tester, om de stadig er på spillefladen.
+            //Det ses tydeligt, at i visse tilfælde, slettes kaninerne fra spillefladen, når "remove" metoden benyttes, selvom de ikke burde.
+            Set<Object> allEntities = world.getEntities().keySet();
+            Set<Rabbit> allRabbits = new HashSet<>();
+            for (Object o : allEntities) {
+                if(o instanceof Rabbit r) {
+                    allRabbits.add(r);
+                }
+            }
+
+            System.out.println("Number Of rabbits in world: " + allRabbits.size());
+
         }
 
         stopSimulation();

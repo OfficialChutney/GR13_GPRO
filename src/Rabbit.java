@@ -19,17 +19,17 @@ public class Rabbit implements Actor {
 
     Rabbit() {
         this.setSex();
+        energy = 15;
     }
 
     @Override
     public void act(World world) {
 
         TimeOfDay currentTime = this.checktime(world);
-        System.out.println("TEEEEEEEST JEG KØRER");
         if (currentTime == TimeOfDay.MORNING) {
-            System.out.println("It is day!");
+
             if (hiding) {
-                System.out.println("i will emerge");
+
                 emerge(world);
                 if (pregnant) {
                     birth(world);
@@ -58,7 +58,13 @@ public class Rabbit implements Actor {
                 this.pathFinder(world, world.getLocation(myRabbitHole));
             }
 
-            if (world.getLocation(this) == world.getLocation(myRabbitHole)) {
+            int thisX = world.getLocation(this).getX();
+            int thisY = world.getLocation(this).getY();
+
+            int rabbitHoleX = world.getLocation(myRabbitHole).getX();
+            int rabbitHoleY = world.getLocation(myRabbitHole).getY();
+
+            if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
                 hide(world);
             }
 
@@ -71,6 +77,18 @@ public class Rabbit implements Actor {
         } else if (currentTime == TimeOfDay.NIGHT && hiding) {
             this.sleep(world);
         }
+
+        if(currentTime == TimeOfDay.NIGHT && hiding) {
+            System.out.println("This is still true");
+            try {
+                world.getLocation(this);
+                world.remove(this);
+            } catch (IllegalArgumentException e) {
+                //Do nothing
+                System.out.println("I ran");
+            }
+        }
+
     }
 
     private void reproduce(World world) {
@@ -92,7 +110,15 @@ public class Rabbit implements Actor {
 
     private void pathFinder(World world, Location destination) {
         if (destination == null) {
+            Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
+            ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
+
+            Random rd = new Random();
+
+            world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
             return;
+
+
         }
         Location start = world.getLocation(this);
         int movingX = start.getX();
@@ -118,6 +144,7 @@ public class Rabbit implements Actor {
     }
 
     private void die(World world) {
+        System.out.println("I died");
         world.delete(this);
     }
 
