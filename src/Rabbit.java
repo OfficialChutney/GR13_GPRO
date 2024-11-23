@@ -2,18 +2,19 @@ import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
 
+import java.sql.Time;
 import java.util.*;
 
 public class Rabbit implements Actor {
-    int age;
+    int age = 0;
+    int maxEnergy = 15;
     int energy;
     RabbitHole myRabbitHole;
     boolean isInRabbitHole;
     Sex sex;
     boolean pregnant;
-    boolean lookingForFood;
-    boolean goingHome;
-    boolean sleeping;
+    RabbitStatus status;
+    boolean hiding = false;
 
 
     Rabbit() {
@@ -22,7 +23,55 @@ public class Rabbit implements Actor {
 
     @Override
     public void act(World world) {
-        // :\
+        if (this.checktime(world) == TimeOfDay.MORNING) {
+            if (hiding) {
+                emerge(world);
+                if (pregnant) {
+                    birth(world);
+                }
+            }
+            this.status = RabbitStatus.LOOKINGFORFOOD;
+            this.pathFinder(world, this.getNearestGrass(world));
+            if (this.isItGrass(world)) {
+                this.eat(world);
+            }
+            this.updateEnergy(-1);
+
+            if (sex == Sex.FEMALE) {
+                this.reproduce(world);
+            }
+
+        } else if (this.checktime(world) == TimeOfDay.EVENING && !hiding) {
+            this.status = RabbitStatus.GOINGHOME;
+            if (this.myRabbitHole == null) {
+                this.digHole(world);
+            } else if (this.myRabbitHole != null) {
+                this.pathFinder(world, world.getLocation(myRabbitHole));
+            }
+            if (world.getLocation(this) == world.getLocation(myRabbitHole)) {
+                hide(world);
+            }
+
+            this.updateEnergy(-1);
+
+            if (this.energy <= 0) {
+                this.die(world);
+            }
+
+        } else if (this.checktime(world) == TimeOfDay.EVENING && !hiding) {
+            this.status = RabbitStatus.GOINGHOME;
+            if (this.myRabbitHole == null) {
+                this.digHole(world);
+            } else if (this.myRabbitHole != null) {
+                this.pathFinder(world, this.findMyHole(world));
+            }
+            if (world.getLocation(this) == this.findMyHole(world)) {
+                hide(world);
+            }
+
+        } else if (this.checktime(world) == TimeOfDay.NIGHT && hiding) {
+            this.sleep(world);
+        }
     }
 
     private void reproduce(World world) {
@@ -42,6 +91,9 @@ public class Rabbit implements Actor {
     }
 
     private void pathFinder(World world, Location destination) {
+        if (destination == null) {
+            return;
+        }
         Location start = world.getLocation(this);
         int movingX = start.getX();
         int movingY = start.getY();
@@ -149,7 +201,7 @@ public class Rabbit implements Actor {
             if (world.getTile(neighbor) instanceof Rabbit rabbit) {
                 return rabbit.getSex() == Sex.MALE;
             }
-            //skyd mig igen :D
+
         }
         return false;
     }
@@ -167,7 +219,14 @@ public class Rabbit implements Actor {
     }
 
     private void birth(World world) {
-        //skyd mig
+        if (pregnant) {
+            Random r = new Random();
+            ArrayList<Location> tiles = surrondingEmptyLocationsList(world);
+
+            Rabbit child = new Rabbit();
+            world.setTile(tiles.get(r.nextInt(tiles.size())), child);
+            pregnant = false;
+        }
     }
 
 
@@ -175,6 +234,7 @@ public class Rabbit implements Actor {
         if (this.checktime(world) == TimeOfDay.NIGHT) {
             this.isInRabbitHole = true;
             world.remove(this);
+            this.hiding = true;
         }
     }
 
@@ -184,6 +244,16 @@ public class Rabbit implements Actor {
 
         Random r = new Random();
         world.setTile(tiles.get(r.nextInt(tiles.size())), this);
+        this.hiding = false;
+        this.ageRabbit();
+    }
+
+    public RabbitStatus getStatus() {
+        return this.status;
+    }
+
+    private void ageRabbit(){
+        age++;
     }
 
 }
