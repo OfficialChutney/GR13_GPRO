@@ -20,7 +20,8 @@ public class Plane {
 
     public Plane() {
         displaySize = 800;
-        delay = 100;
+        delay = 1000;
+        simulationStepLength = 50;
         rd = new Random();
     }
 
