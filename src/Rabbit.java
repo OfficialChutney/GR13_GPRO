@@ -8,7 +8,7 @@ import java.util.*;
 public class Rabbit implements Actor {
     int age = 0;
     int maxEnergy = 15;
-    int energy;
+    int energy = 15;
     RabbitHole myRabbitHole;
     boolean isInRabbitHole;
     Sex sex;
@@ -88,7 +88,7 @@ public class Rabbit implements Actor {
                 System.out.println("I ran");
             }
         }
-
+        this.checkMaxEnergy();
     }
 
     private void reproduce(World world) {
@@ -289,4 +289,9 @@ public class Rabbit implements Actor {
         maxEnergy--;
     }
 
+    private void checkMaxEnergy() {
+        if (energy > maxEnergy) {
+            energy = maxEnergy;
+        }
+    }
 }
