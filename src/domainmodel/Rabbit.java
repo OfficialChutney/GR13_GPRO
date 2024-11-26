@@ -2,23 +2,24 @@ package domainmodel;
 
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.*;
 
 public class Rabbit implements Actor {
-    int age = 0;
-    int maxEnergy = 15;
-    int energy;
-    RabbitHole myRabbitHole;
-    boolean isInRabbitHole;
-    Sex sex;
-    boolean pregnant;
-    RabbitStatus status;
-    boolean hiding = false;
+    private int age = 0;
+    private int maxEnergy = 15;
+    private int energy;
+    private RabbitHole myRabbitHole;
+    private boolean isInRabbitHole;
+    private Sex sex;
+    private boolean pregnant;
+    private RabbitStatus status;
+    private boolean hiding = false;
 
 
-    Rabbit() {
+    public Rabbit() {
         this.setSex();
         energy = 15;
     }
@@ -26,7 +27,20 @@ public class Rabbit implements Actor {
     @Override
     public void act(World world) {
 
+
+
+
         TimeOfDay currentTime = this.checktime(world);
+
+        if(currentTime == TimeOfDay.MORNING) {
+
+        } else if((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
+
+        } else if(currentTime == TimeOfDay.NIGHT && hiding) {
+
+        }
+
+
         if (currentTime == TimeOfDay.MORNING) {
 
             if (hiding) {
@@ -40,7 +54,7 @@ public class Rabbit implements Actor {
 
             this.status = RabbitStatus.LOOKINGFORFOOD;
 
-            this.pathFinder(world, this.getNearestGrass(world));
+            this.pathFinder(world, this.getNearestObject(Grass.class,world));
             if (this.isItGrass(world)) {
                 this.eat(world);
             }
@@ -87,7 +101,6 @@ public class Rabbit implements Actor {
         }
 
         if(currentTime == TimeOfDay.NIGHT && hiding) {
-            System.out.println("This is still true");
             try {
                 world.getLocation(this);
                 world.remove(this);
@@ -100,14 +113,11 @@ public class Rabbit implements Actor {
     }
 
     private void reproduce(World world) {
-        Location myTempLoc = world.getLocation(this);
-
         if (this.isNeighbourMale(world)) {
             this.pregnant = true;
         }
     }
 
-    //fejl
     private void eat(World world) {
         if (this.isItGrass(world)) {
             Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
@@ -184,6 +194,7 @@ public class Rabbit implements Actor {
     }
 
     private void sleep(World world) {
+        status = RabbitStatus.SLEEPING;
         updateEnergy(1);
     }
 
@@ -219,14 +230,24 @@ public class Rabbit implements Actor {
         return world.getNonBlocking(temp) instanceof Grass;
     }
 
-    private Location getNearestGrass(World world) {
+    private Location getNearestObject(Class<?> object, World world) {
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(world, i);
             for (Location loc : temp) {
-                world.containsNonBlocking(loc);
-                if (world.getTile(loc) instanceof Grass) {
+
+                Object objectOnTile;
+
+                if(object.isAssignableFrom(NonBlocking.class)) {
+                    objectOnTile = world.getNonBlocking(loc);
+
+                } else {
+                    objectOnTile = world.getTile(loc);
+                }
+
+                if (object.isInstance(objectOnTile)) {
                     return loc;
                 }
+
             }
         }
         return null;
@@ -243,8 +264,7 @@ public class Rabbit implements Actor {
     }
 
     private ArrayList<Location> surrondingLocationsList(World world) {
-        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this));
-        return new ArrayList<>(neighbours);
+        return surrondingLocationsList(world,1);
     }
 
     private ArrayList<Location> surrondingLocationsList(World world, int range) {
@@ -298,11 +318,16 @@ public class Rabbit implements Actor {
     }
 
     private void emerge(World world) {
+        Location rabbitHoleLoc = world.getLocation(myRabbitHole);
+        if(!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
+
+
+        world.setTile(rabbitHoleLoc, this);
         this.isInRabbitHole = false;
         Random r = new Random();
-        world.setTile(world.getLocation(myRabbitHole), this);
         this.hiding = false;
         this.ageRabbit();
+        }
     }
 
     public RabbitStatus getStatus() {

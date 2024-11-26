@@ -1,5 +1,6 @@
 package domainmodel;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,15 +14,17 @@ public class UserInterface {
 
 
     private File inputFileDirectory;
+    private Controller controller;
 
     public UserInterface() {
         inputFileDirectory = new File("InputFiles");
+        controller = new Controller();
     }
 
     public void startProgram() {
         int start = 0;
         for (File file : inputFileDirectory.listFiles()) {
-            if (start >= 0) {
+            if (start >= 5) {
 
 
                 try {
@@ -47,10 +50,7 @@ public class UserInterface {
 
                     }
 
-
-                    System.out.println(initialConditions.toString());
-                    Plane plane = new Plane();
-                    plane.startSimulation(worldSize, initialConditions);
+                    controller.initiateSimulation(worldSize, initialConditions);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }

@@ -15,7 +15,7 @@ public class Grass implements Actor, NonBlocking {
     private final World ourWorld;
     private final float chanceToGrow;
 
-    Grass(World ourWorld, Location tileLocation) {
+    public Grass(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
         chanceToGrow = 0.1f;
@@ -27,11 +27,11 @@ public class Grass implements Actor, NonBlocking {
         spreadGrass(ourWorld,chanceToGrow);
     }
 
-    Location getTileLocation() {
+    private Location getTileLocation() {
         return tileLocation;
     }
 
-    ArrayList<Location> getEmptyNeighbouringTiles() {
+    private ArrayList<Location> getEmptyNeighbouringTiles() {
         Set<Location> neighbours = ourWorld.getSurroundingTiles();
         ArrayList<Location> list = new ArrayList<>(neighbours);
 
@@ -45,7 +45,7 @@ public class Grass implements Actor, NonBlocking {
         return nonBlockingList;
     }
 
-    void spreadGrass(World ourWorld, float chanceToGrow) {
+    private void spreadGrass(World ourWorld, float chanceToGrow) {
         ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
         Random chance = new Random();
 
@@ -58,7 +58,7 @@ public class Grass implements Actor, NonBlocking {
 
     }
 
-    void deleteGrass(){
+    public void deleteGrass(){
         ourWorld.delete(this);
     }
 
