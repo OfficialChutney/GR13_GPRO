@@ -28,15 +28,15 @@ public class Rabbit implements Actor {
     public void act(World world) {
 
 
-
-
         TimeOfDay currentTime = this.checktime(world);
 
-        if(currentTime == TimeOfDay.MORNING) {
+        if (currentTime == TimeOfDay.MORNING) {
+            emerge(world);
+            birth(world);
+            lookingForFoodBehaviour(world);
+        } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
 
-        } else if((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
-
-        } else if(currentTime == TimeOfDay.NIGHT && hiding) {
+        } else if (currentTime == TimeOfDay.NIGHT && hiding) {
 
         }
 
@@ -54,7 +54,7 @@ public class Rabbit implements Actor {
 
             this.status = RabbitStatus.LOOKINGFORFOOD;
 
-            this.pathFinder(world, this.getNearestObject(Grass.class,world));
+            this.pathFinder(world, this.getNearestObject(Grass.class, world));
             if (this.isItGrass(world)) {
                 this.eat(world);
             }
@@ -69,7 +69,7 @@ public class Rabbit implements Actor {
             if (this.myRabbitHole == null) {
                 RabbitHole rh = findHoleWithoutOwner(world);
 
-                if(rh == null) {
+                if (rh == null) {
                     this.digHole(world);
                 } else {
                     rh.setHasRabbit(true);
@@ -100,7 +100,7 @@ public class Rabbit implements Actor {
             this.sleep(world);
         }
 
-        if(currentTime == TimeOfDay.NIGHT && hiding) {
+        if (currentTime == TimeOfDay.NIGHT && hiding) {
             try {
                 world.getLocation(this);
                 world.remove(this);
@@ -113,8 +113,10 @@ public class Rabbit implements Actor {
     }
 
     private void reproduce(World world) {
-        if (this.isNeighbourMale(world)) {
-            this.pregnant = true;
+        if (sex == Sex.FEMALE) {
+            if (this.isNeighbourMale(world)) {
+                this.pregnant = true;
+            }
         }
     }
 
@@ -180,15 +182,14 @@ public class Rabbit implements Actor {
         Map<Object, Location> allEntities = world.getEntities();
 
         for (Object object : allEntities.keySet()) {
-            if(object instanceof RabbitHole rh) {
-                if(!rh.getHasRabbit()) {
+            if (object instanceof RabbitHole rh) {
+                if (!rh.getHasRabbit()) {
                     return rh;
                 }
             }
         }
 
         return null;
-
 
 
     }
@@ -237,7 +238,7 @@ public class Rabbit implements Actor {
 
                 Object objectOnTile;
 
-                if(object.isAssignableFrom(NonBlocking.class)) {
+                if (object.isAssignableFrom(NonBlocking.class)) {
                     objectOnTile = world.getNonBlocking(loc);
 
                 } else {
@@ -264,7 +265,7 @@ public class Rabbit implements Actor {
     }
 
     private ArrayList<Location> surrondingLocationsList(World world) {
-        return surrondingLocationsList(world,1);
+        return surrondingLocationsList(world, 1);
     }
 
     private ArrayList<Location> surrondingLocationsList(World world, int range) {
@@ -318,15 +319,17 @@ public class Rabbit implements Actor {
     }
 
     private void emerge(World world) {
-        Location rabbitHoleLoc = world.getLocation(myRabbitHole);
-        if(!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
+        if (hiding) {
+            Location rabbitHoleLoc = world.getLocation(myRabbitHole);
+            if (!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
 
 
-        world.setTile(rabbitHoleLoc, this);
-        this.isInRabbitHole = false;
-        Random r = new Random();
-        this.hiding = false;
-        this.ageRabbit();
+                world.setTile(rabbitHoleLoc, this);
+                this.isInRabbitHole = false;
+                Random r = new Random();
+                this.hiding = false;
+                this.ageRabbit();
+            }
         }
     }
 
@@ -334,9 +337,19 @@ public class Rabbit implements Actor {
         return this.status;
     }
 
-    private void ageRabbit(){
+    private void ageRabbit() {
         age++;
         maxEnergy--;
+    }
+
+    private void lookingForFoodBehaviour(World world) {
+        this.status = RabbitStatus.LOOKINGFORFOOD;
+
+        this.pathFinder(world, this.getNearestObject(Grass.class, world));
+        if (this.isItGrass(world)) {
+            this.eat(world);
+        }
+        this.updateEnergy(-1);
     }
 
 }
