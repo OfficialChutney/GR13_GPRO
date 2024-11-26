@@ -2,7 +2,7 @@ import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
 
-import java.sql.Time;
+
 import java.util.*;
 
 public class Rabbit implements Actor {
@@ -75,7 +75,7 @@ public class Rabbit implements Actor {
             }
 
         } else if (currentTime == TimeOfDay.NIGHT && hiding) {
-            this.sleep(world);
+            this.sleep();
         }
 
         if(currentTime == TimeOfDay.NIGHT && hiding) {
@@ -93,8 +93,6 @@ public class Rabbit implements Actor {
     }
 
     private void reproduce(World world) {
-        Location myTempLoc = world.getLocation(this);
-
         if (this.isNeighbourMale(world)) {
             this.pregnant = true;
         }
@@ -159,7 +157,7 @@ public class Rabbit implements Actor {
         }
     }
 
-    private void sleep(World world) {
+    private void sleep() {
         updateEnergy(1);
     }
 
@@ -175,16 +173,6 @@ public class Rabbit implements Actor {
             return TimeOfDay.EVENING;
         } else {
             return TimeOfDay.NIGHT;
-        }
-
-    }
-
-
-    private Location findMyHole(World world) {
-        if (this.myRabbitHole == null) {
-            return null;
-        } else {
-            return world.getLocation(this.myRabbitHole);
         }
 
     }
@@ -275,7 +263,6 @@ public class Rabbit implements Actor {
 
     private void emerge(World world) {
         this.isInRabbitHole = false;
-        Random r = new Random();
         world.setTile(world.getLocation(myRabbitHole), this);
         this.hiding = false;
         this.ageRabbit();
