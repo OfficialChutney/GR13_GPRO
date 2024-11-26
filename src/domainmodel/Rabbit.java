@@ -27,92 +27,23 @@ public class Rabbit implements Actor {
     @Override
     public void act(World world) {
 
-
         TimeOfDay currentTime = this.checktime(world);
-
         if (currentTime == TimeOfDay.MORNING) {
             emerge(world);
-            birth(world);
             lookingForFoodBehaviour(world);
+            tryToReproduce(world);
         } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
-
+            goingHomeBehaviour(world);
+            tryTohide(world);
         } else if (currentTime == TimeOfDay.NIGHT && hiding) {
-
+            sleep(world);
         }
 
-
-        if (currentTime == TimeOfDay.MORNING) {
-
-            if (hiding) {
-
-                emerge(world);
-                if (pregnant) {
-                    birth(world);
-                }
-            }
-
-
-            this.status = RabbitStatus.LOOKINGFORFOOD;
-
-            this.pathFinder(world, this.getNearestObject(Grass.class, world));
-            if (this.isItGrass(world)) {
-                this.eat(world);
-            }
-            this.updateEnergy(-1);
-
-            if (sex == Sex.FEMALE) {
-                this.reproduce(world);
-            }
-
-        } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
-            this.status = RabbitStatus.GOINGHOME;
-            if (this.myRabbitHole == null) {
-                RabbitHole rh = findHoleWithoutOwner(world);
-
-                if (rh == null) {
-                    this.digHole(world);
-                } else {
-                    rh.setHasRabbit(true);
-                    myRabbitHole = rh;
-                }
-
-            } else if (this.myRabbitHole != null) {
-                this.pathFinder(world, world.getLocation(myRabbitHole));
-            }
-
-            int thisX = world.getLocation(this).getX();
-            int thisY = world.getLocation(this).getY();
-
-            int rabbitHoleX = world.getLocation(myRabbitHole).getX();
-            int rabbitHoleY = world.getLocation(myRabbitHole).getY();
-
-            if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
-                hide(world);
-            }
-
-            this.updateEnergy(-1);
-
-            if (this.energy <= 0) {
-                this.die(world);
-            }
-
-        } else if (currentTime == TimeOfDay.NIGHT && hiding) {
-            this.sleep(world);
-        }
-
-        if (currentTime == TimeOfDay.NIGHT && hiding) {
-            try {
-                world.getLocation(this);
-                world.remove(this);
-            } catch (IllegalArgumentException e) {
-                //Do nothing
-                System.out.println("I ran");
-            }
-        }
-
+        tryTodie(world);
+        tryToDecreaseEnergy();
     }
 
-    private void reproduce(World world) {
+    private void tryToReproduce(World world) {
         if (sex == Sex.FEMALE) {
             if (this.isNeighbourMale(world)) {
                 this.pregnant = true;
@@ -163,9 +94,11 @@ public class Rabbit implements Actor {
         }
     }
 
-    private void die(World world) {
-        System.out.println("I died");
-        world.delete(this);
+    private void tryTodie(World world) {
+        if(energy <= 0) {
+            System.out.println("I died");
+            world.delete(this);
+        }
     }
 
     private void digHole(World world) {
@@ -197,10 +130,28 @@ public class Rabbit implements Actor {
     private void sleep(World world) {
         status = RabbitStatus.SLEEPING;
         updateEnergy(1);
+
+        //Resolves a bug where sometimes, the rabbit is not removed. Possibly an issue with the library
+        //Trying to remove several rabbits at once. This forces the rabbit to be removed in the next step.
+        try {
+            world.getLocation(this);
+            world.remove(this);
+        } catch (IllegalArgumentException e) {
+            //Do nothing
+        }
     }
 
     private void updateEnergy(int num) {
         this.energy += num;
+        if(energy > maxEnergy) {
+            energy = maxEnergy;
+        }
+    }
+    
+    private void tryToDecreaseEnergy() {
+        if(status != RabbitStatus.SLEEPING) {
+            updateEnergy(-1);
+        }
     }
 
 
@@ -310,25 +261,33 @@ public class Rabbit implements Actor {
     }
 
 
-    private void hide(World world) {
-        if (this.checktime(world) == TimeOfDay.NIGHT) {
+    private void tryTohide(World world) {
+        int thisX = world.getLocation(this).getX();
+        int thisY = world.getLocation(this).getY();
+
+        int rabbitHoleX = world.getLocation(myRabbitHole).getX();
+        int rabbitHoleY = world.getLocation(myRabbitHole).getY();
+
+        if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
             this.isInRabbitHole = true;
             world.remove(this);
             this.hiding = true;
+
         }
+
+
     }
 
     private void emerge(World world) {
         if (hiding) {
             Location rabbitHoleLoc = world.getLocation(myRabbitHole);
             if (!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
-
-
                 world.setTile(rabbitHoleLoc, this);
                 this.isInRabbitHole = false;
                 Random r = new Random();
                 this.hiding = false;
                 this.ageRabbit();
+                birth(world);
             }
         }
     }
@@ -350,6 +309,23 @@ public class Rabbit implements Actor {
             this.eat(world);
         }
         this.updateEnergy(-1);
+    }
+
+    private void goingHomeBehaviour(World world) {
+        this.status = RabbitStatus.GOINGHOME;
+        if (this.myRabbitHole == null) {
+            RabbitHole rh = findHoleWithoutOwner(world);
+
+            if (rh == null) {
+                this.digHole(world);
+            } else {
+                rh.setHasRabbit(true);
+                myRabbitHole = rh;
+            }
+
+        } else {
+            this.pathFinder(world, world.getLocation(myRabbitHole));
+        }
     }
 
 }

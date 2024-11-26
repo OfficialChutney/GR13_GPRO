@@ -1,9 +1,13 @@
 package domainmodel;
 
+import itumulator.executable.DisplayInformation;
+import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import itumulator.simulator.Actor;
+
+import java.awt.*;
 
 
 public class RabbitHole implements NonBlocking {
@@ -11,6 +15,7 @@ public class RabbitHole implements NonBlocking {
     private final World ourWorld;
     private final Location tileLocation;
     private boolean hasRabbit;
+    private boolean isRabbitHole = false;
 
     public RabbitHole(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
@@ -28,6 +33,5 @@ public class RabbitHole implements NonBlocking {
     public Location getTileLocation() {
         return tileLocation;
     }
-
 
 }
