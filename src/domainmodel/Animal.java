@@ -18,15 +18,13 @@ public abstract class  Animal {
     Sex sex;
     boolean pregnant = false;
     RabbitStatus status;
-    World world;
 
-    Animal(World world){
-        this.world = world;
+    Animal(){
     }
 
     protected abstract void eat();
 
-    private void reproduce(World world) {
+    protected void reproduce(World world) {
         if (sex == Sex.FEMALE) {
             if (this.isNeighbourMale(this ,world)) {
                 this.pregnant = true;
@@ -34,7 +32,7 @@ public abstract class  Animal {
         }
     }
 
-    private void pathFinder(World world, Location destination) {
+    protected void pathFinder(World world, Location destination) {
         if (destination == null) {
             Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
             ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
@@ -69,21 +67,21 @@ public abstract class  Animal {
         }
     }
 
-    private void die(World world) {
+    protected void die(World world) {
         System.out.println("I died");
         world.delete(this);
     }
 
-    private void sleep(World world) {
+    protected void sleep(World world) {
         status = RabbitStatus.SLEEPING;
         updateEnergy(1);
     }
 
-    private void updateEnergy(int num) {
+    protected void updateEnergy(int num) {
         this.energy += num;
     }
 
-    private TimeOfDay checktime(World world) {
+    protected TimeOfDay checktime(World world) {
         if (world.getCurrentTime() < 7) {
             return TimeOfDay.MORNING;
         } else if (world.getCurrentTime() >= 7 && world.getCurrentTime() < 10) {
@@ -94,7 +92,7 @@ public abstract class  Animal {
 
     }
 
-    private Location getNearestObject(Class<?> object, World world) {
+    protected Location getNearestObject(Class<?> object, World world) {
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(world, i);
             for (Location loc : temp) {
@@ -117,23 +115,17 @@ public abstract class  Animal {
         return null;
     }
 
-    protected abstract ArrayList<Location> surrondingEmptyLocationsList(World world);
 
-    private ArrayList<Location> surrondingEmptyLocationsList(World world, Actor actor) {
-        Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(actor));
-        return new ArrayList<>(neighbours);
-    }
-
-    private ArrayList<Location> surrondingLocationsList(World world) {
+    protected ArrayList<Location> surrondingLocationsList(World world) {
         return surrondingLocationsList(world, 1);
     }
 
-    private ArrayList<Location> surrondingLocationsList(World world, int range) {
+    protected ArrayList<Location> surrondingLocationsList(World world, int range) {
         Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
         return new ArrayList<>(neighbours);
     }
 
-    private boolean isNeighbourMale(Animal animal, World world) {
+    protected boolean isNeighbourMale(Animal animal, World world) {
         ArrayList<Location> neighbours = this.surrondingLocationsList(world);
         for (Location neighbor : neighbours) {
 
@@ -148,7 +140,7 @@ public abstract class  Animal {
         return false;
     }
 
-    private void setSex() {
+    protected void setSex() {
         Random r = new Random();
         switch (r.nextInt(2)) {
             case 0 -> this.sex = Sex.MALE;
@@ -156,11 +148,11 @@ public abstract class  Animal {
         }
     }
 
-    private Sex getSex() {
+    protected Sex getSex() {
         return sex;
     }
 
-    private void birth(World world) {
+    protected void birth(World world) {
         if (pregnant) {
             Random r = new Random();
             ArrayList<Location> tiles = surrondingEmptyLocationsList(world);
