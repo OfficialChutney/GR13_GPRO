@@ -39,11 +39,12 @@ public abstract class  Animal {
             Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
             ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
 
-            Random rd = new Random();
+            if(!sourroundingLocationsAsList.isEmpty()){
+                Random rd = new Random();
 
-            world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
+                world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
+            }
             return;
-
 
         }
         Location start = world.getLocation(this);

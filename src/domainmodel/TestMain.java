@@ -18,10 +18,13 @@ public class TestMain {
         DisplayInformation di = new DisplayInformation(Color.BLACK, "wolf");
         p.setDisplayInformation(Wolf.class, di);
 
-        WolfPack wp = new WolfPack(10, new Location(7,7), world);
+        WolfPack wp = new WolfPack(8, new Location(3,3), world);
 
         p.show();
 
+        for (int i = 0; i < 100; i++) {
+            p.simulate();
+        }
 
 
     }

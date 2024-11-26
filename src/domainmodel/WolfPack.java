@@ -1,6 +1,9 @@
 package domainmodel;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import itumulator.world.Location;
@@ -13,7 +16,7 @@ public class WolfPack {
     int wolfPackID;
 
     WolfPack(int numberOfWolfs, Location spawnLocation, World world) {
-
+        wolfs = new ArrayList<>();
         this.numberOfWolfs = numberOfWolfs;
         this.wolfPackID = hashCode();
 
@@ -23,10 +26,10 @@ public class WolfPack {
     }
 
     void createWolfList() {
-        wolfs.add(new Wolf(true, wolfPackID, this));
+        wolfs.add(new Wolf(wolfPackID, this));
 
         for (int i = 1; i < numberOfWolfs; i++) {
-            wolfs.add(new Wolf(false, wolfPackID, this));
+            wolfs.add(new Wolf(wolfPackID, this, wolfs.getFirst()));
         }
     }
 
@@ -36,7 +39,10 @@ public class WolfPack {
 
         world.setTile(spawnLocation, leaderWolf);
 
-        spawnWolfsInWolfPack(numberOfWolfs, spawnLocation, world, 1);
+        ArrayList<Wolf> tempWolfs = new ArrayList<>(wolfs);
+        tempWolfs.remove(tempWolfs.getFirst());
+
+        spawnWolfsInWolfPack(numberOfWolfs, spawnLocation, world, 1, tempWolfs);
 
     }
 
@@ -50,20 +56,22 @@ public class WolfPack {
         return surroundingTiles;
     }
 
-    private void spawnWolfsInWolfPack(int numberOfWolfs, Location spawnLocation, World world, int radius) {
-        Set set = getEmptySurroundingTiles(world, spawnLocation,radius);
+    private void spawnWolfsInWolfPack(int numberOfWolfs, Location spawnLocation, World world, int radius, ArrayList<Wolf> wolfs) {
+        Set<Location> set = getEmptySurroundingTiles(world, spawnLocation,radius);
 
         ArrayList<Location> spawnLocations = new ArrayList<>(set);
-
-        for (int i = 1; i < spawnLocations.size(); i++) {
-            if(i > numberOfWolfs) {
+        ArrayList<Wolf> tempWolfs = new ArrayList<>(wolfs);
+        for (int i = 0; i < spawnLocations.size(); i++) {
+            if(i > numberOfWolfs-2) {
                 break;
             }
-            world.setTile(spawnLocations.get(i-1), wolfs.get(i));
+            wolfs.get(i).setMyLocation(spawnLocations.get(i));
+            world.setTile(spawnLocations.get(i), wolfs.get(i));
+            tempWolfs.remove(wolfs.get(i));
         }
 
-        if(numberOfWolfs > spawnLocations.size()) {
-            spawnWolfsInWolfPack(numberOfWolfs - spawnLocations.size(), spawnLocation, world, (radius+1));
+        if(!tempWolfs.isEmpty()) {
+            spawnWolfsInWolfPack(numberOfWolfs - spawnLocations.size(), spawnLocation, world, (radius+1), tempWolfs);
         }
     }
 
