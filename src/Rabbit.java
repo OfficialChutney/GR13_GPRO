@@ -88,6 +88,7 @@ public class Rabbit implements Actor {
                 System.out.println("I ran");
             }
         }
+
         this.checkMaxEnergy();
     }
 
