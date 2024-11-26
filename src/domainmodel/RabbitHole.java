@@ -1,10 +1,9 @@
+package domainmodel;
+
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import itumulator.simulator.Actor;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 
 public class RabbitHole implements NonBlocking, Actor {
@@ -21,7 +20,6 @@ public class RabbitHole implements NonBlocking, Actor {
     @Override
     public void act(World ourWorld) {
         //hej
-
     }
 
     public void setHasRabbit(boolean hasRabbit) {

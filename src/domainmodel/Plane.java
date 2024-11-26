@@ -1,6 +1,7 @@
+package domainmodel;
+
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
-import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
@@ -21,8 +22,8 @@ public class Plane {
 
     public Plane() {
         displaySize = 800;
-        delay = 1000;
-        simulationStepLength = 50;
+        delay = 500;
+        simulationStepLength = 20;
         rd = new Random();
     }
 
@@ -131,12 +132,6 @@ public class Plane {
                     }
 
                 }
-
-
-
-
-
-
 
             }
         }

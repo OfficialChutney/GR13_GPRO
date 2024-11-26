@@ -1,8 +1,9 @@
+package domainmodel;
+
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
 
-import java.sql.Time;
 import java.util.*;
 
 public class Rabbit implements Actor {
@@ -39,7 +40,6 @@ public class Rabbit implements Actor {
 
             this.status = RabbitStatus.LOOKINGFORFOOD;
 
-
             this.pathFinder(world, this.getNearestGrass(world));
             if (this.isItGrass(world)) {
                 this.eat(world);
@@ -53,7 +53,15 @@ public class Rabbit implements Actor {
         } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
             this.status = RabbitStatus.GOINGHOME;
             if (this.myRabbitHole == null) {
-                this.digHole(world);
+                RabbitHole rh = findHoleWithoutOwner(world);
+
+                if(rh == null) {
+                    this.digHole(world);
+                } else {
+                    rh.setHasRabbit(true);
+                    myRabbitHole = rh;
+                }
+
             } else if (this.myRabbitHole != null) {
                 this.pathFinder(world, world.getLocation(myRabbitHole));
             }
@@ -156,6 +164,23 @@ public class Rabbit implements Actor {
             newHole.setHasRabbit(true);
             this.myRabbitHole = newHole;
         }
+    }
+
+    private RabbitHole findHoleWithoutOwner(World world) {
+        Map<Object, Location> allEntities = world.getEntities();
+
+        for (Object object : allEntities.keySet()) {
+            if(object instanceof RabbitHole rh) {
+                if(!rh.getHasRabbit()) {
+                    return rh;
+                }
+            }
+        }
+
+        return null;
+
+
+
     }
 
     private void sleep(World world) {

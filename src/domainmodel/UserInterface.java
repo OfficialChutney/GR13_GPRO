@@ -1,3 +1,5 @@
+package domainmodel;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -6,7 +8,6 @@ import java.util.HashMap;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class UserInterface {
 
@@ -19,7 +20,7 @@ public class UserInterface {
 
     public void startProgram() {
         int start = 0;
-        for (File file : Objects.requireNonNull(inputFileDirectory.listFiles())) {
+        for (File file : inputFileDirectory.listFiles()) {
             if (start >= 0) {
 
 

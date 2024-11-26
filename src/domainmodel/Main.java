@@ -1,4 +1,4 @@
-import java.util.Random;
+package domainmodel;
 
 public class Main {
 
