@@ -23,7 +23,7 @@ public class Plane {
     public Plane() {
         displaySize = 800;
         delay = 500;
-        simulationStepLength = 20;
+        simulationStepLength = 60;
         rd = new Random();
     }
 
@@ -161,6 +161,28 @@ public class Plane {
         //Set display for Rabbit
         DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
         program.setDisplayInformation(Rabbit.class, rabbitDisplay);
+    }
+
+    private void checkNonBlockingLayer() {
+        Object[][][] tiles = world.getTiles();
+
+        Object[][] nonBlockingLayer = tiles[0];
+        ArrayList<Grass> grassOnMap = new ArrayList<>();
+        int size = 0;
+
+        for (Object object : nonBlockingLayer) {
+            if(object != null) {
+                size++;
+                if(object instanceof Grass grass) {
+                    grassOnMap.add(grass);
+                }
+            }
+        }
+
+        if(size == worldSize*worldSize) {
+
+        }
+
     }
 
 

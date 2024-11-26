@@ -14,17 +14,18 @@ public class Grass implements Actor, NonBlocking {
     private final Location tileLocation;
     private final World ourWorld;
     private final float chanceToGrow;
+    private boolean nonBlockingLayerFull;
 
     public Grass(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        chanceToGrow = 0.1f;
-
+        chanceToGrow = 0.4f;
+        nonBlockingLayerFull = false;
     }
 
     @Override
     public void act(World world) {
-        spreadGrass(ourWorld,chanceToGrow);
+        spreadGrass(ourWorld, chanceToGrow);
     }
 
     private Location getTileLocation() {
@@ -36,8 +37,8 @@ public class Grass implements Actor, NonBlocking {
         ArrayList<Location> list = new ArrayList<>(neighbours);
 
         ArrayList<Location> nonBlockingList = new ArrayList<>();
-        for(Location location : list){
-            if(!ourWorld.containsNonBlocking(location)){
+        for (Location location : list) {
+            if (!ourWorld.containsNonBlocking(location)) {
                 nonBlockingList.add(location);
             }
         }
@@ -46,20 +47,27 @@ public class Grass implements Actor, NonBlocking {
     }
 
     private void spreadGrass(World ourWorld, float chanceToGrow) {
-        ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
-        Random chance = new Random();
+        if (!nonBlockingLayerFull) {
 
-        if(chance.nextFloat(1) < chanceToGrow && !emptyNeighbouringTiles.isEmpty()) { // success
-            Random randLocation = new Random();
-            Location l = emptyNeighbouringTiles.get(randLocation.nextInt(emptyNeighbouringTiles.size()));
 
-            ourWorld.setTile(l, new Grass(ourWorld,l));
+            ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
+            Random chance = new Random();
+
+            if (chance.nextFloat(1) < chanceToGrow && !emptyNeighbouringTiles.isEmpty()) { // success
+                Random randLocation = new Random();
+                Location l = emptyNeighbouringTiles.get(randLocation.nextInt(emptyNeighbouringTiles.size()));
+
+                ourWorld.setTile(l, new Grass(ourWorld, l));
+            }
         }
 
     }
 
-    public void deleteGrass(){
+    public void deleteGrass() {
         ourWorld.delete(this);
     }
 
+    public void setNonBlockingLayerFull(boolean nonBlockingLayerFull) {
+        this.nonBlockingLayerFull = nonBlockingLayerFull;
+    }
 }
