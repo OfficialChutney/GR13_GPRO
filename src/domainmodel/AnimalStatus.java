@@ -1,6 +1,6 @@
 package domainmodel;
 
-public enum RabbitStatus {
+public enum AnimalStatus {
     LOOKINGFORFOOD,
     GOINGHOME,
     SLEEPING

@@ -19,11 +19,10 @@ public class Plane {
     private int worldSize;
     private int simulationStepLength;
 
-
     public Plane() {
         displaySize = 800;
         delay = 500;
-        simulationStepLength = 20;
+        simulationStepLength = 60;
         rd = new Random();
     }
 
@@ -72,7 +71,7 @@ public class Plane {
 
 
         program.show();
-
+        long startingms = System.currentTimeMillis();
         for (int i = 0; i < simulationStepLength; i++) {
             program.simulate();
             System.out.println("Step: "+world.getCurrentTime());
@@ -94,6 +93,8 @@ public class Plane {
         }
 
         stopSimulation();
+        long stopms = System.currentTimeMillis();
+        System.out.println("Time for simluation: " + (stopms - startingms));
 
     }
 

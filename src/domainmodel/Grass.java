@@ -18,13 +18,12 @@ public class Grass implements Actor, NonBlocking {
     public Grass(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        chanceToGrow = 0.1f;
-
+        chanceToGrow = 0.2f;
     }
 
     @Override
     public void act(World world) {
-        spreadGrass(ourWorld,chanceToGrow);
+        spreadGrass(ourWorld, chanceToGrow);
     }
 
     private Location getTileLocation() {
@@ -36,8 +35,8 @@ public class Grass implements Actor, NonBlocking {
         ArrayList<Location> list = new ArrayList<>(neighbours);
 
         ArrayList<Location> nonBlockingList = new ArrayList<>();
-        for(Location location : list){
-            if(!ourWorld.containsNonBlocking(location)){
+        for (Location location : list) {
+            if (!ourWorld.containsNonBlocking(location)) {
                 nonBlockingList.add(location);
             }
         }
@@ -46,20 +45,22 @@ public class Grass implements Actor, NonBlocking {
     }
 
     private void spreadGrass(World ourWorld, float chanceToGrow) {
+
+
         ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
         Random chance = new Random();
 
-        if(chance.nextFloat(1) < chanceToGrow && !emptyNeighbouringTiles.isEmpty()) { // success
+        if (chance.nextFloat(1) < chanceToGrow && !emptyNeighbouringTiles.isEmpty()) { // success
             Random randLocation = new Random();
             Location l = emptyNeighbouringTiles.get(randLocation.nextInt(emptyNeighbouringTiles.size()));
 
-            ourWorld.setTile(l, new Grass(ourWorld,l));
+            ourWorld.setTile(l, new Grass(ourWorld, l));
         }
 
+
     }
 
-    public void deleteGrass(){
+    public void deleteGrass() {
         ourWorld.delete(this);
     }
-
 }
