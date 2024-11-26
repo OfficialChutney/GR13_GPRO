@@ -19,7 +19,6 @@ public class Plane {
     private int worldSize;
     private int simulationStepLength;
 
-
     public Plane() {
         displaySize = 800;
         delay = 500;
@@ -72,7 +71,7 @@ public class Plane {
 
 
         program.show();
-
+        long startingms = System.currentTimeMillis();
         for (int i = 0; i < simulationStepLength; i++) {
             program.simulate();
             System.out.println("Step: "+world.getCurrentTime());
@@ -94,6 +93,8 @@ public class Plane {
         }
 
         stopSimulation();
+        long stopms = System.currentTimeMillis();
+        System.out.println("Time for simluation: " + (stopms - startingms));
 
     }
 
@@ -161,28 +162,6 @@ public class Plane {
         //Set display for Rabbit
         DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
         program.setDisplayInformation(Rabbit.class, rabbitDisplay);
-    }
-
-    private void checkNonBlockingLayer() {
-        Object[][][] tiles = world.getTiles();
-
-        Object[][] nonBlockingLayer = tiles[0];
-        ArrayList<Grass> grassOnMap = new ArrayList<>();
-        int size = 0;
-
-        for (Object object : nonBlockingLayer) {
-            if(object != null) {
-                size++;
-                if(object instanceof Grass grass) {
-                    grassOnMap.add(grass);
-                }
-            }
-        }
-
-        if(size == worldSize*worldSize) {
-
-        }
-
     }
 
 
