@@ -56,7 +56,7 @@ public class Plane {
                         createObjectOnTile(Rabbit.class, value);
                     }
                     case "burrow" -> {
-                        createObjectOnTile(RabbitHole.class, value);
+                        createObjectOnTile(Hole.class, value);
                     }
                     case "grass" -> {
                         createObjectOnTile(Grass.class,value);
@@ -79,8 +79,8 @@ public class Plane {
 
 
 
-            //Denne kode henter alle kaniner og tester, om de stadig er på spillefladen.
-            //Det ses tydeligt, at i visse tilfælde, slettes kaninerne fra spillefladen, når "remove" metoden benyttes, selvom de ikke burde.
+            //Denne kode henter alle kaniner og tester, om de stadig er pï¿½ spillefladen.
+            //Det ses tydeligt, at i visse tilfï¿½lde, slettes kaninerne fra spillefladen, nï¿½r "remove" metoden benyttes, selvom de ikke burde.
             Set<Object> allEntities = world.getEntities().keySet();
             Set<Rabbit> allRabbits = new HashSet<>();
             for (Object o : allEntities) {
@@ -113,8 +113,8 @@ public class Plane {
                         if(objectType == Grass.class) {
                             Grass grassToPlace = new Grass(world, locationOfObject);
                             world.setTile(locationOfObject, grassToPlace);
-                        } else if(objectType == RabbitHole.class) {
-                            RabbitHole holeToPlace = new RabbitHole(world, locationOfObject);
+                        } else if(objectType == Hole.class) {
+                            Hole holeToPlace = new Hole(world, locationOfObject, HoleType.RABBITHOLE);
                             world.setTile(locationOfObject, holeToPlace);
                         }
                     }
@@ -156,7 +156,7 @@ public class Plane {
 
         //Set display for Rabbitholes
         DisplayInformation rabbitHoleDisplay = new DisplayInformation(Color.orange, "hole-small");
-        program.setDisplayInformation(RabbitHole.class, rabbitHoleDisplay);
+        program.setDisplayInformation(Hole.class, rabbitHoleDisplay);
 
         //Set display for Rabbit
         DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");

@@ -8,18 +8,18 @@ import itumulator.world.World;
 import java.util.*;
 
 public class Rabbit implements Actor {
-    private int age = 0;
-    private int maxEnergy = 15;
-    private int energy;
-    private RabbitHole myRabbitHole;
-    private boolean isInRabbitHole;
-    private Sex sex;
-    private boolean pregnant;
-    private RabbitStatus status;
-    private boolean hiding = false;
+    int age = 0;
+    int maxEnergy = 15;
+    int energy;
+    Hole myRabbitHole;
+    boolean isInRabbitHole;
+    Sex sex;
+    boolean pregnant;
+    RabbitStatus status;
+    boolean hiding = false;
 
 
-    public Rabbit() {
+    Rabbit() {
         this.setSex();
         energy = 15;
     }
@@ -54,7 +54,7 @@ public class Rabbit implements Actor {
 
             this.status = RabbitStatus.LOOKINGFORFOOD;
 
-            this.pathFinder(world, this.getNearestObject(Grass.class, world));
+            this.pathFinder(world, this.getNearestGrass(world));
             if (this.isItGrass(world)) {
                 this.eat(world);
             }
@@ -69,7 +69,7 @@ public class Rabbit implements Actor {
             if (this.myRabbitHole == null) {
                 RabbitHole rh = findHoleWithoutOwner(world);
 
-                if (rh == null) {
+                if(rh == null) {
                     this.digHole(world);
                 } else {
                     rh.setHasRabbit(true);
@@ -171,14 +171,14 @@ public class Rabbit implements Actor {
     private void digHole(World world) {
         System.out.println("digging a hole");
         if (this.myRabbitHole == null) {
-            RabbitHole newHole = new RabbitHole(world, world.getLocation(this));
+            Hole newHole = new Hole(world, world.getLocation(this), HoleType.RABBITHOLE);
             world.setTile(world.getLocation(this), newHole);
             newHole.setHasRabbit(true);
             this.myRabbitHole = newHole;
         }
     }
 
-    private RabbitHole findHoleWithoutOwner(World world) {
+    private Hole findHoleWithoutOwner(World world) {
         Map<Object, Location> allEntities = world.getEntities();
 
         for (Object object : allEntities.keySet()) {
