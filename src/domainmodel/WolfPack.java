@@ -11,11 +11,11 @@ import itumulator.world.World;
 
 public class WolfPack {
 
-    int numberOfWolfs;
-    ArrayList<Wolf> wolfs;
-    int wolfPackID;
+    private int numberOfWolfs;
+    private ArrayList<Wolf> wolfs;
+    private int wolfPackID;
 
-    WolfPack(int numberOfWolfs, Location spawnLocation, World world) {
+    public WolfPack(int numberOfWolfs, Location spawnLocation, World world) {
         wolfs = new ArrayList<>();
         this.numberOfWolfs = numberOfWolfs;
         this.wolfPackID = hashCode();
@@ -25,7 +25,7 @@ public class WolfPack {
         spawnWolfPack(spawnLocation, world);
     }
 
-    void createWolfList() {
+    private void createWolfList() {
         wolfs.add(new Wolf(wolfPackID, this));
 
         for (int i = 1; i < numberOfWolfs; i++) {
@@ -33,7 +33,7 @@ public class WolfPack {
         }
     }
 
-    void spawnWolfPack(Location spawnLocation, World world) {
+    private void spawnWolfPack(Location spawnLocation, World world) {
         Wolf leaderWolf = wolfs.getFirst();
         leaderWolf.setMyLocation(spawnLocation);
 
@@ -50,7 +50,7 @@ public class WolfPack {
         return wolfs.getFirst();
     }
 
-    public Set<Location> getEmptySurroundingTiles(World world, Location location, int radius) {
+    private Set<Location> getEmptySurroundingTiles(World world, Location location, int radius) {
         Set<Location> surroundingTiles = world.getSurroundingTiles(location, radius);
         surroundingTiles.removeIf(tile -> !world.isTileEmpty(tile));
         return surroundingTiles;
