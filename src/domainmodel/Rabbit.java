@@ -121,10 +121,7 @@ public class Rabbit implements Actor {
                 }
             }
         }
-
         return null;
-
-
     }
 
     private void sleep(World world) {
