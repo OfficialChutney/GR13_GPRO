@@ -21,8 +21,8 @@ public class Plane {
 
     public Plane() {
         displaySize = 800;
-        delay = 500;
-        simulationStepLength = 60;
+        delay = 300;
+        simulationStepLength = 20;
         rd = new Random();
     }
 
@@ -59,6 +59,9 @@ public class Plane {
                     }
                     case "grass" -> {
                         createObjectOnTile(Grass.class,value);
+                    }
+                    case "wolf" -> {
+                        createObjectOnTile(WolfPack.class, value);
                     }
                     default -> {
                         System.out.println("could not determine type " + key);
@@ -99,6 +102,7 @@ public class Plane {
     }
 
     private void createObjectOnTile(Class<?> objectType, int numberOfUnits) {
+
         for (int i = 0; i < numberOfUnits; i++) {
             boolean tileIsEmpty = false;
             while (!tileIsEmpty) {
@@ -129,6 +133,9 @@ public class Plane {
                         if(objectType == Rabbit.class) {
                             Rabbit rabbit = new Rabbit();
                             world.setTile(locationOfObject, rabbit);
+                        } else if(objectType == WolfPack.class) {
+                            new WolfPack(numberOfUnits, locationOfObject, world);
+                            return;
                         }
                     }
 
@@ -162,6 +169,10 @@ public class Plane {
         //Set display for Rabbit
         DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
         program.setDisplayInformation(Rabbit.class, rabbitDisplay);
+
+        //Set display for Wolf
+        DisplayInformation wolfDisplay = new DisplayInformation(Color.orange, "wolf");
+        program.setDisplayInformation(Wolf.class, wolfDisplay);
     }
 
 
