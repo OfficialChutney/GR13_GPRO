@@ -24,10 +24,21 @@ public class Wolf extends Animal implements Actor {
         isLeader = true;
         leader = this;
         this.world = world;
+        isOnMap = true;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
         super(30, world);
+        this.wolfPackID = wolfPackID;
+        this.pack = pack;
+        isLeader = false;
+        this.leader = leader;
+        this.world = world;
+        isOnMap = true;
+    }
+
+    Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader, boolean isOnMap) {
+        super(30, world, isOnMap);
         this.wolfPackID = wolfPackID;
         this.pack = pack;
         isLeader = false;
@@ -85,5 +96,26 @@ public class Wolf extends Animal implements Actor {
     @Override
     protected void eat() {
 
+    }
+
+    public int getWolfPackID() {
+        return wolfPackID;
+    }
+
+    public Wolf getLeader() {
+        return leader;
+    }
+
+    public WolfPack getWolfPack() {
+        return pack;
+    }
+
+    @Override
+    protected LifeStage getLifeStage() {
+        if(age < 100) {
+            return LifeStage.CHILD;
+        } else {
+            return LifeStage.ADULT;
+        }
     }
 }

@@ -1,16 +1,18 @@
 package domainmodel;
 
+import itumulator.executable.DisplayInformation;
+import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
 
+import java.awt.*;
 import java.util.*;
 
-public class Rabbit extends Animal implements Actor {
+public class Rabbit extends Animal implements Actor, DynamicDisplayInformationProvider {
 
     private Hole myRabbitHole;
     private boolean hiding = false;
-
 
     public Rabbit(World world) {
         super(10000, world);
@@ -18,8 +20,15 @@ public class Rabbit extends Animal implements Actor {
         energy = 10000;
     }
 
+    public Rabbit(World world, boolean isOnMap) {
+        super(10000, world, isOnMap);
+        this.setSex();
+        energy = 10000;
+    }
+
     @Override
     public void act(World world) {
+
 
         TimeOfDay currentTime = checktime();
         if (currentTime == TimeOfDay.MORNING) {
@@ -33,8 +42,9 @@ public class Rabbit extends Animal implements Actor {
             sleep();
         }
 
-        die();
+        ageRabbit();
         tryToDecreaseEnergy();
+        die();
     }
 
     @Override
@@ -47,18 +57,27 @@ public class Rabbit extends Animal implements Actor {
     }
 
     private void digHole() {
-        if (this.myRabbitHole == null) {
+        if (myRabbitHole == null) {
             Location locOfRabbit = world.getLocation(this);
             Object objectOnRabbit = world.getNonBlocking(locOfRabbit);
-            if(!(objectOnRabbit instanceof Grass) && objectOnRabbit != null) {
+            if (!(objectOnRabbit instanceof Grass) && objectOnRabbit != null) {
                 Random rd = new Random();
-                ArrayList<Location> emptyTiles = surrondingEmptyLocationsList();
-                world.move(this, emptyTiles.get(rd.nextInt(emptyTiles.size())));
+
+                for (int i = 1; i <= world.getSize(); i++) {
+                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(locOfRabbit,i);
+                    ArrayList<Location> emptyTiles = new ArrayList<>(emptyTilesSet);
+                    if(!emptyTiles.isEmpty()) {
+                        pathFinder(emptyTiles.get(rd.nextInt(emptyTiles.size())));
+                        break;
+                    }
+                }
+
+
             } else {
-                if(isItGrass()) {
+                if (isItGrass()) {
                     eat();
                 }
-                Hole newHole = new Hole(world, world.getLocation(this),HoleType.RABBITHOLE);
+                Hole newHole = new Hole(world, world.getLocation(this), HoleType.RABBITHOLE);
                 world.setTile(locOfRabbit, newHole);
                 newHole.setHasAnimal(true);
                 myRabbitHole = newHole;
@@ -79,9 +98,9 @@ public class Rabbit extends Animal implements Actor {
         }
         return null;
     }
-    
+
     private void tryToDecreaseEnergy() {
-        if(status != AnimalStatus.SLEEPING) {
+        if (status != AnimalStatus.SLEEPING) {
             updateEnergy(-1);
         }
     }
@@ -93,35 +112,44 @@ public class Rabbit extends Animal implements Actor {
     }
 
 
-
     private void tryTohide() {
-        int thisX = world.getLocation(this).getX();
-        int thisY = world.getLocation(this).getY();
+        if (isOnMap) {
 
-        int rabbitHoleX = world.getLocation(myRabbitHole).getX();
-        int rabbitHoleY = world.getLocation(myRabbitHole).getY();
+            if(myRabbitHole == null) {
+                digHole();
+                return;
+            }
 
-        if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
-            world.remove(this);
-            hiding = true;
 
+            int thisX = world.getLocation(this).getX();
+            int thisY = world.getLocation(this).getY();
+
+            int rabbitHoleX = world.getLocation(myRabbitHole).getX();
+            int rabbitHoleY = world.getLocation(myRabbitHole).getY();
+
+            if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
+                world.remove(this);
+                hiding = true;
+                isOnMap = false;
+
+            }
         }
     }
 
     private void emerge() {
-        if (hiding) {
+        if (hiding && !isOnMap) {
             Location rabbitHoleLoc = world.getLocation(myRabbitHole);
             if (!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
                 world.setTile(rabbitHoleLoc, this);
+                isOnMap = true;
                 hiding = false;
-                ageRabbit();
                 birth();
             }
         }
     }
 
     public AnimalStatus getStatus() {
-        return this.status;
+        return status;
     }
 
     private void ageRabbit() {
@@ -130,32 +158,55 @@ public class Rabbit extends Animal implements Actor {
     }
 
     private void lookingForFoodBehaviour() {
-        this.status = AnimalStatus.LOOKINGFORFOOD;
+        if (isOnMap) {
 
-        pathFinder(getNearestObject(Grass.class));
-        if (this.isItGrass()) {
-            eat();
+            this.status = AnimalStatus.LOOKINGFORFOOD;
+
+            pathFinder(getNearestObject(Grass.class));
+            if (isItGrass()) {
+                eat();
+            }
+            updateEnergy(-1);
         }
-        this.updateEnergy(-1);
     }
 
     private void goingHomeBehaviour() {
-        this.status = AnimalStatus.GOINGHOME;
-        if (this.myRabbitHole == null) {
-            Hole rh = findHoleWithoutOwner();
+        if (isOnMap) {
+            status = AnimalStatus.GOINGHOME;
+            if (myRabbitHole == null) {
+                Hole rh = findHoleWithoutOwner();
 
-            if (rh == null) {
-                digHole();
+                if (rh == null) {
+                    digHole();
+                } else {
+                    rh.setHasAnimal(true);
+                    myRabbitHole = rh;
+                }
+
             } else {
-                rh.setHasAnimal(true);
-                myRabbitHole = rh;
+                pathFinder(world.getLocation(myRabbitHole));
             }
-
-        } else {
-            pathFinder(world.getLocation(myRabbitHole));
         }
     }
 
+    @Override
+    protected LifeStage getLifeStage() {
+        if(age < 40) {
+            return LifeStage.CHILD;
+        } else {
+            return LifeStage.ADULT;
+        }
+    }
+
+    @Override
+    public DisplayInformation getInformation() {
+        if(getLifeStage() == LifeStage.CHILD) {
+            return new DisplayInformation(Color.red, "rabbit-small");
+        } else {
+            return new DisplayInformation(Color.red, "rabbit-large");
+        }
 
 
+
+    }
 }

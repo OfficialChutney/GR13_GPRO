@@ -23,7 +23,7 @@ public class Plane {
     public Plane() {
         displaySize = 800;
         delay = 500;
-        simulationStepLength = 20;
+        simulationStepLength = 200;
         rd = new Random();
     }
 

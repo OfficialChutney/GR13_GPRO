@@ -4,42 +4,64 @@ import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class  Animal {
+public abstract class Animal {
     protected int age;
     protected int energy;
     protected int maxEnergy;
     protected int hitpoints;
     protected int maxHitpoints;
     protected Sex sex;
-    protected boolean pregnant = false;
+    protected boolean pregnant;
     protected AnimalStatus status;
     protected World world;
+    protected Random rd;
+    protected boolean isOnMap;
+    protected Helper helper;
 
-    Animal(int maxEnergy, World world){
+    Animal(int maxEnergy, World world) {
         this.maxEnergy = maxEnergy;
         this.world = world;
+        rd = new Random();
+        isOnMap = true;
+        pregnant = false;
+        helper = new Helper(world);
+    }
+
+    Animal(int maxEnergy, World world, boolean isOnMap) {
+        this.maxEnergy = maxEnergy;
+        this.world = world;
+        rd = new Random();
+        this.isOnMap = isOnMap;
+        pregnant = false;
+        helper = new Helper(world);
     }
 
     protected abstract void eat();
 
+    protected abstract LifeStage getLifeStage();
+
     protected void reproduce() {
-        if (sex == Sex.FEMALE) {
-            if (isNeighbourMale(this)) {
-                pregnant = true;
+        if (isOnMap) {
+            if (sex == Sex.FEMALE && getLifeStage() == LifeStage.ADULT) {
+                if (isNeighbourMale(this)) {
+                    pregnant = true;
+                }
             }
         }
     }
 
     protected void pathFinder(Location destination) {
+
         if (destination == null) {
             Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
             ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
 
-            if(!sourroundingLocationsAsList.isEmpty()){
+            if (!sourroundingLocationsAsList.isEmpty()) {
                 Random rd = new Random();
 
                 world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
@@ -71,13 +93,20 @@ public abstract class  Animal {
 
         if (world.isTileEmpty(onTheMove)) {
             world.move(this, onTheMove);
+        } else {
+            ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(start, 1));
+            if (!alternativeLocations.isEmpty()) {
+                world.move(this, alternativeLocations.get(rd.nextInt(alternativeLocations.size())));
+            }
+
         }
     }
 
     protected void die() {
-        if(energy <= 0) {
+        if (energy <= 0) {
             System.out.println("I died");
             world.delete(this);
+            isOnMap = false;
         }
     }
 
@@ -97,7 +126,7 @@ public abstract class  Animal {
 
     protected void updateEnergy(int num) {
         energy += num;
-        if(energy > maxEnergy) {
+        if (energy > maxEnergy) {
             energy = maxEnergy;
         }
     }
@@ -113,6 +142,7 @@ public abstract class  Animal {
     }
 
     protected Location getNearestObject(Class<?> object) {
+
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
             for (Location loc : temp) {
@@ -136,7 +166,6 @@ public abstract class  Animal {
     }
 
 
-
     protected ArrayList<Location> surrondingEmptyLocationsList() {
         Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
         return new ArrayList<>(neighbours);
@@ -149,6 +178,7 @@ public abstract class  Animal {
     protected ArrayList<Location> surrondingLocationsList(int range) {
         Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
         return new ArrayList<>(neighbours);
+
     }
 
     protected boolean isNeighbourMale(Animal animal) {
@@ -158,14 +188,12 @@ public abstract class  Animal {
             Object objectOnTile = world.getTile(neighbor);
 
             try {
-                if(animal.getClass() == objectOnTile.getClass()) {
+                if (animal.getClass() == objectOnTile.getClass()) {
                     return ((Animal) objectOnTile).getSex() == Sex.MALE;
                 }
             } catch (NullPointerException e) {
                 return false;
             }
-
-
 
 
         }
@@ -189,9 +217,27 @@ public abstract class  Animal {
             Random r = new Random();
             ArrayList<Location> tiles = surrondingEmptyLocationsList();
 
-            Rabbit child = new Rabbit(world);
-            world.setTile(tiles.get(r.nextInt(tiles.size())), child);
-            pregnant = false;
+            if (tiles.isEmpty()) {
+                return;
+            }
+
+            Animal child = null;
+            if (this instanceof Rabbit) {
+                child = new Rabbit(world, false);
+            } else if (this instanceof Wolf w) {
+                child = new Wolf(world, w.getWolfPackID(), w.getWolfPack(), w.getLeader(), false);
+            }
+
+            if (child != null) {
+                System.out.println("I birthed");
+                world.setTile(tiles.get(r.nextInt(tiles.size())), child);
+                child.setOnMap(true);
+                pregnant = false;
+            }
         }
+    }
+
+    protected void setOnMap(boolean isOnMap) {
+        this.isOnMap = isOnMap;
     }
 }
