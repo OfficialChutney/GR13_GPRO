@@ -18,10 +18,11 @@ public class Plane {
     private Random rd;
     private int worldSize;
     private int simulationStepLength;
+    private static int numOfNonBlocking;
 
     public Plane() {
         displaySize = 800;
-        delay = 300;
+        delay = 500;
         simulationStepLength = 20;
         rd = new Random();
     }
@@ -48,7 +49,7 @@ public class Plane {
                 value = Integer.parseInt(valueAsText);
             }
 
-            if (value != -1 ) {
+            if (value != -1) {
 
                 switch (key) {
                     case "rabbit" -> {
@@ -58,7 +59,7 @@ public class Plane {
                         createObjectOnTile(Hole.class, value);
                     }
                     case "grass" -> {
-                        createObjectOnTile(Grass.class,value);
+                        createObjectOnTile(Grass.class, value);
                     }
                     case "wolf" -> {
                         createObjectOnTile(WolfPack.class, value);
@@ -77,8 +78,7 @@ public class Plane {
         long startingms = System.currentTimeMillis();
         for (int i = 0; i < simulationStepLength; i++) {
             program.simulate();
-            System.out.println("Step: "+world.getCurrentTime());
-
+            System.out.println("Step: " + world.getCurrentTime());
 
 
             //Denne kode henter alle kaniner og tester, om de stadig er p� spillefladen.
@@ -86,7 +86,7 @@ public class Plane {
             Set<Object> allEntities = world.getEntities().keySet();
             Set<Rabbit> allRabbits = new HashSet<>();
             for (Object o : allEntities) {
-                if(o instanceof Rabbit r) {
+                if (o instanceof Rabbit r) {
                     allRabbits.add(r);
                 }
             }
@@ -110,15 +110,15 @@ public class Plane {
                 int y = rd.nextInt(worldSize);
                 Location locationOfObject = new Location(x, y);
 
-                if(NonBlocking.class.isAssignableFrom(objectType)) {
+                if (NonBlocking.class.isAssignableFrom(objectType)) {
 
                     if (!world.containsNonBlocking(locationOfObject)) {
                         tileIsEmpty = true;
 
-                        if(objectType == Grass.class) {
+                        if (objectType == Grass.class) {
                             Grass grassToPlace = new Grass(world, locationOfObject);
                             world.setTile(locationOfObject, grassToPlace);
-                        } else if(objectType == Hole.class) {
+                        } else if (objectType == Hole.class) {
                             Hole holeToPlace = new Hole(world, locationOfObject, HoleType.RABBITHOLE);
                             world.setTile(locationOfObject, holeToPlace);
                         }
@@ -128,12 +128,12 @@ public class Plane {
 
                     Object objectOnTile = world.getTile(locationOfObject);
 
-                    if(objectOnTile == null || objectOnTile instanceof NonBlocking) {
+                    if (objectOnTile == null || objectOnTile instanceof NonBlocking) {
                         tileIsEmpty = true;
-                        if(objectType == Rabbit.class) {
-                            Rabbit rabbit = new Rabbit();
+                        if (objectType == Rabbit.class) {
+                            Rabbit rabbit = new Rabbit(world);
                             world.setTile(locationOfObject, rabbit);
-                        } else if(objectType == WolfPack.class) {
+                        } else if (objectType == WolfPack.class) {
                             new WolfPack(numberOfUnits, locationOfObject, world);
                             return;
                         }
@@ -173,6 +173,18 @@ public class Plane {
         //Set display for Wolf
         DisplayInformation wolfDisplay = new DisplayInformation(Color.orange, "wolf");
         program.setDisplayInformation(Wolf.class, wolfDisplay);
+    }
+
+    public static void increaseNonBlocking() {
+        numOfNonBlocking++;
+    }
+
+    public static void decreaseNonBlocking() {
+        numOfNonBlocking--;
+    }
+
+    public static int getNonBlocking() {
+        return numOfNonBlocking;
     }
 
 

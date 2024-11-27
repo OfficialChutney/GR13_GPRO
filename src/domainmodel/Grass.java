@@ -14,53 +14,64 @@ public class Grass implements Actor, NonBlocking {
     private final Location tileLocation;
     private final World ourWorld;
     private final float chanceToGrow;
+    private final Random rd;
+    private final int worldSizeSquared;
 
     public Grass(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        chanceToGrow = 0.2f;
+        chanceToGrow = 0.5f;
+        rd = new Random();
+        worldSizeSquared = ourWorld.getSize() * ourWorld.getSize();
+        Plane.increaseNonBlocking();
+
     }
 
     @Override
     public void act(World world) {
-        spreadGrass(ourWorld, chanceToGrow);
+        spreadGrass();
+
     }
 
     private Location getTileLocation() {
         return tileLocation;
     }
 
-    private ArrayList<Location> getEmptyNeighbouringTiles() {
-        Set<Location> neighbours = ourWorld.getSurroundingTiles();
-        ArrayList<Location> list = new ArrayList<>(neighbours);
 
-        ArrayList<Location> nonBlockingList = new ArrayList<>();
-        for (Location location : list) {
-            if (!ourWorld.containsNonBlocking(location)) {
-                nonBlockingList.add(location);
+    public void spreadGrass() {
+
+        if(Plane.getNonBlocking() != worldSizeSquared) {
+            if(!(rd.nextFloat(1) < chanceToGrow)) {
+                return;
             }
+        } else {
+            return;
         }
 
-        return nonBlockingList;
-    }
+        Set<Location> set = ourWorld.getSurroundingTiles();
+        ArrayList<Location> list = new ArrayList<>(set);
 
-    private void spreadGrass(World ourWorld, float chanceToGrow) {
-
-
-        ArrayList<Location> emptyNeighbouringTiles = getEmptyNeighbouringTiles();
-        Random chance = new Random();
-
-        if (chance.nextFloat(1) < chanceToGrow && !emptyNeighbouringTiles.isEmpty()) { // success
-            Random randLocation = new Random();
-            Location l = emptyNeighbouringTiles.get(randLocation.nextInt(emptyNeighbouringTiles.size()));
-
-            ourWorld.setTile(l, new Grass(ourWorld, l));
+        int i = 0;
+        for (Location l : list) {
+            if (!ourWorld.containsNonBlocking(l)) {
+                break;
+            }
+            i++;
         }
 
+        if (i != list.size()) {
+            Location l = list.get(rd.nextInt(list.size()));
 
+            while (ourWorld.containsNonBlocking(l)) {
+                l = list.get(rd.nextInt(list.size()));
+            }
+
+            ourWorld.setTile(l, new Grass(ourWorld,l));
+        }
     }
 
     public void deleteGrass() {
         ourWorld.delete(this);
+        Plane.decreaseNonBlocking();
     }
 }

@@ -8,71 +8,71 @@ import java.util.*;
 
 public class Rabbit extends Animal implements Actor {
 
-    private RabbitHole myRabbitHole;
+    private Hole myRabbitHole;
     private boolean hiding = false;
 
 
-    public Rabbit() {
-        super(25);
+    public Rabbit(World world) {
+        super(10000, world);
         this.setSex();
-        energy = 15;
+        energy = 10000;
     }
 
     @Override
     public void act(World world) {
 
-        TimeOfDay currentTime = this.checktime(world);
+        TimeOfDay currentTime = checktime();
         if (currentTime == TimeOfDay.MORNING) {
-            emerge(world);
-            lookingForFoodBehaviour(world);
-            reproduce(world);
+            emerge();
+            lookingForFoodBehaviour();
+            reproduce();
         } else if ((currentTime == TimeOfDay.EVENING || currentTime == TimeOfDay.NIGHT) && !hiding) {
-            goingHomeBehaviour(world);
-            tryTohide(world);
+            goingHomeBehaviour();
+            tryTohide();
         } else if (currentTime == TimeOfDay.NIGHT && hiding) {
-            sleep(world);
+            sleep();
         }
 
-        die(world);
+        die();
         tryToDecreaseEnergy();
     }
 
     @Override
-    protected void eat(World world) {
-        if (this.isItGrass(world)) {
+    protected void eat() {
+        if (isItGrass()) {
             Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
             victim.deleteGrass();
-            this.updateEnergy(4);
+            updateEnergy(4);
         }
     }
 
-    private void digHole(World world) {
+    private void digHole() {
         if (this.myRabbitHole == null) {
             Location locOfRabbit = world.getLocation(this);
             Object objectOnRabbit = world.getNonBlocking(locOfRabbit);
             if(!(objectOnRabbit instanceof Grass) && objectOnRabbit != null) {
                 Random rd = new Random();
-                ArrayList<Location> emptyTiles = surrondingEmptyLocationsList(world);
+                ArrayList<Location> emptyTiles = surrondingEmptyLocationsList();
                 world.move(this, emptyTiles.get(rd.nextInt(emptyTiles.size())));
             } else {
-                if(isItGrass(world)) {
-                    eat(world);
+                if(isItGrass()) {
+                    eat();
                 }
-                RabbitHole newHole = new RabbitHole(world, world.getLocation(this));
+                Hole newHole = new Hole(world, world.getLocation(this),HoleType.RABBITHOLE);
                 world.setTile(locOfRabbit, newHole);
-                newHole.setHasRabbit(true);
-                this.myRabbitHole = newHole;
+                newHole.setHasAnimal(true);
+                myRabbitHole = newHole;
             }
 
         }
     }
 
-    private RabbitHole findHoleWithoutOwner(World world) {
+    private Hole findHoleWithoutOwner() {
         Map<Object, Location> allEntities = world.getEntities();
 
         for (Object object : allEntities.keySet()) {
-            if (object instanceof RabbitHole rh) {
-                if (!rh.getHasRabbit()) {
+            if (object instanceof Hole rh) {
+                if (!rh.getHasAnimal() && rh.getHoleType() == HoleType.RABBITHOLE) {
                     return rh;
                 }
             }
@@ -86,7 +86,7 @@ public class Rabbit extends Animal implements Actor {
         }
     }
 
-    private boolean isItGrass(World world) {
+    private boolean isItGrass() {
         Location temp = world.getLocation(this);
 
         return world.getNonBlocking(temp) instanceof Grass;
@@ -94,7 +94,7 @@ public class Rabbit extends Animal implements Actor {
 
 
 
-    private void tryTohide(World world) {
+    private void tryTohide() {
         int thisX = world.getLocation(this).getX();
         int thisY = world.getLocation(this).getY();
 
@@ -103,20 +103,19 @@ public class Rabbit extends Animal implements Actor {
 
         if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
             world.remove(this);
-            this.hiding = true;
+            hiding = true;
 
         }
     }
 
-    private void emerge(World world) {
+    private void emerge() {
         if (hiding) {
             Location rabbitHoleLoc = world.getLocation(myRabbitHole);
             if (!(world.getTile(rabbitHoleLoc) instanceof Actor)) {
                 world.setTile(rabbitHoleLoc, this);
-                Random r = new Random();
-                this.hiding = false;
-                this.ageRabbit();
-                birth(world);
+                hiding = false;
+                ageRabbit();
+                birth();
             }
         }
     }
@@ -130,30 +129,30 @@ public class Rabbit extends Animal implements Actor {
         maxEnergy--;
     }
 
-    private void lookingForFoodBehaviour(World world) {
+    private void lookingForFoodBehaviour() {
         this.status = AnimalStatus.LOOKINGFORFOOD;
 
-        this.pathFinder(world, this.getNearestObject(Grass.class, world));
-        if (this.isItGrass(world)) {
-            this.eat(world);
+        pathFinder(getNearestObject(Grass.class));
+        if (this.isItGrass()) {
+            eat();
         }
         this.updateEnergy(-1);
     }
 
-    private void goingHomeBehaviour(World world) {
+    private void goingHomeBehaviour() {
         this.status = AnimalStatus.GOINGHOME;
         if (this.myRabbitHole == null) {
-            RabbitHole rh = findHoleWithoutOwner(world);
+            Hole rh = findHoleWithoutOwner();
 
             if (rh == null) {
-                this.digHole(world);
+                digHole();
             } else {
-                rh.setHasRabbit(true);
+                rh.setHasAnimal(true);
                 myRabbitHole = rh;
             }
 
         } else {
-            this.pathFinder(world, world.getLocation(myRabbitHole));
+            pathFinder(world.getLocation(myRabbitHole));
         }
     }
 

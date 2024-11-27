@@ -20,6 +20,7 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
         this.type = type;
+        Plane.increaseNonBlocking();
 
     }
 
@@ -48,5 +49,9 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
         }
 
         return null;
+    }
+
+    public HoleType getHoleType() {
+        return type;
     }
 }

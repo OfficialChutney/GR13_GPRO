@@ -10,26 +10,29 @@ import java.util.Set;
 
 public class Wolf extends Animal implements Actor {
 
-    boolean isLeader;
-    int wolfPackID;
-    WolfPack pack;
-    Wolf leader;
-    Location myLocation;
+    private boolean isLeader;
+    private int wolfPackID;
+    private WolfPack pack;
+    private Wolf leader;
+    private Location myLocation;
+    private World world;
 
-    Wolf(int wolfPackID, WolfPack pack) {
-        super(30);
+    Wolf(World world, int wolfPackID, WolfPack pack) {
+        super(30, world);
         this.wolfPackID = wolfPackID;
         this.pack = pack;
         isLeader = true;
         leader = this;
+        this.world = world;
     }
 
-    Wolf(int wolfPackID, WolfPack pack, Wolf leader) {
-        super(30);
+    Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
+        super(30, world);
         this.wolfPackID = wolfPackID;
         this.pack = pack;
         isLeader = false;
         this.leader = leader;
+        this.world = world;
     }
 
     @Override
@@ -37,14 +40,14 @@ public class Wolf extends Animal implements Actor {
 
         if (isLeader) { // pack leader
             // move independently
-            pathFinder(world, null);
+            pathFinder(null);
         } else {
 
-            if (rangeFromLeader(pack.getWolfLeader(), world) < 4) {
-                pathFinder(world, null);
+            if (rangeFromLeader(pack.getWolfLeader()) < 4) {
+                pathFinder(null);
 
             } else { // move independently
-                pathFinder(world, leader.getMyLocation());
+                pathFinder(leader.getMyLocation());
                 System.out.println("Out of leader range");
                 System.out.println(myLocation.toString());
             }
@@ -54,7 +57,7 @@ public class Wolf extends Animal implements Actor {
         myLocation = world.getLocation(this);
     }
 
-    private float rangeFromLeader(Wolf wolfLeader, World world) {
+    private float rangeFromLeader(Wolf wolfLeader) {
         // Get the coordinates of "this" wolf
         int thisX = world.getLocation(this).getX();
         int thisY = world.getLocation(this).getY();
@@ -80,7 +83,7 @@ public class Wolf extends Animal implements Actor {
     }
 
     @Override
-    protected void eat(World world) {
+    protected void eat() {
 
     }
 }
