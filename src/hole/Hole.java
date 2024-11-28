@@ -10,20 +10,17 @@ import itumulator.world.World;
 import java.awt.*;
 
 
-public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
+public abstract class Hole implements NonBlocking {
 
     private final World ourWorld;
     private final Location tileLocation;
     private boolean hasAnimal;
-    private HoleType type;
 
-    public Hole(World ourWorld, Location tileLocation, HoleType type) {
+    public Hole(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        this.type = type;
         Plane.increaseNonBlocking();
     }
-
 
     public void setHasAnimal(boolean hasAnimal) {
         this.hasAnimal = hasAnimal;
@@ -35,21 +32,5 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
 
     public Location getTileLocation() {
         return tileLocation;
-    }
-
-    @Override
-    public DisplayInformation getInformation(){
-        switch (type){
-            case RABBITHOLE:
-                return new DisplayInformation(Color.black, "hole-small");
-            case WOLFHOLE:
-                return new DisplayInformation(Color.black, "hole");
-        }
-
-        return null;
-    }
-
-    public HoleType getHoleType() {
-        return type;
     }
 }

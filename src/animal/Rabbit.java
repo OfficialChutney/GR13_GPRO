@@ -3,7 +3,7 @@ package animal;
 import foliage.Grass;
 import hole.Hole;
 import domainmodel.*;
-import hole.HoleType;
+import hole.RabbitHole;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
@@ -81,7 +81,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
                 if (isItGrass()) {
                     eat();
                 }
-                Hole newHole = new Hole(world, world.getLocation(this), HoleType.RABBITHOLE);
+                Hole newHole = new RabbitHole(world, world.getLocation(this));
                 world.setTile(locOfRabbit, newHole);
                 newHole.setHasAnimal(true);
                 myRabbitHole = newHole;
@@ -90,12 +90,12 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
         }
     }
 
-    private Hole findHoleWithoutOwner() {
+    private RabbitHole findHoleWithoutOwner() {
         Map<Object, Location> allEntities = world.getEntities();
 
         for (Object object : allEntities.keySet()) {
-            if (object instanceof Hole rh) {
-                if (!rh.getHasAnimal() && rh.getHoleType() == HoleType.RABBITHOLE) {
+            if (object instanceof RabbitHole rh) {
+                if (!rh.getHasAnimal()) {
                     return rh;
                 }
             }

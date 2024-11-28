@@ -1,8 +1,17 @@
 package animal;
 
+
+import domainmodel.TimeOfDay;
+import foliage.Grass;
+import hole.Hole;
+import hole.WolfHole;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Set;
 
 
 public class Wolf extends Animal implements Actor {
@@ -13,6 +22,9 @@ public class Wolf extends Animal implements Actor {
     private Wolf leader;
     private Location myLocation;
     private World world;
+    private WolfHole myWolfHole;
+    private boolean attacking = false;
+    private boolean hiding = false;
 
     Wolf(World world, int wolfPackID, WolfPack pack) {
         super(30, world);
@@ -46,6 +58,50 @@ public class Wolf extends Animal implements Actor {
     @Override
     public void act(World world) {
 
+        if(isOnMap){
+            myLocation = world.getLocation(this);
+        }
+
+        if(attacking){
+            huntingBehavior();
+        } else{
+            passiveBehavior();
+        }
+
+
+
+    }
+
+    @Override
+    protected void eat() {
+
+    }
+
+    // pack behavior
+    protected void passiveBehavior(){
+        if(isOnMap){
+            if (checktime() == TimeOfDay.MORNING) {
+                searchBehaviour();
+
+            }
+            else if(checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT){
+                if(myWolfHole != null){
+                    goingHomeBehaviour();
+                    tryToHide();
+                } else{
+                    setHole();
+                }
+            }
+        }
+
+
+        //wakey wakey
+        if(checktime() == TimeOfDay.MORNING && hiding && !isOnMap){
+            emerge();
+        }
+    }
+
+    protected void searchBehaviour() {
         if (isLeader) { // pack leader
             // move independently
             pathFinder(null);
@@ -56,13 +112,57 @@ public class Wolf extends Animal implements Actor {
 
             } else { // move independently
                 pathFinder(leader.getMyLocation());
-                System.out.println("Out of leader range");
-                System.out.println(myLocation.toString());
+                //System.out.println("Out of leader range");
+                //System.out.println(myLocation.toString());
             }
 
         }
+    }
 
-        myLocation = world.getLocation(this);
+    protected void goingHomeBehaviour() {
+        if (isOnMap) {
+            pathFinder(world.getLocation(myWolfHole));
+        }
+    }
+
+    protected void huntingBehavior(){
+
+    }
+
+    private void tryToHide() {
+        if (isOnMap) {
+            int thisX = world.getLocation(this).getX();
+            int thisY = world.getLocation(this).getY();
+
+            int rabbitHoleX = world.getLocation(myWolfHole).getX();
+            int rabbitHoleY = world.getLocation(myWolfHole).getY();
+
+            if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
+                world.remove(this);
+                hiding = true;
+                isOnMap = false;
+
+            }
+        }
+    }
+
+    public void emerge() {
+        if (hiding && !isOnMap) {
+            Location wolfHoleLoc = world.getLocation(myWolfHole);
+
+            //leader bliver skubbet ud af hulen først.
+            if(!isLeader && !leader.getIsOnMap() && leader.getIsHiding()){
+                leader.act(world);
+            }
+
+            if (!(world.getTile(wolfHoleLoc) instanceof Actor)) {
+
+                world.setTile(wolfHoleLoc, this);
+                isOnMap = true;
+                hiding = false;
+                birth();
+            }
+        }
     }
 
     private float rangeFromLeader(Wolf wolfLeader) {
@@ -90,11 +190,6 @@ public class Wolf extends Animal implements Actor {
         return myLocation;
     }
 
-    @Override
-    protected void eat() {
-
-    }
-
     public int getWolfPackID() {
         return wolfPackID;
     }
@@ -109,10 +204,58 @@ public class Wolf extends Animal implements Actor {
 
     @Override
     protected LifeStage getLifeStage() {
-        if(age < 100) {
+        if (age < 100) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
         }
     }
+
+
+    //Hole
+    protected void setHole() {
+        if ((checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT)) {
+            if (isLeader) {
+                digHole();
+                System.out.println("dig hole");
+            } else {
+                myWolfHole = leader.getPackHole();
+                System.out.println("look for leaders hole");
+            }
+
+        }
+    }
+
+    protected void digHole() {
+        if (myWolfHole == null) {
+            Location locOfWolf = world.getLocation(this);
+            Object objectOnWolf = world.getNonBlocking(locOfWolf);
+            if (!(objectOnWolf instanceof Grass) && objectOnWolf != null) {
+                Random rd = new Random();
+
+                for (int i = 1; i <= world.getSize(); i++) {
+                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(locOfWolf, i);
+                    ArrayList<Location> emptyTiles = new ArrayList<>(emptyTilesSet);
+                    if (!emptyTiles.isEmpty()) {
+                        pathFinder(emptyTiles.get(rd.nextInt(emptyTiles.size())));
+                        break;
+                    }
+                }
+
+
+            } else {
+                WolfHole newHole = new WolfHole(world, getMyLocation(), wolfPackID);
+                world.setTile(getMyLocation(), newHole);
+                newHole.setHasAnimal(true);
+                myWolfHole = newHole;
+            }
+        }
+    }
+
+    public WolfHole getPackHole() {
+            return myWolfHole;
+        }
+
+    public  boolean getIsHiding() {return hiding;}
+
 }

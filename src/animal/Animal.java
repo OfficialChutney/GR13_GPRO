@@ -240,4 +240,8 @@ public abstract class Animal {
     protected void setOnMap(boolean isOnMap) {
         this.isOnMap = isOnMap;
     }
+
+    public boolean getIsOnMap() {return isOnMap;}
+
+
 }
