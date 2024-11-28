@@ -19,11 +19,14 @@ public class Bear extends Animal implements Actor {
     public Bear(World world) {
         super(103, world);
         maxHitpoints = 20;
+        hitpoints = maxHitpoints;
+
+        setTerritory(world.getLocation(this));
     }
 
     @Override
     public void act(World world) {
-
+        beheavior();
     }
 
     @Override
@@ -89,7 +92,7 @@ public class Bear extends Animal implements Actor {
         return null;
     }
 
-    protected void chooseBheavior() {
+    protected void beheavior() {
         isThereSomeoneInMyTerritory();
 
         if (bearBehavior == BearBehavior.TIMETOSEX) {
