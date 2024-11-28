@@ -91,7 +91,7 @@ public class Wolf extends Animal implements Actor {
     }
 
     @Override
-    protected void eat() {
+    public void eat() {
 
     }
 
@@ -108,7 +108,7 @@ public class Wolf extends Animal implements Actor {
     }
 
     @Override
-    protected LifeStage getLifeStage() {
+    public LifeStage getLifeStage() {
         if(age < 100) {
             return LifeStage.CHILD;
         } else {

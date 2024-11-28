@@ -122,7 +122,7 @@ public class Plane {
                         tileIsEmpty = true;
 
                         if (objectType == Grass.class) {
-                            Grass grassToPlace = new Grass(world, locationOfObject);
+                            Grass grassToPlace = new Grass(world);
                             world.setTile(locationOfObject, grassToPlace);
                         } else if (objectType == Hole.class) {
                             Hole holeToPlace = new Hole(world, locationOfObject, HoleType.RABBITHOLE);

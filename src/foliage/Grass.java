@@ -12,18 +12,18 @@ import java.util.Random;
 
 public class Grass implements Actor, NonBlocking {
 
-    private final Location tileLocation;
     private final World ourWorld;
     private final float chanceToGrow;
     private final Random rd;
     private final int worldSizeSquared;
+    private boolean canSpread;
 
-    public Grass(World ourWorld, Location tileLocation) {
+    public Grass(World ourWorld) {
         this.ourWorld = ourWorld;
-        this.tileLocation = tileLocation;
         chanceToGrow = 0.5f;
         rd = new Random();
         worldSizeSquared = ourWorld.getSize() * ourWorld.getSize();
+        canSpread = true;
         Plane.increaseNonBlocking();
 
     }
@@ -34,14 +34,10 @@ public class Grass implements Actor, NonBlocking {
 
     }
 
-    private Location getTileLocation() {
-        return tileLocation;
-    }
-
 
     public void spreadGrass() {
 
-        if(Plane.getNonBlocking() != worldSizeSquared) {
+        if(Plane.getNonBlocking() != worldSizeSquared && canSpread) {
             if(!(rd.nextFloat(1) < chanceToGrow)) {
                 return;
             }
@@ -67,12 +63,16 @@ public class Grass implements Actor, NonBlocking {
                 l = list.get(rd.nextInt(list.size()));
             }
 
-            ourWorld.setTile(l, new Grass(ourWorld,l));
+            ourWorld.setTile(l, new Grass(ourWorld));
         }
     }
 
     public void deleteGrass() {
         ourWorld.delete(this);
         Plane.decreaseNonBlocking();
+    }
+
+    public void setCanSpread(boolean canSpread) {
+        this.canSpread = canSpread;
     }
 }

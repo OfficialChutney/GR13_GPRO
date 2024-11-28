@@ -20,19 +20,18 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
 
     public Rabbit(World world) {
         super(10000, world);
-        this.setSex();
+        this.setRandomSex();
         energy = 10000;
     }
 
     public Rabbit(World world, boolean isOnMap) {
         super(10000, world, isOnMap);
-        this.setSex();
+        this.setRandomSex();
         energy = 10000;
     }
 
     @Override
     public void act(World world) {
-
 
         TimeOfDay currentTime = checktime();
         if (currentTime == TimeOfDay.MORNING) {
@@ -52,7 +51,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     }
 
     @Override
-    protected void eat() {
+    public void eat() {
         if (isItGrass()) {
             Grass victim = (Grass) world.getNonBlocking(world.getLocation(this));
             victim.deleteGrass();
@@ -157,8 +156,10 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     }
 
     private void ageRabbit() {
-        age++;
-        maxEnergy--;
+        if(world.getCurrentTime() == 0) {
+            age++;
+            maxEnergy--;
+        }
     }
 
     private void lookingForFoodBehaviour() {
@@ -194,8 +195,8 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     }
 
     @Override
-    protected LifeStage getLifeStage() {
-        if(age < 40) {
+    public LifeStage getLifeStage() {
+        if(age < 2) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
@@ -209,8 +210,6 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
         } else {
             return new DisplayInformation(Color.red, "rabbit-large");
         }
-
-
 
     }
 }

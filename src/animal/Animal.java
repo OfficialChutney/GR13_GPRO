@@ -22,6 +22,8 @@ public abstract class Animal {
     protected Random rd;
     protected boolean isOnMap;
     protected Helper helper;
+    protected boolean canDie;
+    protected boolean canGetPregnant;
 
     public Animal(int maxEnergy, World world) {
         this.maxEnergy = maxEnergy;
@@ -30,6 +32,9 @@ public abstract class Animal {
         isOnMap = true;
         pregnant = false;
         helper = new Helper(world);
+        canDie = true;
+        canGetPregnant = true;
+        age = 0;
     }
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
@@ -39,14 +44,17 @@ public abstract class Animal {
         this.isOnMap = isOnMap;
         pregnant = false;
         helper = new Helper(world);
+        canDie = true;
+        canGetPregnant = true;
+        age = 0;
     }
 
-    protected abstract void eat();
+    public abstract void eat();
 
-    protected abstract LifeStage getLifeStage();
+    public abstract LifeStage getLifeStage();
 
-    protected void reproduce() {
-        if (isOnMap) {
+    public void reproduce() {
+        if (isOnMap && canGetPregnant) {
             if (sex == Sex.FEMALE && getLifeStage() == LifeStage.ADULT) {
                 if (isNeighbourMale(this)) {
                     pregnant = true;
@@ -55,7 +63,7 @@ public abstract class Animal {
         }
     }
 
-    protected void pathFinder(Location destination) {
+    public void pathFinder(Location destination) {
 
         if (destination == null) {
             Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
@@ -102,15 +110,15 @@ public abstract class Animal {
         }
     }
 
-    protected void die() {
-        if (energy <= 0) {
+    public void die() {
+        if (energy <= 0 && canDie) {
             System.out.println("I died");
             world.delete(this);
             isOnMap = false;
         }
     }
 
-    protected void sleep() {
+    public void sleep() {
         status = AnimalStatus.SLEEPING;
         updateEnergy(1);
 
@@ -124,14 +132,14 @@ public abstract class Animal {
         }
     }
 
-    protected void updateEnergy(int num) {
+    public void updateEnergy(int num) {
         energy += num;
         if (energy > maxEnergy) {
             energy = maxEnergy;
         }
     }
 
-    protected TimeOfDay checktime() {
+    public TimeOfDay checktime() {
         if (world.getCurrentTime() < 7) {
             return TimeOfDay.MORNING;
         } else if (world.getCurrentTime() >= 7 && world.getCurrentTime() < 10) {
@@ -141,7 +149,7 @@ public abstract class Animal {
         }
     }
 
-    protected Location getNearestObject(Class<?> object) {
+    public Location getNearestObject(Class<?> object) {
 
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
@@ -166,22 +174,22 @@ public abstract class Animal {
     }
 
 
-    protected ArrayList<Location> surrondingEmptyLocationsList() {
+    public ArrayList<Location> surrondingEmptyLocationsList() {
         Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
         return new ArrayList<>(neighbours);
     }
 
-    protected ArrayList<Location> surrondingLocationsList() {
+    public ArrayList<Location> surrondingLocationsList() {
         return surrondingLocationsList(1);
     }
 
-    protected ArrayList<Location> surrondingLocationsList(int range) {
+    public ArrayList<Location> surrondingLocationsList(int range) {
         Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
         return new ArrayList<>(neighbours);
 
     }
 
-    protected boolean isNeighbourMale(Animal animal) {
+    public boolean isNeighbourMale(Animal animal) {
         ArrayList<Location> neighbours = surrondingLocationsList();
         for (Location neighbor : neighbours) {
 
@@ -200,19 +208,23 @@ public abstract class Animal {
         return false;
     }
 
-    protected void setSex() {
+    public void setRandomSex() {
         Random r = new Random();
         switch (r.nextInt(2)) {
-            case 0 -> this.sex = Sex.MALE;
-            case 1 -> this.sex = Sex.FEMALE;
+            case 0 -> sex = Sex.MALE;
+            case 1 -> sex = Sex.FEMALE;
         }
     }
 
-    protected Sex getSex() {
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public Sex getSex() {
         return sex;
     }
 
-    protected void birth() {
+    public void birth() {
         if (pregnant) {
             Random r = new Random();
             ArrayList<Location> tiles = surrondingEmptyLocationsList();
@@ -237,7 +249,23 @@ public abstract class Animal {
         }
     }
 
-    protected void setOnMap(boolean isOnMap) {
+    public void setOnMap(boolean isOnMap) {
         this.isOnMap = isOnMap;
     }
+
+    public void setCanDie(boolean canDie) {
+        this.canDie = canDie;
+    }
+
+    public void setCanGetPregnant(boolean canGetPregnant) {
+        this.canGetPregnant = canGetPregnant;
+    }
+
+    public boolean isPregnant() {
+        return pregnant;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+
 }
