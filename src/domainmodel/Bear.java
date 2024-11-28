@@ -6,6 +6,7 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 public class Bear extends Animal implements Actor {
@@ -20,13 +21,19 @@ public class Bear extends Animal implements Actor {
         super(103, world);
         maxHitpoints = 20;
         hitpoints = maxHitpoints;
-
-        setTerritory(world.getLocation(this));
     }
 
     @Override
     public void act(World world) {
-        beheavior();
+        try {
+            if (territoryTopLeftCornor == null) {
+                setTerritory(world.getLocation(this));
+            }
+            //System.out.println(steps);
+            beheavior();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -71,20 +78,24 @@ public class Bear extends Animal implements Actor {
     }
 
     protected Location getNearestBearFood() {
-        Map<Object, Location> entitiesOnMap = world.getEntities();
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
 
             for (Location loc : temp) {
 
-                Object entity = entitiesOnMap.get(loc);
+                Object entity = world.getTile(loc);
 
-                if ((entity instanceof Animal && !(entity instanceof Bear))) {
-                    return loc;
+                if (entity != null) {
 
-                } else if (entity instanceof BerryBush bush) {
-                    if (bush.BerryState()) {
+
+                    if ((entity instanceof Animal && !(entity instanceof Bear))) {
+                        System.out.println(loc);
                         return loc;
+
+                    } else if (entity instanceof BerryBush bush) {
+                        if (bush.BerryState()) {
+                            return loc;
+                        }
                     }
                 }
             }
@@ -117,7 +128,7 @@ public class Bear extends Animal implements Actor {
 
         } else if (checktime() == TimeOfDay.NIGHT) {
             status = AnimalStatus.SLEEPING;
-            sleep();
+
         }
     }
 

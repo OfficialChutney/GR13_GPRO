@@ -64,6 +64,9 @@ public class Plane {
                     case "wolf" -> {
                         createObjectOnTile(WolfPack.class, value);
                     }
+                    case "bear" -> {
+                        createObjectOnTile(Bear.class, value);
+                    }
                     default -> {
                         System.out.println("could not determine type " + key);
                     }
@@ -76,22 +79,16 @@ public class Plane {
 
         program.show();
         long startingms = System.currentTimeMillis();
-        for (int i = 0; i < simulationStepLength; i++) {
+        for (int i = 1; i <= simulationStepLength; i++) {
             program.simulate();
-            System.out.println("Step: " + world.getCurrentTime());
+            Map<Object, Location> entities = world.getEntities();
 
-
-            //Denne kode henter alle kaniner og tester, om de stadig er p� spillefladen.
-            //Det ses tydeligt, at i visse tilf�lde, slettes kaninerne fra spillefladen, n�r "remove" metoden benyttes, selvom de ikke burde.
-            Set<Object> allEntities = world.getEntities().keySet();
-            Set<Rabbit> allRabbits = new HashSet<>();
-            for (Object o : allEntities) {
-                if (o instanceof Rabbit r) {
-                    allRabbits.add(r);
+            for (Object entity : entities.keySet()) {
+                if (entity instanceof Animal a) {
+                    a.setSteps(i);
                 }
-            }
 
-            System.out.println("Number Of rabbits in world: " + allRabbits.size());
+            }
 
         }
 
@@ -136,6 +133,9 @@ public class Plane {
                         } else if (objectType == WolfPack.class) {
                             new WolfPack(numberOfUnits, locationOfObject, world);
                             return;
+                        } else if (objectType == Bear.class) {
+                            Bear bear = new Bear(world);
+                            world.setTile(locationOfObject, bear);
                         }
                     }
 
@@ -173,6 +173,11 @@ public class Plane {
         //Set display for Wolf
         DisplayInformation wolfDisplay = new DisplayInformation(Color.orange, "wolf");
         program.setDisplayInformation(Wolf.class, wolfDisplay);
+
+
+        //set display for Bear
+        DisplayInformation bearDisplay = new DisplayInformation(Color.green, "bear");
+        program.setDisplayInformation(Bear.class, bearDisplay);
     }
 
     public static void increaseNonBlocking() {

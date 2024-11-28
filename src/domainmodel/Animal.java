@@ -21,6 +21,7 @@ public abstract class Animal {
     protected Random rd;
     protected boolean isOnMap;
     protected Helper helper;
+    protected int steps;
 
 
     Animal(int maxEnergy, World world) {
@@ -30,6 +31,7 @@ public abstract class Animal {
         isOnMap = true;
         pregnant = false;
         helper = new Helper(world);
+        steps = 0;
     }
 
     Animal(int maxEnergy, World world, boolean isOnMap) {
@@ -39,6 +41,7 @@ public abstract class Animal {
         this.isOnMap = isOnMap;
         pregnant = false;
         helper = new Helper(world);
+        steps = 0;
     }
 
     protected abstract void eat();
@@ -255,5 +258,9 @@ public abstract class Animal {
         if (hitpoints > maxHitpoints) {
             hitpoints = maxHitpoints;
         }
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
     }
 }
