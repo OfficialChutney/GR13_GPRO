@@ -25,19 +25,21 @@ public class Plane {
     private int worldSize;
     private int simulationStepLength;
     private static int numOfNonBlocking;
+    private Helper helper;
 
     public Plane() {
         displaySize = 800;
         delay = 500;
         simulationStepLength = 200;
         rd = new Random();
+        helper = new Helper();
     }
 
-    public void startSimulation(int worldSize, HashMap<String, String> initialConditions) {
+    public TestPackage startSimulation(int worldSize, HashMap<String, String> initialConditions, boolean isTest) {
         this.worldSize = worldSize;
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
-        setDisplayInfo();
+        helper.setDisplayInfo(program);
 
         for (String key : initialConditions.keySet()) {
 
@@ -80,30 +82,29 @@ public class Plane {
         }
 
 
-        program.show();
-        long startingms = System.currentTimeMillis();
-        for (int i = 0; i < simulationStepLength; i++) {
-            program.simulate();
-            System.out.println("Step: " + world.getCurrentTime());
+        if (!isTest) {
 
+            program.show();
+            long startingms = System.currentTimeMillis();
 
-            //Denne kode henter alle kaniner og tester, om de stadig er p� spillefladen.
-            //Det ses tydeligt, at i visse tilf�lde, slettes kaninerne fra spillefladen, n�r "remove" metoden benyttes, selvom de ikke burde.
-            Set<Object> allEntities = world.getEntities().keySet();
-            Set<Rabbit> allRabbits = new HashSet<>();
-            for (Object o : allEntities) {
-                if (o instanceof Rabbit r) {
-                    allRabbits.add(r);
-                }
+            for (int i = 1; i <= simulationStepLength; i++) {
+                program.simulate();
+                System.out.println("Step: " + world.getCurrentTime());
             }
 
-            System.out.println("Number Of rabbits in world: " + allRabbits.size());
+            stopSimulation();
+            long stopms = System.currentTimeMillis();
+            System.out.println("Time for simluation: " + (stopms - startingms));
+            return null;
+
+
+        } else {
+
+            TestPackage tp = new TestPackage(world, program, world.getEntities());
+            return tp;
 
         }
 
-        stopSimulation();
-        long stopms = System.currentTimeMillis();
-        System.out.println("Time for simluation: " + (stopms - startingms));
 
     }
 
@@ -162,23 +163,8 @@ public class Plane {
         program.getFrame().setVisible(false);
     }
 
-    private void setDisplayInfo() {
-
-        //Set display for Grass
-        DisplayInformation grassDisplay = new DisplayInformation(Color.black, "grass");
-        program.setDisplayInformation(Grass.class, grassDisplay);
-
-        //Set display for Rabbitholes
-        DisplayInformation rabbitHoleDisplay = new DisplayInformation(Color.orange, "hole-small");
-        program.setDisplayInformation(Hole.class, rabbitHoleDisplay);
-
-        //Set display for Rabbit
-        DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
-        program.setDisplayInformation(Rabbit.class, rabbitDisplay);
-
-        //Set display for Wolf
-        DisplayInformation wolfDisplay = new DisplayInformation(Color.orange, "wolf");
-        program.setDisplayInformation(Wolf.class, wolfDisplay);
+    public Program getProgram() {
+        return program;
     }
 
     public static void increaseNonBlocking() {

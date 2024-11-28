@@ -1,6 +1,7 @@
 import animal.LifeStage;
 import animal.Rabbit;
 import animal.Sex;
+import domainmodel.*;
 import foliage.Grass;
 import itumulator.executable.Program;
 import itumulator.world.Location;
@@ -8,6 +9,10 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import org.junit.jupiter.api.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,17 +22,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RabbitTest {
 
-    private int worldSize = 15;
-    private int display_size = 800;
-    private int delay = 500;
-    private int numberOfTiles = worldSize * worldSize;
+    private int worldSize;
+    private int display_size;
+    private int delay;
+    private int numberOfTiles;
     private World world;
     private Program program;
+    private Helper helper;
+
+    public RabbitTest() {
+        helper = new Helper();
+        delay = 500;
+        display_size = 800;
+        worldSize = 15;
+        numberOfTiles = worldSize * worldSize;
+    }
 
     @BeforeEach
     public void makeWorld() {
         program = new Program(worldSize, display_size, delay);
         world = program.getWorld();
+        helper.setDisplayInfo(program);
     }
 
     @Test
@@ -68,6 +83,7 @@ public class RabbitTest {
     public void hasBirthed() {
         Program program = new Program(2,display_size, delay);
         World world = program.getWorld();
+        helper.setDisplayInfo(program);
         //ARRANGE
         Location loc1 = new Location(0,0);
         Location loc2 = new Location(0,1);
@@ -148,6 +164,11 @@ public class RabbitTest {
     @Test
     public void hasEatenGrass() {
         //ARRANGE
+        int worldSize = 5;
+        Program program = new Program(worldSize,display_size,delay);
+        helper.setDisplayInfo(program);
+        World world = program.getWorld();
+
         Location rabbitStartLocation = new Location(0,0);
         Rabbit rabbit = new Rabbit(world);
         world.setTile(rabbitStartLocation, rabbit);
@@ -159,7 +180,7 @@ public class RabbitTest {
 
         program.show();
         //ACT
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             program.simulate();
         }
 
@@ -169,6 +190,47 @@ public class RabbitTest {
         boolean expected = false;
 
         assertEquals(expected,actual);
+
+    }
+
+
+    @Test
+    public void rabbitPlacedFromFile() {
+        //ASSERT
+
+        UserInterface ui = new UserInterface();
+        String directory = ui.getInputFileDirectory();
+        ui.setTest(true);
+        File testFile = new File(directory+"/testFile.txt");
+        ui.setSpecifiedFileToRun("testFile.txt");
+
+        int numOfRabbits = 15;
+
+        try {
+            testFile.createNewFile();
+            try (FileWriter fw = new FileWriter(testFile)) {
+                fw.write(String.valueOf(worldSize)+"\n");
+                fw.write("rabbit "+String.valueOf(numOfRabbits));
+            }
+
+            TestPackage tp = ui.startProgram();
+
+            int expected = numOfRabbits;
+            int actual = tp.getEntities().size();
+
+
+            assertEquals(expected, actual);
+
+        } catch (IOException e) {
+            assertDoesNotThrow(() -> {
+                throw e;
+            });
+        }
+
+
+
+
+
 
     }
 

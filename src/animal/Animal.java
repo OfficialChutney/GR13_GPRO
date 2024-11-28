@@ -31,7 +31,7 @@ public abstract class Animal {
         rd = new Random();
         isOnMap = true;
         pregnant = false;
-        helper = new Helper(world);
+        helper = new Helper();
         canDie = true;
         canGetPregnant = true;
         age = 0;
@@ -43,7 +43,7 @@ public abstract class Animal {
         rd = new Random();
         this.isOnMap = isOnMap;
         pregnant = false;
-        helper = new Helper(world);
+        helper = new Helper();
         canDie = true;
         canGetPregnant = true;
         age = 0;
@@ -102,7 +102,7 @@ public abstract class Animal {
         if (world.isTileEmpty(onTheMove)) {
             world.move(this, onTheMove);
         } else {
-            ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(start, 1));
+            ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(world,start, 1));
             if (!alternativeLocations.isEmpty()) {
                 world.move(this, alternativeLocations.get(rd.nextInt(alternativeLocations.size())));
             }

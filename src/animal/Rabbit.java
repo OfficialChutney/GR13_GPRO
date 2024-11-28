@@ -67,7 +67,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
                 Random rd = new Random();
 
                 for (int i = 1; i <= world.getSize(); i++) {
-                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(locOfRabbit,i);
+                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(world,locOfRabbit,i);
                     ArrayList<Location> emptyTiles = new ArrayList<>(emptyTilesSet);
                     if(!emptyTiles.isEmpty()) {
                         pathFinder(emptyTiles.get(rd.nextInt(emptyTiles.size())));

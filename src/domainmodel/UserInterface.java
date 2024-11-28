@@ -15,16 +15,22 @@ public class UserInterface {
 
     private File inputFileDirectory;
     private Controller controller;
+    private String specifiedFileToRun;
+    private String inputFileDirectoryString;
+    private boolean isTest;
 
     public UserInterface() {
-        inputFileDirectory = new File("InputFiles");
+        inputFileDirectoryString = "InputFiles";
+        inputFileDirectory = new File(inputFileDirectoryString);
         controller = new Controller();
+        specifiedFileToRun = null;
+        isTest = false;
     }
 
-    public void startProgram() {
-        int start = 0;
+    public TestPackage startProgram() {
+        TestPackage testPackage = null;
         for (File file : inputFileDirectory.listFiles()) {
-            if (start >= 0) {
+            if (file.getName().equals(specifiedFileToRun) || specifiedFileToRun == null) {
 
 
                 try {
@@ -50,19 +56,41 @@ public class UserInterface {
 
                     }
 
-                    controller.initiateSimulation(worldSize, initialConditions);
+                    testPackage = controller.initiateSimulation(worldSize, initialConditions, isTest);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
 
             }
-            start++;
         }
 
-        System.exit(0);
+        if(isTest) {
+            return testPackage;
+        } else {
+            System.exit(0);
+        }
+        return null;
 
 
     }
+
+    public void setSpecifiedFileToRun(String file) {
+        specifiedFileToRun = file;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public String getInputFileDirectory() {
+        return inputFileDirectoryString;
+    }
+
+    public void setTest(boolean isTest) {
+        this.isTest = isTest;
+    }
+
+
 
 
 }
