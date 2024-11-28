@@ -93,7 +93,7 @@ public abstract class Animal {
         }
 
         Location onTheMove = new Location(movingX, movingY);
-
+        System.out.println(world.getTile(onTheMove));
         if (world.isTileEmpty(onTheMove)) {
             world.move(this, onTheMove);
         } else {
@@ -106,7 +106,7 @@ public abstract class Animal {
     }
 
     protected void die() {
-        if (energy <= 0) {
+        if (energy <= 0 || hitpoints <= 0) {
             System.out.println("I died");
             world.delete(this);
             isOnMap = false;

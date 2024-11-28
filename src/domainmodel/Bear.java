@@ -63,19 +63,20 @@ public class Bear extends Animal implements Actor {
     }
 
     protected void setTerritory(Location loc) {
+        int tSize = 1;
         int startX = loc.getX();
         int startY = loc.getY();
-        territoryTopLeftCornor = new Location(startX - 3, startY - 3);
-        territoryLowerRightCornor = new Location(startX + 3, startY + 3);
+        territoryTopLeftCornor = new Location(startX - tSize, startY - tSize);
+        territoryLowerRightCornor = new Location(startX + tSize, startY + tSize);
 
-        territoryTileList = new ArrayList<>(world.getSurroundingTiles(3));
+        territoryTileList = new ArrayList<>(world.getSurroundingTiles(tSize));
     }
 
     protected void isThereSomeoneInMyTerritory() {
         for (int i = 0; i < territoryTileList.size(); i++) {
             Location temp = territoryTileList.get(i);
             if (!world.isTileEmpty(temp)) {
-                if (!(world.getTile(temp) instanceof NonBlocking)) {
+                if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) == this))) {
                     bearBehavior = BearBehavior.GETOFMYLAWN;
                     bearTarget = (Actor) world.getTile(temp);
                     return;
