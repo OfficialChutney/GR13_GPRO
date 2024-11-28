@@ -127,7 +127,6 @@ public class Bear extends Animal implements Actor {
 
         } else {
             normalBehavior();
-            eat();
         }
 
     }
@@ -136,9 +135,12 @@ public class Bear extends Animal implements Actor {
         if (checktime() == TimeOfDay.MORNING) {
             status = AnimalStatus.LOOKINGFORFOOD;
             pathFinder(getNearestBearFood());
+            eat();
             //eat or attack
         } else if (checktime() == TimeOfDay.EVENING) {
             status = AnimalStatus.GOINGHOME;
+            pathFinder(getNearestBearFood());
+            eat();
 
         } else if (checktime() == TimeOfDay.NIGHT) {
             status = AnimalStatus.SLEEPING;
