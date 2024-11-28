@@ -155,7 +155,7 @@ public class Bear extends Animal implements Actor {
 
             for (Location loc : temp) {
 
-                Object entity = entitiesOnMap.get(loc);
+                Object entity = world.getTile(loc);
 
                 if ((entity instanceof Bear maidBear)) {
 

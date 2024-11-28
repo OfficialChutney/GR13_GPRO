@@ -246,14 +246,14 @@ public abstract class Animal {
     }
 
     public void takeDamage(int damage) {
-        hitpoints = -damage;
+        hitpoints = hitpoints - damage;
         if(hitpoints <= 0) {
             die();
         }
     }
 
     protected void healHitPoints(int heal) {
-        hitpoints = +heal;
+        hitpoints = hitpoints + heal;
 
         if (hitpoints > maxHitpoints) {
             hitpoints = maxHitpoints;
