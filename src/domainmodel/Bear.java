@@ -29,7 +29,7 @@ public class Bear extends Animal implements Actor {
             if (territoryTopLeftCornor == null) {
                 setTerritory(world.getLocation(this));
             }
-            //System.out.println(steps);
+
             beheavior();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -38,7 +38,19 @@ public class Bear extends Animal implements Actor {
 
     @Override
     protected void eat() {
-
+        ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
+        for (Location neighbor : neighborTiles) {
+            Object temp = world.getTile(neighbor);
+            if(temp instanceof Animal animal) {
+                animal.takeDamage(5);
+                if(world.isTileEmpty(neighbor)){
+                    updateEnergy(3);
+                }
+            } else if(temp instanceof BerryBush bush) {
+                bush.eatBerries();
+                updateEnergy(3);
+            }
+        }
     }
 
     @Override
@@ -111,9 +123,11 @@ public class Bear extends Animal implements Actor {
 
         } else if (bearBehavior == BearBehavior.GETOFMYLAWN) {
             chaseIntruder();
+            eat();
 
         } else {
             normalBehavior();
+            eat();
         }
 
     }
@@ -167,6 +181,7 @@ public class Bear extends Animal implements Actor {
 
     protected void babyMakingSeason() {
         //a methoed that calls all bears to get horny!
+        //steps
     }
 
 }
