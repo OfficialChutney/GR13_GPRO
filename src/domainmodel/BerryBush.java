@@ -7,12 +7,12 @@ import itumulator.world.World;
 
 import java.util.Random;
 
-public class BerriBush implements Actor, NonBlocking {
+public class BerryBush implements Actor, NonBlocking {
     private Location tileLocation;
     private boolean hasBerries = true;
 
-    public BerriBush() {
-    this.tileLocation = this.getTileLocation();
+    public BerryBush() {
+        this.tileLocation = this.getTileLocation();
     }
 
     @Override
