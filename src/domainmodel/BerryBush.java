@@ -35,4 +35,8 @@ public class BerryBush implements Actor, NonBlocking {
     public void eatBerries(){
         hasBerries = false;
     }
+
+    public boolean BerryState() {
+        return hasBerries;
+    }
 }

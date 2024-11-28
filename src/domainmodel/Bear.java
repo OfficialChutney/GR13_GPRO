@@ -6,7 +6,6 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Bear extends Animal implements Actor {
@@ -19,7 +18,7 @@ public class Bear extends Animal implements Actor {
 
     public Bear(World world) {
         super(103, world);
-
+        maxHitpoints = 20;
     }
 
     @Override
@@ -33,8 +32,8 @@ public class Bear extends Animal implements Actor {
     }
 
     @Override
-    protected LifeStage getLifeStage(){
-        if(age < 2) {
+    protected LifeStage getLifeStage() {
+        if (age < 2) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
@@ -69,7 +68,7 @@ public class Bear extends Animal implements Actor {
     }
 
     protected Location getNearestBearFood() {
-        Map<Object,Location> entitiesOnMap = world.getEntities();
+        Map<Object, Location> entitiesOnMap = world.getEntities();
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
 
@@ -77,20 +76,24 @@ public class Bear extends Animal implements Actor {
 
                 Object entity = entitiesOnMap.get(loc);
 
-                if((entity instanceof Animal && !(entity instanceof Bear)) || entity instanceof BerryBush) {
-                    System.out.println("I ran");
+                if ((entity instanceof Animal && !(entity instanceof Bear))) {
                     return loc;
+
+                } else if (entity instanceof BerryBush bush) {
+                    if (bush.BerryState()) {
+                        return loc;
+                    }
                 }
             }
         }
         return null;
     }
 
-    protected void chooseBheavior (){
+    protected void chooseBheavior() {
         isThereSomeoneInMyTerritory();
 
         if (bearBehavior == BearBehavior.TIMETOSEX) {
-            //sex behavior
+            timeToSexBehavior();
 
         } else if (bearBehavior == BearBehavior.GETOFMYLAWN) {
             chaseIntruder();
@@ -101,22 +104,22 @@ public class Bear extends Animal implements Actor {
 
     }
 
-    protected void normalBehavior(){
-        if (checktime() == TimeOfDay.MORNING){
+    protected void normalBehavior() {
+        if (checktime() == TimeOfDay.MORNING) {
             status = AnimalStatus.LOOKINGFORFOOD;
             pathFinder(getNearestBearFood());
             //eat or attack
-        } else if(checktime() == TimeOfDay.EVENING){
+        } else if (checktime() == TimeOfDay.EVENING) {
             status = AnimalStatus.GOINGHOME;
 
-        } else if(checktime() == TimeOfDay.NIGHT){
+        } else if (checktime() == TimeOfDay.NIGHT) {
             status = AnimalStatus.SLEEPING;
             sleep();
         }
     }
 
-    protected Location locateMaid(){
-        Map<Object,Location> entitiesOnMap = world.getEntities();
+    protected Location locateMaid() {
+        Map<Object, Location> entitiesOnMap = world.getEntities();
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
 
@@ -124,9 +127,9 @@ public class Bear extends Animal implements Actor {
 
                 Object entity = entitiesOnMap.get(loc);
 
-                if((entity instanceof Bear maidBear)) {
+                if ((entity instanceof Bear maidBear)) {
 
-                    if(maidBear.getSex() != sex){
+                    if (maidBear.getSex() != sex) {
                         return loc;
                     }
                 }
@@ -135,9 +138,21 @@ public class Bear extends Animal implements Actor {
         return null;
     }
 
-    protected void timeToSexBehavior(){
-        if(sex != Sex.MALE && !pregnant) {
-            pathFinder(locateMaid());
+    protected void timeToSexBehavior() {
+        if (locateMaid() == null) {
+            bearBehavior = BearBehavior.PASSIVE;
+            return;
+        }
+        pathFinder(locateMaid());
+        surrondingLocationsList();
+        if (sex != Sex.MALE && !pregnant && isNeighbourMale(this)) {
+            reproduce();
+            bearBehavior = BearBehavior.PASSIVE;
         }
     }
+
+    protected void babyMakingSeason() {
+        //a methoed that calls all bears to get horny!
+    }
+
 }

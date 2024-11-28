@@ -114,6 +114,7 @@ public abstract class Animal {
         status = AnimalStatus.SLEEPING;
         updateEnergy(1);
 
+
         //Resolves a bug where sometimes, the rabbit is not removed. Possibly an issue with the library
         //Trying to remove several rabbits at once. This forces the rabbit to be removed in the next step.
         try {
@@ -239,5 +240,20 @@ public abstract class Animal {
 
     protected void setOnMap(boolean isOnMap) {
         this.isOnMap = isOnMap;
+    }
+
+    public void takeDamage(int damage) {
+        hitpoints = -damage;
+        if(hitpoints <= 0) {
+            die();
+        }
+    }
+
+    protected void healHitPoints(int heal) {
+        hitpoints = +heal;
+
+        if (hitpoints > maxHitpoints) {
+            hitpoints = maxHitpoints;
+        }
     }
 }
