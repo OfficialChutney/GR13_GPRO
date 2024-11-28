@@ -1,0 +1,143 @@
+package domainmodel;
+
+import itumulator.simulator.Actor;
+import itumulator.world.Location;
+import itumulator.world.NonBlocking;
+import itumulator.world.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Bear extends Animal implements Actor {
+    protected Location territoryTopLeftCornor;
+    protected Location territoryLowerRightCornor;
+    protected ArrayList<Location> territoryTileList;
+    protected BearBehavior bearBehavior;
+    protected Actor bearTarget;
+
+
+    public Bear(World world) {
+        super(103, world);
+
+    }
+
+    @Override
+    public void act(World world) {
+
+    }
+
+    @Override
+    protected void eat() {
+
+    }
+
+    @Override
+    protected LifeStage getLifeStage(){
+        if(age < 2) {
+            return LifeStage.CHILD;
+        } else {
+            return LifeStage.ADULT;
+        }
+    }
+
+    protected void setTerritory(Location loc) {
+        int startX = loc.getX();
+        int startY = loc.getY();
+        territoryTopLeftCornor = new Location(startX - 3, startY - 3);
+        territoryLowerRightCornor = new Location(startX + 3, startY + 3);
+
+        territoryTileList = new ArrayList<>(world.getSurroundingTiles(3));
+    }
+
+    protected void isThereSomeoneInMyTerritory() {
+        for (int i = 0; i < territoryTileList.size(); i++) {
+            Location temp = territoryTileList.get(i);
+            if (!world.isTileEmpty(temp)) {
+                if (!(world.getTile(temp) instanceof NonBlocking)) {
+                    bearBehavior = BearBehavior.GETOFMYLAWN;
+                    bearTarget = (Actor) world.getTile(temp);
+                    return;
+                }
+            }
+        }
+        bearBehavior = BearBehavior.PASSIVE;
+    }
+
+    protected void chaseIntruder() {
+        pathFinder(world.getLocation(bearTarget));
+    }
+
+    protected Location getNearestBearFood() {
+        Map<Object,Location> entitiesOnMap = world.getEntities();
+        for (int i = 1; i < 11; i++) {
+            ArrayList<Location> temp = surrondingLocationsList(i);
+
+            for (Location loc : temp) {
+
+                Object entity = entitiesOnMap.get(loc);
+
+                if((entity instanceof Animal && !(entity instanceof Bear)) || entity instanceof BerryBush) {
+                    System.out.println("I ran");
+                    return loc;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected void chooseBheavior (){
+        isThereSomeoneInMyTerritory();
+
+        if (bearBehavior == BearBehavior.TIMETOSEX) {
+            //sex behavior
+
+        } else if (bearBehavior == BearBehavior.GETOFMYLAWN) {
+            chaseIntruder();
+
+        } else {
+            normalBehavior();
+        }
+
+    }
+
+    protected void normalBehavior(){
+        if (checktime() == TimeOfDay.MORNING){
+            status = AnimalStatus.LOOKINGFORFOOD;
+            pathFinder(getNearestBearFood());
+            //eat or attack
+        } else if(checktime() == TimeOfDay.EVENING){
+            status = AnimalStatus.GOINGHOME;
+
+        } else if(checktime() == TimeOfDay.NIGHT){
+            status = AnimalStatus.SLEEPING;
+            sleep();
+        }
+    }
+
+    protected Location locateMaid(){
+        Map<Object,Location> entitiesOnMap = world.getEntities();
+        for (int i = 1; i < 11; i++) {
+            ArrayList<Location> temp = surrondingLocationsList(i);
+
+            for (Location loc : temp) {
+
+                Object entity = entitiesOnMap.get(loc);
+
+                if((entity instanceof Bear maidBear)) {
+
+                    if(maidBear.getSex() != sex){
+                        return loc;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    protected void timeToSexBehavior(){
+        if(sex != Sex.MALE && !pregnant) {
+            pathFinder(locateMaid());
+        }
+    }
+}

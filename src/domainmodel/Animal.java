@@ -4,7 +4,6 @@ import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
@@ -22,6 +21,7 @@ public abstract class Animal {
     protected Random rd;
     protected boolean isOnMap;
     protected Helper helper;
+
 
     Animal(int maxEnergy, World world) {
         this.maxEnergy = maxEnergy;

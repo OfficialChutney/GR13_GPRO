@@ -191,7 +191,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
 
     @Override
     protected LifeStage getLifeStage() {
-        if(age < 40) {
+        if(age < 2) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
