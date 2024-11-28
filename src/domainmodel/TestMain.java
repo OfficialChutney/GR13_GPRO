@@ -15,7 +15,7 @@ import java.awt.*;
 public class TestMain {
 
     public static void main(String[] args) {
-        Program p = new Program(15,800,300);
+        Program p = new Program(10,800,800);
 
         World world = p.getWorld();
 
@@ -26,12 +26,17 @@ public class TestMain {
         DisplayInformation wolfHole = new DisplayInformation(Color.BLACK, "hole");
         p.setDisplayInformation(WolfHole.class, wolfHole);
 
-        WolfPack wp = new WolfPack(5, new Location(3,3), world);
+        DisplayInformation rabbitHole = new DisplayInformation(Color.BLACK, "hole");
+        p.setDisplayInformation(RabbitHole.class, rabbitHole);
 
+        WolfPack wp = new WolfPack(4, new Location(5,5), world);
+
+        Rabbit rabbit = new Rabbit(world);
+        world.setTile(new Location(1,1),rabbit);
 
         p.show();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             p.simulate();
         }
 

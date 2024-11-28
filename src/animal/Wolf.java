@@ -3,7 +3,6 @@ package animal;
 
 import domainmodel.TimeOfDay;
 import foliage.Grass;
-import hole.Hole;
 import hole.WolfHole;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
@@ -25,6 +24,8 @@ public class Wolf extends Animal implements Actor {
     private WolfHole myWolfHole;
     private boolean attacking = false;
     private boolean hiding = false;
+    protected Animal target = null;
+    protected Location preyLocation;
 
     Wolf(World world, int wolfPackID, WolfPack pack) {
         super(30, world);
@@ -64,11 +65,10 @@ public class Wolf extends Animal implements Actor {
 
         if(attacking){
             huntingBehavior();
+
         } else{
             passiveBehavior();
         }
-
-
 
     }
 
@@ -81,8 +81,8 @@ public class Wolf extends Animal implements Actor {
     protected void passiveBehavior(){
         if(isOnMap){
             if (checktime() == TimeOfDay.MORNING) {
-                searchBehaviour();
-
+                roamBehaviour();
+                searchForPrey();
             }
             else if(checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT){
                 if(myWolfHole != null){
@@ -101,13 +101,13 @@ public class Wolf extends Animal implements Actor {
         }
     }
 
-    protected void searchBehaviour() {
+    protected void roamBehaviour() {
         if (isLeader) { // pack leader
             // move independently
             pathFinder(null);
         } else {
 
-            if (rangeFromLeader(pack.getWolfLeader()) < 4) {
+            if (rangeFromLeader(pack.getWolfLeader()) < 2) {
                 pathFinder(null);
 
             } else { // move independently
@@ -119,14 +119,35 @@ public class Wolf extends Animal implements Actor {
         }
     }
 
-    protected void goingHomeBehaviour() {
-        if (isOnMap) {
-            pathFinder(world.getLocation(myWolfHole));
+
+    protected void searchForPrey(){
+        //if rabbit found
+        if(getNearestObject(Rabbit.class, 8) != null){
+            System.out.println("search");
+            attacking = true;
+            preyLocation = getNearestObject(Rabbit.class, 8);
+            System.out.println(preyLocation);
+        } else{
+            preyLocation = null;
         }
     }
 
     protected void huntingBehavior(){
+        if(getNearestObject(Rabbit.class, 8) != null){
+            attacking = true;
+            preyLocation = getNearestObject(Rabbit.class, 8);
+            System.out.println(preyLocation);
+        } else{
+            preyLocation = null; attacking = false;
+        }
+        pathFinder(preyLocation);
+    }
 
+
+    protected void goingHomeBehaviour() {
+        if (isOnMap) {
+            pathFinder(world.getLocation(myWolfHole));
+        }
     }
 
     private void tryToHide() {
@@ -152,12 +173,21 @@ public class Wolf extends Animal implements Actor {
 
             //leader bliver skubbet ud af hulen først.
             if(!isLeader && !leader.getIsOnMap() && leader.getIsHiding()){
-                leader.act(world);
+                leader.emerge();
+            }
+
+            Set<Location> set = world.getEmptySurroundingTiles(wolfHoleLoc);
+            ArrayList<Location> emptyEmergeLocations = new ArrayList<>(set);
+
+            if(emptyEmergeLocations.isEmpty()){
+                return;
             }
 
             if (!(world.getTile(wolfHoleLoc) instanceof Actor)) {
+                Random rand = new Random();
+                Location emergeLocation = emptyEmergeLocations.get(rand.nextInt(emptyEmergeLocations.size()));
 
-                world.setTile(wolfHoleLoc, this);
+                world.setTile(emergeLocation, this);
                 isOnMap = true;
                 hiding = false;
                 birth();
@@ -257,5 +287,7 @@ public class Wolf extends Animal implements Actor {
         }
 
     public  boolean getIsHiding() {return hiding;}
+
+    public boolean isAttacking(){return attacking;}
 
 }

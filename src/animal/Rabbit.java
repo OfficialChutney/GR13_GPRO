@@ -166,7 +166,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
 
             this.status = AnimalStatus.LOOKINGFORFOOD;
 
-            pathFinder(getNearestObject(Grass.class));
+            pathFinder(getNearestObject(Grass.class, 10));
             if (isItGrass()) {
                 eat();
             }

@@ -141,9 +141,9 @@ public abstract class Animal {
         }
     }
 
-    protected Location getNearestObject(Class<?> object) {
+    protected Location getNearestObject(Class<?> object, int range) {
 
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i < range + 1; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
             for (Location loc : temp) {
 
