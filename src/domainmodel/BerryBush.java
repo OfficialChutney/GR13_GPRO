@@ -32,7 +32,7 @@ public class BerryBush implements Actor, NonBlocking {
         return tileLocation;
     }
 
-    public void berriesWasEaten(){
+    public void eatBerries(){
         hasBerries = false;
     }
 }
