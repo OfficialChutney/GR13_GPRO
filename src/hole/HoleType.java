@@ -1,4 +1,4 @@
-package domainmodel;
+package hole;
 
 public enum HoleType {
     RABBITHOLE,

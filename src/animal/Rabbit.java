@@ -1,5 +1,9 @@
-package domainmodel;
+package animal;
 
+import foliage.Grass;
+import hole.Hole;
+import domainmodel.*;
+import hole.HoleType;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;

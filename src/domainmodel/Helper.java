@@ -9,7 +9,7 @@ public class Helper {
 
 
     private World world;
-    Helper(World world) {
+    public Helper(World world) {
         this.world = world;
     }
 

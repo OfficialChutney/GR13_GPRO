@@ -1,11 +1,8 @@
-package domainmodel;
+package animal;
 
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
-
-import java.util.Iterator;
-import java.util.Set;
 
 
 public class Wolf extends Animal implements Actor {

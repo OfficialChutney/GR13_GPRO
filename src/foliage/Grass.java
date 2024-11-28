@@ -1,5 +1,6 @@
-package domainmodel;
+package foliage;
 
+import domainmodel.Plane;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;

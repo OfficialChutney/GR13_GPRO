@@ -1,13 +1,8 @@
-package domainmodel;
+package hole;
 
-import itumulator.executable.DisplayInformation;
-import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
-import itumulator.simulator.Actor;
-
-import java.awt.*;
 
 
 public class RabbitHole implements NonBlocking {

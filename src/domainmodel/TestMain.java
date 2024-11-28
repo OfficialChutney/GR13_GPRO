@@ -1,5 +1,7 @@
 package domainmodel;
 
+import animal.Wolf;
+import animal.WolfPack;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;

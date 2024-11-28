@@ -1,10 +1,16 @@
 package domainmodel;
 
+import animal.Rabbit;
+import animal.Wolf;
+import animal.WolfPack;
+import foliage.Grass;
+import hole.Hole;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
+import hole.HoleType;
 
 import java.awt.*;
 import java.util.*;

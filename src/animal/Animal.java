@@ -1,10 +1,10 @@
-package domainmodel;
+package animal;
 
+import domainmodel.*;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
@@ -23,7 +23,7 @@ public abstract class Animal {
     protected boolean isOnMap;
     protected Helper helper;
 
-    Animal(int maxEnergy, World world) {
+    public Animal(int maxEnergy, World world) {
         this.maxEnergy = maxEnergy;
         this.world = world;
         rd = new Random();
@@ -32,7 +32,7 @@ public abstract class Animal {
         helper = new Helper(world);
     }
 
-    Animal(int maxEnergy, World world, boolean isOnMap) {
+    public Animal(int maxEnergy, World world, boolean isOnMap) {
         this.maxEnergy = maxEnergy;
         this.world = world;
         rd = new Random();

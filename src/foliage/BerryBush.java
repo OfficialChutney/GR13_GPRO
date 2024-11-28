@@ -1,4 +1,4 @@
-package domainmodel;
+package foliage;
 
 import itumulator.simulator.Actor;
 import itumulator.world.Location;

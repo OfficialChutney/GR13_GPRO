@@ -1,8 +1,9 @@
-package domainmodel;
+package animal;
 
 import java.util.ArrayList;
 import java.util.Set;
 
+import domainmodel.Helper;
 import itumulator.world.Location;
 import itumulator.world.World;
 

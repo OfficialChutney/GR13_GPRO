@@ -1,5 +1,6 @@
-package domainmodel;
+package hole;
 
+import domainmodel.Plane;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.world.Location;
@@ -16,12 +17,11 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
     private boolean hasAnimal;
     private HoleType type;
 
-    Hole(World ourWorld, Location tileLocation, HoleType type) {
+    public Hole(World ourWorld, Location tileLocation, HoleType type) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
         this.type = type;
         Plane.increaseNonBlocking();
-
     }
 
 
@@ -29,7 +29,7 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
         this.hasAnimal = hasAnimal;
     }
 
-    boolean getHasAnimal() {
+    public boolean getHasAnimal() {
         return hasAnimal;
     }
 
@@ -42,10 +42,8 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
         switch (type){
             case RABBITHOLE:
                 return new DisplayInformation(Color.black, "hole-small");
-
             case WOLFHOLE:
                 return new DisplayInformation(Color.black, "hole");
-
         }
 
         return null;
