@@ -103,7 +103,7 @@ public abstract class Animal {
     }
 
     protected void die() {
-        if (energy <= 0) {
+        if (energy <= 0 || hitpoints <= 0) {
             System.out.println("I died");
             world.delete(this);
             isOnMap = false;

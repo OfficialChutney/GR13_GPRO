@@ -36,6 +36,8 @@ public class Wolf extends Animal implements Actor {
         this.world = world;
         isOnMap = true;
         energy = 30;
+        hitpoints = 30;
+        maxHitpoints = hitpoints;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
@@ -47,6 +49,8 @@ public class Wolf extends Animal implements Actor {
         this.world = world;
         isOnMap = true;
         energy = 30;
+        hitpoints = 30;
+        maxHitpoints = hitpoints;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader, boolean isOnMap) {
@@ -57,6 +61,8 @@ public class Wolf extends Animal implements Actor {
         this.leader = leader;
         this.world = world;
         energy = 30;
+        hitpoints = 30;
+        maxHitpoints = hitpoints;
     }
 
     @Override
@@ -75,7 +81,7 @@ public class Wolf extends Animal implements Actor {
         }
 
         tryToDecreaseEnergy();
-        //die();
+        die();
 
     }
 
@@ -136,7 +142,7 @@ public class Wolf extends Animal implements Actor {
         if (isLeader) { // pack leader
             // move independently
             pathFinder(null);
-        } else {
+        } else if (leader != null) { // if leader exists
 
             if (rangeFromLeader(pack.getWolfLeader()) < 2) {
                 pathFinder(null);
@@ -147,6 +153,8 @@ public class Wolf extends Animal implements Actor {
                 //System.out.println(myLocation.toString());
             }
 
+        } else { // no leader exists
+            pathFinder(null);
         }
     }
 
@@ -158,7 +166,9 @@ public class Wolf extends Animal implements Actor {
             attacking = true;
             preyLocation = getNearestObject(Rabbit.class, 8);
             System.out.println(preyLocation);
-        } else {
+        //} else if(){ search for another wolf party
+        }
+        else {
             preyLocation = null;
         }
     }

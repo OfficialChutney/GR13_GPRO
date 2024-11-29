@@ -29,7 +29,9 @@ public class TestMain {
         DisplayInformation rabbitHole = new DisplayInformation(Color.BLACK, "hole");
         p.setDisplayInformation(RabbitHole.class, rabbitHole);
 
-        WolfPack wp = new WolfPack(4, new Location(5,5), world);
+        WolfPack wp1 = new WolfPack(4, new Location(7,7), world);
+
+        WolfPack wp2 = new WolfPack(4, new Location(3,3), world);
 
         Rabbit rabbit = new Rabbit(world);
         world.setTile(new Location(1,1),rabbit);
