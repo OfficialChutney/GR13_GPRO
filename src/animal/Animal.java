@@ -243,5 +243,20 @@ public abstract class Animal {
 
     public boolean getIsOnMap() {return isOnMap;}
 
+    public void takeDamage(int damage) {
+        hitpoints -= damage;
+        if(hitpoints <= 0) {
+            die();
+        }
+    }
+
+    protected void healHitPoints(int heal) {
+        hitpoints = +heal;
+
+        if (hitpoints > maxHitpoints) {
+            hitpoints = maxHitpoints;
+        }
+    }
+
 
 }
