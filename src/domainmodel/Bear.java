@@ -118,6 +118,7 @@ public class Bear extends Animal implements Actor {
 
     protected void beheavior() {
         isThereSomeoneInMyTerritory();
+        isItBabyMakingSeason();
 
         if (bearBehavior == BearBehavior.TIMETOSEX) {
             timeToSexBehavior();
@@ -175,16 +176,16 @@ public class Bear extends Animal implements Actor {
             return;
         }
         pathFinder(locateMaid());
-        surrondingLocationsList();
         if (sex != Sex.MALE && !pregnant && isNeighbourMale(this)) {
             reproduce();
             bearBehavior = BearBehavior.PASSIVE;
         }
     }
 
-    protected void babyMakingSeason() {
-        //a methoed that calls all bears to get horny!
-        //steps
+    protected void isItBabyMakingSeason() {
+        if( steps/40 == 0){
+            bearBehavior = BearBehavior.TIMETOSEX;
+        }
     }
 
 }
