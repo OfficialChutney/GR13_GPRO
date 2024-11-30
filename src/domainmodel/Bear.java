@@ -117,15 +117,20 @@ public class Bear extends Animal implements Actor {
     }
 
     protected void beheavior() {
-        isThereSomeoneInMyTerritory();
         isItBabyMakingSeason();
+
+        if(bearBehavior != BearBehavior.TIMETOSEX) {
+            isThereSomeoneInMyTerritory();
+        }
 
         if (bearBehavior == BearBehavior.TIMETOSEX) {
             timeToSexBehavior();
+            updateEnergy(-1);
 
         } else if (bearBehavior == BearBehavior.GETOFMYLAWN) {
             chaseIntruder();
             eat();
+            updateEnergy(-1);
 
         } else {
             normalBehavior();
@@ -138,15 +143,17 @@ public class Bear extends Animal implements Actor {
             status = AnimalStatus.LOOKINGFORFOOD;
             pathFinder(getNearestBearFood());
             eat();
-            //eat or attack
+            updateEnergy(-1);
+
         } else if (checktime() == TimeOfDay.EVENING) {
             status = AnimalStatus.GOINGHOME;
             pathFinder(getNearestBearFood());
             eat();
+            updateEnergy(-1);
 
         } else if (checktime() == TimeOfDay.NIGHT) {
             status = AnimalStatus.SLEEPING;
-
+            updateEnergy(1);
         }
     }
 
@@ -161,7 +168,7 @@ public class Bear extends Animal implements Actor {
 
                 if ((entity instanceof Bear maidBear)) {
 
-                    if (maidBear.getSex() != sex) {
+                    if (maidBear.getSex() != sex && maidBear != this) {
                         return loc;
                     }
                 }
@@ -183,7 +190,7 @@ public class Bear extends Animal implements Actor {
     }
 
     protected void isItBabyMakingSeason() {
-        if( steps/40 == 0){
+        if( steps%40 == 0){
             bearBehavior = BearBehavior.TIMETOSEX;
         }
     }
