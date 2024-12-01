@@ -154,6 +154,7 @@ public class Bear extends Animal implements Actor {
         } else if (checktime() == TimeOfDay.NIGHT) {
             status = AnimalStatus.SLEEPING;
             updateEnergy(1);
+            healHitPoints(1);
         }
     }
 
