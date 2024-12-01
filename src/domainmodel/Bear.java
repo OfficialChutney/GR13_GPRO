@@ -63,7 +63,7 @@ public class Bear extends Animal implements Actor {
     }
 
     protected void setTerritory(Location loc) {
-        int tSize = 1;
+        int tSize = 2;
         int startX = loc.getX();
         int startY = loc.getY();
         territoryTopLeftCornor = new Location(startX - tSize, startY - tSize);
@@ -134,6 +134,9 @@ public class Bear extends Animal implements Actor {
 
         } else {
             normalBehavior();
+            if(pregnant){
+                birth();
+            }
         }
 
     }
