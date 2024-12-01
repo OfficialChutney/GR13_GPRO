@@ -20,14 +20,18 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
 
     public Rabbit(World world) {
         super(10000, world);
-        this.setRandomSex();
+        setRandomSex();
         energy = 10000;
+        hitpoints = 1;
+        maxHitpoints = hitpoints;
     }
 
     public Rabbit(World world, boolean isOnMap) {
         super(10000, world, isOnMap);
         this.setRandomSex();
         energy = 10000;
+        hitpoints = 1;
+        maxHitpoints = hitpoints;
     }
 
     @Override

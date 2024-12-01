@@ -24,6 +24,8 @@ public abstract class Animal {
     protected Helper helper;
     protected boolean canDie;
     protected boolean canGetPregnant;
+    protected int steps;
+
 
     public Animal(int maxEnergy, World world) {
         this.maxEnergy = maxEnergy;
@@ -35,6 +37,7 @@ public abstract class Animal {
         canDie = true;
         canGetPregnant = true;
         age = 0;
+        steps = 0;
     }
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
@@ -47,6 +50,7 @@ public abstract class Animal {
         canDie = true;
         canGetPregnant = true;
         age = 0;
+        steps = 0;
     }
 
     public abstract void eat();
@@ -98,7 +102,7 @@ public abstract class Animal {
         }
 
         Location onTheMove = new Location(movingX, movingY);
-
+        System.out.println(world.getTile(onTheMove));
         if (world.isTileEmpty(onTheMove)) {
             world.move(this, onTheMove);
         } else {
@@ -111,7 +115,7 @@ public abstract class Animal {
     }
 
     public void die() {
-        if (energy <= 0 && canDie) {
+        if ((energy <= 0 || hitpoints <= 0) && canDie) {
             System.out.println("I died");
             world.delete(this);
             isOnMap = false;
@@ -268,4 +272,23 @@ public abstract class Animal {
         this.age = age;
     }
 
+
+    public void takeDamage(int damage) {
+        hitpoints = hitpoints - damage;
+        if(hitpoints <= 0) {
+            die();
+        }
+    }
+
+    protected void healHitPoints(int heal) {
+        hitpoints = hitpoints + heal;
+
+        if (hitpoints > maxHitpoints) {
+            hitpoints = maxHitpoints;
+        }
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
+    }
 }

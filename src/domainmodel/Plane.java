@@ -72,6 +72,9 @@ public class Plane {
                     case "wolf" -> {
                         createObjectOnTile(WolfPack.class, value);
                     }
+                    case "bear" -> {
+                        createObjectOnTile(Bear.class, value);
+                    }
                     default -> {
                         System.out.println("could not determine type " + key);
                     }
@@ -90,6 +93,14 @@ public class Plane {
             for (int i = 1; i <= simulationStepLength; i++) {
                 program.simulate();
                 System.out.println("Step: " + world.getCurrentTime());
+                Map<Object, Location> entities = world.getEntities();
+
+                for (Object entity : entities.keySet()) {
+                    if (entity instanceof Animal a) {
+                        a.setSteps(i);
+                    }
+
+                }
             }
 
             stopSimulation();
@@ -143,6 +154,9 @@ public class Plane {
                         } else if (objectType == WolfPack.class) {
                             new WolfPack(numberOfUnits, locationOfObject, world);
                             return;
+                        } else if (objectType == Bear.class) {
+                            Bear bear = new Bear(world);
+                            world.setTile(locationOfObject, bear);
                         }
                     }
 
