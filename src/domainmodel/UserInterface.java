@@ -1,6 +1,5 @@
 package domainmodel;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,12 +32,9 @@ public class UserInterface {
             if (file.getName().equals(specifiedFileToRun) || specifiedFileToRun == null) {
 
 
-                try {
+                try (FileReader fr = new FileReader(file.toString())) {
                     int worldSize;
                     HashMap<String, String> initialConditions = new HashMap<>();
-
-
-                    FileReader fr = new FileReader(file.toString());
 
                     BufferedReader br = new BufferedReader(fr);
                     List<String> lines = new LinkedList<>(br.lines().toList());

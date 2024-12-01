@@ -84,14 +84,15 @@ public class Plane {
         }
 
 
+        long startingms = System.currentTimeMillis();
+
         if (!isTest) {
 
             program.show();
-            long startingms = System.currentTimeMillis();
+
 
             for (int i = 1; i <= simulationStepLength; i++) {
                 program.simulate();
-                //System.out.println("Step: " + world.getCurrentTime());
                 Map<Object, Location> entities = world.getEntities();
 
                 for (Object entity : entities.keySet()) {
@@ -101,19 +102,14 @@ public class Plane {
 
                 }
             }
-
-            stopSimulation();
-            long stopms = System.currentTimeMillis();
-            System.out.println("Time for simluation: " + (stopms - startingms));
-            return null;
-
-
-        } else {
-
-            TestPackage tp = new TestPackage(world, program, world.getEntities());
-            return tp;
-
         }
+
+        stopSimulation();
+        long stopms = System.currentTimeMillis();
+        System.out.println("Time for simluation: " + (stopms - startingms));
+
+        TestPackage tp = new TestPackage(world, program, world.getEntities());
+        return tp;
 
 
     }

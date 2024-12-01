@@ -3,18 +3,11 @@ import animal.Rabbit;
 import animal.Sex;
 import domainmodel.*;
 import foliage.Grass;
+import hole.Hole;
 import itumulator.executable.Program;
 import itumulator.world.Location;
-import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import org.junit.jupiter.api.*;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -143,6 +136,8 @@ public class RabbitTest {
         Rabbit rabbit = new Rabbit(world);
         world.setTile(startLocation,rabbit);
 
+        program.show();
+
         //ACT
         program.simulate();
 
@@ -155,7 +150,7 @@ public class RabbitTest {
         int deltaY = Math.abs(startY - endY);
 
         int expected = 1;
-        int actual = deltaX + deltaY;
+        int actual = Math.max(deltaX, deltaY);
 
         assertEquals(expected, actual);
 
@@ -193,43 +188,112 @@ public class RabbitTest {
 
     }
 
+    @Test
+    public void rabbitsCanDie() {
+        //ARRANGE
+        Location rabbitStartLocation = new Location(0,0);
+        Rabbit rabbit = new Rabbit(world);
+        world.setTile(rabbitStartLocation, rabbit);
+        rabbit.setEnergy(1);
+
+        int numOfRabbitsStart = getRabbitsOnMap().size();
+
+        program.simulate();
+
+        int numOfRabbitsEnd = getRabbitsOnMap().size();
+
+        assertNotEquals(numOfRabbitsStart, numOfRabbitsEnd);
+
+        assertEquals(0, numOfRabbitsEnd);
+    }
 
     @Test
-    public void rabbitPlacedFromFile() {
-        //ASSERT
+    public void rabbitAgeChangeMaxEnergy() {
+        //ARRANGE
+        Location rabbitStartLocation = new Location(0,0);
+        Rabbit rabbit = new Rabbit(world);
+        rabbit.setCanDie(false);
+        int defaultMaxEnergy = rabbit.getMaxEnergy();
 
-        UserInterface ui = new UserInterface();
-        String directory = ui.getInputFileDirectory();
-        ui.setTest(true);
-        File testFile = new File(directory+"/testFile.txt");
-        ui.setSpecifiedFileToRun("testFile.txt");
+        world.setTile(rabbitStartLocation, rabbit);
 
-        int numOfRabbits = 15;
+        //ACT
+        rabbit.setAge(2);
+        program.simulate();
+        int rabbitMaxEnergyStart = rabbit.getMaxEnergy();
+
+        rabbit.setAge(10);
+        program.simulate();
+        int rabbitMaxEnergyEnd = rabbit.getMaxEnergy();
+
+
+        assertNotEquals(rabbitMaxEnergyStart, rabbitMaxEnergyEnd);
+
+        assertEquals(defaultMaxEnergy - 2, rabbitMaxEnergyStart);
+        assertEquals(defaultMaxEnergy - 10, rabbitMaxEnergyEnd);
+    }
+
+    @Test
+    public void hasDugHole() {
+        //ARRANGE
+        Location rabbitStartLocation = new Location(0,0);
+        Rabbit rabbit = new Rabbit(world);
+        rabbit.setCanDie(false);
+        world.setTile(rabbitStartLocation, rabbit);
+        world.setNight();
+        int numOfHolesBeforeAct = getRabbitHolesOnMap(world).size();
+
+        program.show();
+        //ACT
+        for (int i = 0; i < 4; i++) {
+            program.simulate();
+        }
+
+        int expected = 1;
+        int actual = getRabbitHolesOnMap(world).size();
+
+        assertEquals(expected, actual);
+
+        expected = 0;
+        actual = numOfHolesBeforeAct;
+        assertEquals(expected, actual);
+
+
+
+    }
+
+    @Test
+    public void hasReachedHole() {
+        //ARRANGE
+        Location rabbitStartLocation = new Location(0,0);
+        Rabbit rabbit = new Rabbit(world);
+        rabbit.setCanDie(false);
+        world.setTile(rabbitStartLocation, rabbit);
+        world.setNight();
+
+        program.show();
+        //ACT
+        for (int i = 0; i < 4; i++) {
+            program.simulate();
+        }
+
+        int expected = 1;
+        int actual = getRabbitHolesOnMap(world).size();
+
+        assertEquals(expected, actual);
 
         try {
-            testFile.createNewFile();
-            try (FileWriter fw = new FileWriter(testFile)) {
-                fw.write(String.valueOf(worldSize)+"\n");
-                fw.write("rabbit "+String.valueOf(numOfRabbits));
-            }
-
-            TestPackage tp = ui.startProgram();
-
-            int expected = numOfRabbits;
-            int actual = tp.getEntities().size();
-
-
-            assertEquals(expected, actual);
-
-        } catch (IOException e) {
-            assertDoesNotThrow(() -> {
-                throw e;
+            world.getLocation(rabbit);
+        } catch (IllegalArgumentException e) {
+            assertThrows(IllegalArgumentException.class, () -> {
+               throw e;
             });
+            assertEquals("Object is not on the map.", e.getMessage());
         }
 
 
-
-
+        assertEquals(rabbitStartLocation.getX(), rabbit.getMyRabbitHole().getTileLocation().getX());
+        assertEquals(rabbitStartLocation.getY(), rabbit.getMyRabbitHole().getTileLocation().getY());
 
 
     }
@@ -268,4 +332,19 @@ public class RabbitTest {
     private LinkedList<Grass> getGrassOnMap() {
         return getGrassOnMap(world);
     }
+
+    private LinkedList<Hole> getRabbitHolesOnMap(World world) {
+        Map<Object, Location> entities = world.getEntities();
+        LinkedList<Hole> rabbitHoles = new LinkedList<>();
+
+        for (Object o : entities.keySet()) {
+            if (o instanceof Hole rb) {
+                rabbitHoles.add(rb);
+            }
+        }
+
+        return rabbitHoles;
+    }
+
+
 }

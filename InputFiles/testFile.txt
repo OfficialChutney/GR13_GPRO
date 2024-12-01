@@ -1,2 +1,2 @@
 15
-rabbit 15
+burrow 7

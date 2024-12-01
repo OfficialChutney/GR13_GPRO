@@ -25,9 +25,11 @@ public abstract class Animal {
     protected boolean canDie;
     protected boolean canGetPregnant;
     protected int steps;
+    protected int startMaxEnergy;
 
 
     public Animal(int maxEnergy, World world) {
+        startMaxEnergy = maxEnergy;
         this.maxEnergy = maxEnergy;
         this.world = world;
         rd = new Random();
@@ -288,5 +290,17 @@ public abstract class Animal {
 
     public void setSteps(int steps) {
         this.steps = steps;
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 }

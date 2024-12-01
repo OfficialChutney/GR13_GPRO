@@ -19,9 +19,8 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     private boolean hiding = false;
 
     public Rabbit(World world) {
-        super(10000, world);
+        super(15, world);
         setRandomSex();
-        energy = 10000;
         hitpoints = 1;
         maxHitpoints = hitpoints;
     }
@@ -29,7 +28,6 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     public Rabbit(World world, boolean isOnMap) {
         super(10000, world, isOnMap);
         this.setRandomSex();
-        energy = 10000;
         hitpoints = 1;
         maxHitpoints = hitpoints;
     }
@@ -162,8 +160,8 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
     private void ageRabbit() {
         if(world.getCurrentTime() == 0) {
             age++;
-            maxEnergy--;
         }
+        maxEnergy = startMaxEnergy - age;
     }
 
     private void lookingForFoodBehaviour() {
@@ -216,4 +214,12 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
         }
 
     }
+
+    public Hole getMyRabbitHole() {
+        return myRabbitHole;
+    }
+
+
+
+
 }
