@@ -1,12 +1,14 @@
-package domainmodel;
+package animal;
 
+import domainmodel.TimeOfDay;
+import foliage.BerryBush;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 public class Bear extends Animal implements Actor {
@@ -37,7 +39,7 @@ public class Bear extends Animal implements Actor {
     }
 
     @Override
-    protected void eat() {
+    public void eat() {
         ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
         for (Location neighbor : neighborTiles) {
             Object temp = world.getTile(neighbor);
@@ -54,7 +56,7 @@ public class Bear extends Animal implements Actor {
     }
 
     @Override
-    protected LifeStage getLifeStage() {
+    public LifeStage getLifeStage() {
         if (age < 2) {
             return LifeStage.CHILD;
         } else {

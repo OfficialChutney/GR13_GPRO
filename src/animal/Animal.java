@@ -102,7 +102,6 @@ public abstract class Animal {
         }
 
         Location onTheMove = new Location(movingX, movingY);
-        System.out.println(world.getTile(onTheMove));
         if (world.isTileEmpty(onTheMove)) {
             world.move(this, onTheMove);
         } else {
@@ -245,7 +244,6 @@ public abstract class Animal {
             }
 
             if (child != null) {
-                System.out.println("I birthed");
                 world.setTile(tiles.get(r.nextInt(tiles.size())), child);
                 child.setOnMap(true);
                 pregnant = false;

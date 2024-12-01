@@ -1,18 +1,17 @@
 package domainmodel;
 
+import animal.Animal;
+import animal.Bear;
 import animal.Rabbit;
-import animal.Wolf;
 import animal.WolfPack;
 import foliage.Grass;
 import hole.Hole;
-import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 import hole.HoleType;
 
-import java.awt.*;
 import java.util.*;
 
 public class Plane {
@@ -92,7 +91,7 @@ public class Plane {
 
             for (int i = 1; i <= simulationStepLength; i++) {
                 program.simulate();
-                System.out.println("Step: " + world.getCurrentTime());
+                //System.out.println("Step: " + world.getCurrentTime());
                 Map<Object, Location> entities = world.getEntities();
 
                 for (Object entity : entities.keySet()) {
