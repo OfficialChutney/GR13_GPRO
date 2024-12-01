@@ -1,3 +1,4 @@
-10
-bear 1
+15
+bear 2
 rabbit 2
+grass 8
