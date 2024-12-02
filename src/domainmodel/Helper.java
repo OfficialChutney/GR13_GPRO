@@ -1,5 +1,6 @@
 package domainmodel;
 
+import animal.Bear;
 import animal.Rabbit;
 import animal.Wolf;
 import foliage.Grass;
@@ -41,5 +42,9 @@ public class Helper {
         //Set display for Wolf
         DisplayInformation wolfDisplay = new DisplayInformation(Color.orange, "wolf");
         program.setDisplayInformation(Wolf.class, wolfDisplay);
+
+        //Set display for Bear
+        DisplayInformation BearDisplay = new DisplayInformation(Color.orange, "bear");
+        program.setDisplayInformation(Bear.class, BearDisplay);
     }
 }

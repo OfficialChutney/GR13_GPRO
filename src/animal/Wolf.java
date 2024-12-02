@@ -87,7 +87,7 @@ public class Wolf extends Animal implements Actor {
     }
 
     @Override
-    protected void eat() {
+    public void eat() {
         ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
         for (Location neighbor : neighborTiles) {
             Object temp = world.getTile(neighbor);
@@ -273,11 +273,6 @@ public class Wolf extends Animal implements Actor {
         return myLocation;
     }
 
-    @Override
-    public void eat() {
-
-    }
-
     public int getWolfPackID() {
         return wolfPackID;
     }
@@ -322,7 +317,7 @@ public class Wolf extends Animal implements Actor {
                 Random rd = new Random();
 
                 for (int i = 1; i <= world.getSize(); i++) {
-                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(locOfWolf, i);
+                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(world, locOfWolf, i);
                     ArrayList<Location> emptyTiles = new ArrayList<>(emptyTilesSet);
                     if (!emptyTiles.isEmpty()) {
                         pathFinder(emptyTiles.get(rd.nextInt(emptyTiles.size())));
