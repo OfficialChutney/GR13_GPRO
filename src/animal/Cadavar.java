@@ -1,6 +1,8 @@
 package animal;
 
+import foliage.Mushroom;
 import itumulator.simulator.Actor;
+import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
@@ -10,6 +12,7 @@ public class Cadavar  implements Actor, NonBlocking {
     int stepsToDecompose;
     int currentSteps = 0;
     boolean mushrooms;
+    Location myLocation;
 
     public Cadavar(World world, boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         this.world = world;
@@ -21,7 +24,9 @@ public class Cadavar  implements Actor, NonBlocking {
 
     @Override
     public void act(World world) {
-
+        if(myLocation == null) {
+            myLocation = world.getLocation(this);
+        }
         decomposeOrDelete();
         currentSteps++;
         if(mushrooms) {
@@ -44,10 +49,11 @@ public class Cadavar  implements Actor, NonBlocking {
     }
 
     private void setMushroomInWorld(){
-        //...
+        Mushroom mushroom = new Mushroom(world);
+        world.setTile(myLocation, mushroom);
     }
 
-    public void setMushroom(boolean mushrooms){
+    public void setMushroomState(boolean mushrooms){
         this.mushrooms = mushrooms;
     }
 }

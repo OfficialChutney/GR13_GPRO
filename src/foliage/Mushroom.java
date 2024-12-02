@@ -44,7 +44,7 @@ public class Mushroom implements Actor, NonBlocking {
             Object object = world.getTile(surrondingTilesList.get(i));
 
             if(object instanceof Cadavar cadavar){
-                cadavar.setMushroom(true);
+                cadavar.setMushroomState(true);
             }
         }
 
