@@ -6,11 +6,13 @@ import animal.Rabbit;
 import animal.WolfPack;
 import foliage.Grass;
 import hole.Hole;
+import hole.WolfHole;
+import hole.RabbitHole;
+import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
-import hole.HoleType;
 
 import java.util.*;
 
@@ -63,7 +65,7 @@ public class Plane {
                         createObjectOnTile(Rabbit.class, value);
                     }
                     case "burrow" -> {
-                        createObjectOnTile(Hole.class, value);
+                        createObjectOnTile(RabbitHole.class, value);
                     }
                     case "grass" -> {
                         createObjectOnTile(Grass.class, value);
@@ -132,7 +134,7 @@ public class Plane {
                             Grass grassToPlace = new Grass(world);
                             world.setTile(locationOfObject, grassToPlace);
                         } else if (objectType == Hole.class) {
-                            Hole holeToPlace = new Hole(world, locationOfObject, HoleType.RABBITHOLE);
+                            Hole holeToPlace = new RabbitHole(world, locationOfObject);
                             world.setTile(locationOfObject, holeToPlace);
                         }
                     }

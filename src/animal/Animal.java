@@ -156,9 +156,9 @@ public abstract class Animal {
         }
     }
 
-    public Location getNearestObject(Class<?> object) {
+    public Location getNearestObject(Class<?> object, int range) {
 
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i < range + 1; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
             for (Location loc : temp) {
 
@@ -305,4 +305,9 @@ public abstract class Animal {
     public void setEnergy(int energy) {
         this.energy = energy;
     }
+
+    public boolean getIsOnMap() {return isOnMap;}
+
 }
+
+
