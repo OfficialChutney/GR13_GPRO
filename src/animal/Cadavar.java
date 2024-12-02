@@ -46,4 +46,8 @@ public class Cadavar  implements Actor, NonBlocking {
     private void setMushroomInWorld(){
         //...
     }
+
+    public void setMushroom(boolean mushrooms){
+        this.mushrooms = mushrooms;
+    }
 }
