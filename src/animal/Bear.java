@@ -2,16 +2,19 @@ package animal;
 
 import domainmodel.TimeOfDay;
 import foliage.BerryBush;
+import itumulator.executable.DisplayInformation;
+import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+import java.awt.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Bear extends Animal implements Actor {
+public class Bear extends Animal {
     protected Location territoryTopLeftCornor;
     protected Location territoryLowerRightCornor;
     protected ArrayList<Location> territoryTileList;
@@ -36,6 +39,8 @@ public class Bear extends Animal implements Actor {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+
+        ageAnimal();
     }
 
     @Override
@@ -198,4 +203,22 @@ public class Bear extends Animal implements Actor {
         }
     }
 
+    @Override
+    public DisplayInformation getInformation() {
+
+        if(status == AnimalStatus.SLEEPING) {
+            if (getLifeStage() == LifeStage.CHILD) {
+                return new DisplayInformation(Color.BLACK, "bear-small-sleeping");
+            } else {
+                return new DisplayInformation(Color.BLACK, "bear-sleeping");
+            }
+        } else {
+
+            if (getLifeStage() == LifeStage.CHILD) {
+                return new DisplayInformation(Color.BLACK, "bear-small");
+            } else {
+                return new DisplayInformation(Color.BLACK, "bear");
+            }
+        }
+    }
 }

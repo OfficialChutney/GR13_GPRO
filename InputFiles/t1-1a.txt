@@ -1,2 +1,8 @@
-10
+15
+rabbit 4
+grass 6-8
+burrow 4
+wolf 3
+wolf 6
 bear 1
+bear 1 (3,4)

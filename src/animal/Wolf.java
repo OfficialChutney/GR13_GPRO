@@ -4,16 +4,18 @@ package animal;
 import domainmodel.TimeOfDay;
 import foliage.Grass;
 import hole.WolfHole;
+import itumulator.executable.DisplayInformation;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
 
-public class Wolf extends Animal implements Actor {
+public class Wolf extends Animal {
 
     private boolean isLeader;
     private int wolfPackID;
@@ -329,7 +331,6 @@ public class Wolf extends Animal implements Actor {
             } else {
                 WolfHole newHole = new WolfHole(world, getMyLocation(), wolfPackID);
                 world.setTile(getMyLocation(), newHole);
-                newHole.setHasAnimal(true);
                 myWolfHole = newHole;
             }
         }
@@ -353,4 +354,13 @@ public class Wolf extends Animal implements Actor {
         }
     }
 
+    @Override
+    public DisplayInformation getInformation() {
+        if (getLifeStage() == LifeStage.CHILD) {
+            return new DisplayInformation(Color.red, "wolf-small");
+        } else {
+            return new DisplayInformation(Color.red, "wolf-large");
+        }
+
+    }
 }

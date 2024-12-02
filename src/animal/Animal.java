@@ -1,15 +1,18 @@
 package animal;
 
 import domainmodel.*;
+import itumulator.executable.DynamicDisplayInformationProvider;
+import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Animal {
+public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
     protected int age;
     protected int energy;
     protected int maxEnergy;
@@ -44,6 +47,7 @@ public abstract class Animal {
     }
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
+        startMaxEnergy = maxEnergy;
         this.maxEnergy = maxEnergy;
         energy = maxEnergy;
         this.world = world;
@@ -73,55 +77,66 @@ public abstract class Animal {
 
     public void pathFinder(Location destination) {
 
-        if (destination == null) {
-            Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
-            ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
+        if (isOnMap) {
 
-            if (!sourroundingLocationsAsList.isEmpty()) {
-                Random rd = new Random();
+            if (destination == null) {
+                Set<Location> sorroundingLocations = world.getEmptySurroundingTiles(world.getLocation(this));
+                ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
 
-                world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
+                if (!sourroundingLocationsAsList.isEmpty()) {
+                    Random rd = new Random();
+
+                    world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
+                }
+                return;
+
             }
-            return;
+            Location start = world.getLocation(this);
 
-        }
-        Location start = world.getLocation(this);
+            int movingX = start.getX();
+            int movingY = start.getY();
 
-        int movingX = start.getX();
-        int movingY = start.getY();
+            int destinationY = destination.getY();
+            int destinationX = destination.getX();
 
-        int destinationY = destination.getY();
-        int destinationX = destination.getX();
-
-        if (movingX > destinationX) {
-            movingX--;
-        } else if (movingX < destinationX) {
-            movingX++;
-        }
-
-        if (movingY > destinationY) {
-            movingY--;
-        } else if (movingY < destinationY) {
-            movingY++;
-        }
-
-        Location onTheMove = new Location(movingX, movingY);
-        if (world.isTileEmpty(onTheMove)) {
-            world.move(this, onTheMove);
-        } else {
-            ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(world,start, 1));
-            if (!alternativeLocations.isEmpty()) {
-                world.move(this, alternativeLocations.get(rd.nextInt(alternativeLocations.size())));
+            if (movingX > destinationX) {
+                movingX--;
+            } else if (movingX < destinationX) {
+                movingX++;
             }
 
+            if (movingY > destinationY) {
+                movingY--;
+            } else if (movingY < destinationY) {
+                movingY++;
+            }
+
+            Location onTheMove = new Location(movingX, movingY);
+            if (world.isTileEmpty(onTheMove)) {
+                world.move(this, onTheMove);
+            } else {
+                ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(world, start, 1));
+                if (!alternativeLocations.isEmpty()) {
+                    world.move(this, alternativeLocations.get(rd.nextInt(alternativeLocations.size())));
+                }
+
+            }
         }
     }
 
     public void die() {
         if ((energy <= 0 || hitpoints <= 0) && canDie) {
-            System.out.println("I died");
+            System.out.println("Energy on death: " + energy);
+            System.out.println("Hitpoints on death: " + hitpoints);
             world.delete(this);
             isOnMap = false;
+
+            if (this instanceof Rabbit r) {
+                if (r.getMyRabbitHole() != null) {
+                    r.getMyRabbitHole().removeRabbit(r);
+                }
+
+            }
         }
     }
 
@@ -191,7 +206,13 @@ public abstract class Animal {
     }
 
     public ArrayList<Location> surrondingLocationsList(int range) {
-        Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this), range);
+        Set<Location> neighbours;
+        try {
+            neighbours = world.getSurroundingTiles(world.getLocation(this), range);
+        } catch (IllegalArgumentException e) {
+            neighbours = new HashSet<>();
+            isOnMap = false;
+        }
         return new ArrayList<>(neighbours);
 
     }
@@ -235,7 +256,7 @@ public abstract class Animal {
         if (pregnant) {
             Random r = new Random();
             ArrayList<Location> tiles = surrondingEmptyLocationsList();
-
+            System.out.println("I birthed");
             if (tiles.isEmpty()) {
                 return;
             }
@@ -270,6 +291,7 @@ public abstract class Animal {
     public boolean isPregnant() {
         return pregnant;
     }
+
     public void setAge(int age) {
         this.age = age;
     }
@@ -277,9 +299,16 @@ public abstract class Animal {
 
     public void takeDamage(int damage) {
         hitpoints = hitpoints - damage;
-        if(hitpoints <= 0) {
+        if (hitpoints <= 0) {
             die();
         }
+    }
+
+    public void ageAnimal() {
+        if (world.getCurrentTime() == 0) {
+            age++;
+        }
+        maxEnergy = startMaxEnergy - age;
     }
 
     protected void healHitPoints(int heal) {
@@ -306,7 +335,9 @@ public abstract class Animal {
         this.energy = energy;
     }
 
-    public boolean getIsOnMap() {return isOnMap;}
+    public boolean getIsOnMap() {
+        return isOnMap;
+    }
 
 }
 

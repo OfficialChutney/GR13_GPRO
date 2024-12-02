@@ -4,7 +4,8 @@ import animal.Bear;
 import animal.Rabbit;
 import animal.Wolf;
 import foliage.Grass;
-import hole.Hole;
+import hole.RabbitHole;
+import hole.WolfHole;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
@@ -33,7 +34,7 @@ public class Helper {
 
         //Set display for Rabbitholes
         DisplayInformation rabbitHoleDisplay = new DisplayInformation(Color.orange, "hole-small");
-        program.setDisplayInformation(Hole.class, rabbitHoleDisplay);
+        program.setDisplayInformation(RabbitHole.class, rabbitHoleDisplay);
 
         //Set display for Rabbit
         DisplayInformation rabbitDisplay = new DisplayInformation(Color.orange, "rabbit-large");
@@ -46,5 +47,9 @@ public class Helper {
         //Set display for Bear
         DisplayInformation BearDisplay = new DisplayInformation(Color.orange, "bear");
         program.setDisplayInformation(Bear.class, BearDisplay);
+
+        //Set display for WolfHole
+        DisplayInformation WolfHole = new DisplayInformation(Color.orange, "hole");
+        program.setDisplayInformation(WolfHole.class, WolfHole);
     }
 }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.LinkedList;
@@ -28,13 +29,13 @@ public class UserInterface {
 
     public TestPackage startProgram() {
         TestPackage testPackage = null;
+        LinkedList<InitialConditions> icList = new LinkedList<>();
         for (File file : inputFileDirectory.listFiles()) {
             if (file.getName().equals(specifiedFileToRun) || specifiedFileToRun == null) {
-
+                InitialConditions ic = null;
 
                 try (FileReader fr = new FileReader(file.toString())) {
                     int worldSize;
-                    HashMap<String, String> initialConditions = new HashMap<>();
 
                     BufferedReader br = new BufferedReader(fr);
                     List<String> lines = new LinkedList<>(br.lines().toList());
@@ -47,12 +48,27 @@ public class UserInterface {
 
                         if (!line.isBlank()) {
                             String[] splitted = line.split(" ");
-                            initialConditions.put(splitted[0].toLowerCase(), splitted[1]);
+
+                            if(splitted.length > 2) {
+                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase(), splitted[2].toLowerCase());
+                            } else {
+                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase());
+                            }
+
+                            if(ic == null) {
+                                throw new NullPointerException("InitialConditions are null!");
+                            } else {
+                                icList.add(ic);
+                            }
+
                         }
 
                     }
 
-                    testPackage = controller.initiateSimulation(worldSize, initialConditions, isTest);
+
+
+
+                    testPackage = controller.initiateSimulation(worldSize, isTest, icList);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }

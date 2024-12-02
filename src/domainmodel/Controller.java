@@ -1,6 +1,7 @@
 package domainmodel;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Controller {
 
@@ -10,9 +11,9 @@ public class Controller {
         plane = new Plane();
     }
 
-    public TestPackage initiateSimulation(int worldSize, HashMap<String, String> initialConditions, boolean isTest) {
+    public TestPackage initiateSimulation(int worldSize, boolean isTest, LinkedList<InitialConditions> icList) {
 
-        return plane.startSimulation(worldSize, initialConditions, isTest);
+        return plane.startSimulation(worldSize, isTest, icList);
     }
 
     public Plane getPlane() {

@@ -1,9 +1,6 @@
 package domainmodel;
 
-import animal.Animal;
-import animal.Bear;
-import animal.Rabbit;
-import animal.WolfPack;
+import animal.*;
 import foliage.Grass;
 import hole.Hole;
 import hole.WolfHole;
@@ -15,6 +12,8 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Plane {
 
@@ -27,7 +26,6 @@ public class Plane {
     private int simulationStepLength;
     private static int numOfNonBlocking;
     private Helper helper;
-
     public Plane() {
         displaySize = 800;
         delay = 500;
@@ -36,15 +34,16 @@ public class Plane {
         helper = new Helper();
     }
 
-    public TestPackage startSimulation(int worldSize, HashMap<String, String> initialConditions, boolean isTest) {
+    public TestPackage startSimulation(int worldSize, boolean isTest, LinkedList<InitialConditions> icList) {
         this.worldSize = worldSize;
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
         helper.setDisplayInfo(program);
 
-        for (String key : initialConditions.keySet()) {
 
-            String valueAsText = initialConditions.get(key);
+        for (InitialConditions ic : icList) {
+
+            String valueAsText = ic.getNumberOfObjects();
             int value = -1;
 
             if (valueAsText.contains("-")) {
@@ -60,7 +59,7 @@ public class Plane {
 
             if (value != -1) {
 
-                switch (key) {
+                switch (ic.getObject()) {
                     case "rabbit" -> {
                         createObjectOnTile(Rabbit.class, value);
                     }
@@ -74,15 +73,13 @@ public class Plane {
                         createObjectOnTile(WolfPack.class, value);
                     }
                     case "bear" -> {
-                        createObjectOnTile(Bear.class, value);
+                        createObjectOnTile(Bear.class, value, ic.getCoordinates());
                     }
                     default -> {
-                        System.out.println("could not determine type " + key);
+                        System.out.println("could not determine type " + ic.getObject());
                     }
                 }
             }
-
-
         }
 
 
@@ -96,13 +93,21 @@ public class Plane {
             for (int i = 1; i <= simulationStepLength; i++) {
                 program.simulate();
                 Map<Object, Location> entities = world.getEntities();
-
+                int numOfRabbitHoles = 0;
                 for (Object entity : entities.keySet()) {
                     if (entity instanceof Animal a) {
                         a.setSteps(i);
+
+
+
+                    }
+
+                    if(entity instanceof RabbitHole) {
+                        numOfRabbitHoles++;
                     }
 
                 }
+                System.out.println("Number of rabbitHoles: "+numOfRabbitHoles);
             }
         }
 
@@ -117,6 +122,10 @@ public class Plane {
     }
 
     private void createObjectOnTile(Class<?> objectType, int numberOfUnits) {
+        createObjectOnTile(objectType, numberOfUnits, null);
+    }
+
+    private void createObjectOnTile(Class<?> objectType, int numberOfUnits, Location locationOfBear) {
 
         for (int i = 0; i < numberOfUnits; i++) {
             boolean tileIsEmpty = false;
@@ -153,7 +162,16 @@ public class Plane {
                             return;
                         } else if (objectType == Bear.class) {
                             Bear bear = new Bear(world);
-                            world.setTile(locationOfObject, bear);
+
+                            if(locationOfBear == null) {
+                                world.setTile(locationOfObject, bear);
+                                System.out.println("I have placed random");
+                            } else {
+                                world.setTile(locationOfBear, bear);
+                                System.out.println("I have been placed on: ("+locationOfBear.getX() + ","+locationOfBear.getY()+")");
+                            }
+
+
                         }
                     }
 
