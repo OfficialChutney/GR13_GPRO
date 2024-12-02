@@ -63,6 +63,7 @@ public class Wolf extends Animal implements Actor {
         }
 
         myLocation = world.getLocation(this);
+        die(false,15,100);
     }
 
     private float rangeFromLeader(Wolf wolfLeader) {

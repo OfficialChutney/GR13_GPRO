@@ -36,6 +36,7 @@ public class Bear extends Animal implements Actor {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+        die(false,60,160);
     }
 
     @Override

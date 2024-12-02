@@ -49,7 +49,7 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
 
         ageRabbit();
         tryToDecreaseEnergy();
-        die();
+        die(false,3,80);
     }
 
     @Override

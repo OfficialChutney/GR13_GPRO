@@ -115,11 +115,14 @@ public abstract class Animal {
         }
     }
 
-    public void die() {
+    public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         if ((energy <= 0 || hitpoints <= 0) && canDie) {
+            Location temp = world.getLocation(this);
             System.out.println("I died");
             world.delete(this);
             isOnMap = false;
+            Cadavar myCadavar = new Cadavar(world,  mushrooms,  amountOfMeat,  stepsToDecompose);
+            world.setTile(temp, myCadavar);
         }
     }
 
@@ -276,7 +279,13 @@ public abstract class Animal {
     public void takeDamage(int damage) {
         hitpoints = hitpoints - damage;
         if(hitpoints <= 0) {
-            die();
+            if(this instanceof Rabbit) {
+                die(false,3,80);
+            } else if (this instanceof Wolf ) {
+                die(false,15,100);
+            } else if (this instanceof Bear){
+                die(false,60,160);
+            }
         }
     }
 
