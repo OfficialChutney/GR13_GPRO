@@ -24,8 +24,9 @@ public class Wolf extends Animal implements Actor {
     private WolfHole myWolfHole;
     private boolean attacking = false;
     private boolean hiding = false;
-    protected Animal target = null;
+    protected Wolf wolfTarget = null;
     protected Location preyLocation;
+    protected boolean inWolfDuel;
 
     Wolf(World world, int wolfPackID, WolfPack pack) {
         super(30, world);
@@ -98,7 +99,10 @@ public class Wolf extends Animal implements Actor {
                     if (wolf.getWolfPackID() == this.getWolfPackID()) {
                         System.out.println("My homie");
                     } else {
-                        wolf.takeDamage(5);
+                        wolf.takeDamage(100);
+                        inWolfDuel = true;
+                        wolfTarget = wolf;
+                        attacking = true;
                         if (world.isTileEmpty(neighbor)) {
                             updateEnergy(3);
                         }
@@ -142,7 +146,7 @@ public class Wolf extends Animal implements Actor {
         if (isLeader) { // pack leader
             // move independently
             pathFinder(null);
-        } else if (leader != null) { // if leader exists
+        } else if (leader != null && leader.getIsOnMap()) { // if leader exists
 
             if (rangeFromLeader(pack.getWolfLeader()) < 2) {
                 pathFinder(null);
@@ -161,28 +165,32 @@ public class Wolf extends Animal implements Actor {
 
     protected void searchForPrey() {
         //if rabbit found
-        if (getNearestObject(Rabbit.class, 8) != null) {
+
+        if (getNearestObject(Animal.class, 8) != null) {
+            preyLocation = getNearestObject(Animal.class, 8);
             System.out.println("search");
             attacking = true;
-            preyLocation = getNearestObject(Rabbit.class, 8);
             System.out.println(preyLocation);
-        //} else if(){ search for another wolf party
-        }
-        else {
+        } else {
             preyLocation = null;
         }
     }
 
     protected void huntingBehavior() {
-        if (getNearestObject(Rabbit.class, 8) != null) {
-            attacking = true;
-            preyLocation = getNearestObject(Rabbit.class, 8);
-            System.out.println(preyLocation);
-        } else {
-            preyLocation = null;
-            attacking = false;
+        if(!inWolfDuel){
+            if (getNearestObject(Rabbit.class, 8) != null) {
+                attacking = true;
+                preyLocation = getNearestObject(Rabbit.class, 8);
+                System.out.println(preyLocation);
+            } else {
+                preyLocation = null;
+                attacking = false;
+            }
+            pathFinder(preyLocation);
+        } else{
+            pathFinder(wolfTarget.getMyLocation());
         }
-        pathFinder(preyLocation);
+
     }
 
 
@@ -239,19 +247,21 @@ public class Wolf extends Animal implements Actor {
     }
 
     private float rangeFromLeader(Wolf wolfLeader) {
-        // Get the coordinates of "this" wolf
-        int thisX = world.getLocation(this).getX();
-        int thisY = world.getLocation(this).getY();
+        if(wolfLeader.isOnMap) {
+            // Get the coordinates of "this" wolf
+            int thisX = world.getLocation(this).getX();
+            int thisY = world.getLocation(this).getY();
 
-        // Get the coordinates of the leader wolf
-        int leaderX = world.getLocation(wolfLeader).getX();
-        int leaderY = world.getLocation(wolfLeader).getY();
+            // Get the coordinates of the leader wolf
+            int leaderX = world.getLocation(wolfLeader).getX();
+            int leaderY = world.getLocation(wolfLeader).getY();
 
-        // Calculate the distance using the Pythagorean theorem
-        int deltaX = Math.abs(leaderX - thisX);
-        int deltaY = Math.abs(leaderY - thisY);
+            // Calculate the distance using the Pythagorean theorem
+            int deltaX = Math.abs(leaderX - thisX);
+            int deltaY = Math.abs(leaderY - thisY);
 
-        return (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+            return (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+        } else return 0;
 
     }
 

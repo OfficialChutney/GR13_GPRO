@@ -15,7 +15,7 @@ import java.awt.*;
 public class TestMain {
 
     public static void main(String[] args) {
-        Program p = new Program(10,800,800);
+        Program p = new Program(10,800,300);
 
         World world = p.getWorld();
 
