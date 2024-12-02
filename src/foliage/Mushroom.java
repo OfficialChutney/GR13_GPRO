@@ -13,7 +13,6 @@ public class Mushroom implements Actor, NonBlocking {
     World world;
     int steps = 0;
     int stepsUntilDecompose = 80;
-    boolean didItSpread;
 
     public Mushroom(World world) {
         this.world = world;
@@ -25,11 +24,8 @@ public class Mushroom implements Actor, NonBlocking {
 
            spread();
 
-           if(didItSpread){
-               resetCountDown();
-           } else {
-               steps++;
-           }
+
+           steps++;
 
            if(steps >= stepsUntilDecompose){
                world.delete(this);
@@ -48,7 +44,7 @@ public class Mushroom implements Actor, NonBlocking {
             }
         }
 
-        didItSpread = true;
+        resetCountDown();
     }
 
     private void resetCountDown() {
