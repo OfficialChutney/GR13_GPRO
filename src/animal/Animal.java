@@ -31,6 +31,7 @@ public abstract class Animal {
     public Animal(int maxEnergy, World world) {
         startMaxEnergy = maxEnergy;
         this.maxEnergy = maxEnergy;
+        energy = maxEnergy;
         this.world = world;
         rd = new Random();
         isOnMap = true;
@@ -44,6 +45,7 @@ public abstract class Animal {
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
         this.maxEnergy = maxEnergy;
+        energy = maxEnergy;
         this.world = world;
         rd = new Random();
         this.isOnMap = isOnMap;

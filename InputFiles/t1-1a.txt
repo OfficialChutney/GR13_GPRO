@@ -1,3 +1,2 @@
 10
-grass 10
-rabbit 50
+bear 1
