@@ -7,6 +7,7 @@ import domainmodel.UserInterface;
 import foliage.BerryBush;
 import foliage.Grass;
 import hole.Hole;
+import hole.RabbitHole;
 import itumulator.executable.Program;
 import itumulator.world.World;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,7 +109,7 @@ public class FileReaderTest {
     public void BurrowPlacedFromFile() {
         //ARRANGE & ACT
         int expectedNumOfBurrows = 7;
-        TestPackage tp = placeEntityFromFile(Hole.class, expectedNumOfBurrows);
+        TestPackage tp = placeEntityFromFile(RabbitHole.class, expectedNumOfBurrows);
 
 
         //ASSERT
@@ -133,7 +134,7 @@ public class FileReaderTest {
                 Bear.class, "bear",
                 Wolf.class, "wolf",
                 Grass.class, "grass",
-                Hole.class, "burrow"
+                RabbitHole.class, "burrow"
         );
 
 

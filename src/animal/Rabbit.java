@@ -19,7 +19,7 @@ public class Rabbit extends Animal {
     private boolean hiding;
 
     public Rabbit(World world) {
-        super(10000, world);
+        super(1, world);
         setRandomSex();
         hitpoints = 1;
         maxHitpoints = hitpoints;

@@ -24,7 +24,6 @@ public class Grass implements Actor, NonBlocking {
         rd = new Random();
         worldSizeSquared = ourWorld.getSize() * ourWorld.getSize();
         canSpread = true;
-        Plane.increaseNonBlocking();
 
     }
 
@@ -37,7 +36,7 @@ public class Grass implements Actor, NonBlocking {
 
     public void spreadGrass() {
 
-        if(Plane.getNonBlocking() != worldSizeSquared && canSpread) {
+        if(canSpread) {
             if(!(rd.nextFloat(1) < chanceToGrow)) {
                 return;
             }
@@ -69,7 +68,6 @@ public class Grass implements Actor, NonBlocking {
 
     public void deleteGrass() {
         ourWorld.delete(this);
-        Plane.decreaseNonBlocking();
     }
 
     public void setCanSpread(boolean canSpread) {

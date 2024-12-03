@@ -23,7 +23,7 @@ public class TestPackage {
     Map<Wolf, Location> wolves;
     Map<Grass, Location> grass;
     Map<BerryBush, Location> berrybushes;
-    Map<Hole, Location> rabbitHoles;
+    Map<RabbitHole, Location> rabbitHoles;
 
     public TestPackage(World world, Program program, Map<Object, Location> entities) {
         this.world = world;
@@ -64,7 +64,7 @@ public class TestPackage {
                 grass.put(g,locationOfObject);
             } else if(o instanceof BerryBush b) {
                 berrybushes.put(b,locationOfObject);
-            } else if(o instanceof Hole rb) {
+            } else if(o instanceof RabbitHole rb) {
                 rabbitHoles.put(rb, locationOfObject );
             }
         }
@@ -83,7 +83,7 @@ public class TestPackage {
         return wolves;
     }
 
-    public Map<Hole, Location> getRabbitHoles() {
+    public Map<RabbitHole, Location> getRabbitHoles() {
         return rabbitHoles;
     }
 

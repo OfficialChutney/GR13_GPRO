@@ -31,15 +31,11 @@ public class Bear extends Animal {
 
     @Override
     public void act(World world) {
-        try {
             if (territoryTopLeftCornor == null) {
                 setTerritory(world.getLocation(this));
             }
 
             beheavior();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
         ageAnimal();
         die(false, 60, 160);
     }
@@ -197,7 +193,7 @@ public class Bear extends Animal {
             bearBehavior = BearBehavior.PASSIVE;
         }
         if (sex == Sex.MALE) {
-            ArrayList<Location> tempList = (ArrayList<Location>) world.getSurroundingTiles(world.getLocation(this));
+            ArrayList<Location> tempList = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
             for (Location loc : tempList) {
                 if (loc == locateMaid()) {
                     bearBehavior = BearBehavior.PASSIVE;

@@ -135,22 +135,33 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
             if(world.getNonBlocking(temp) instanceof NonBlocking nonBlocking) {
 
                 if(nonBlocking instanceof Hole) {
-                    Set<Location> ltsc = world.getEmptySurroundingTiles(temp);
-                    ArrayList<Location> locToSetCadaver = new ArrayList<>(ltsc);
+                    Set<Location> ltsc = world.getSurroundingTiles(temp);
+                    ArrayList<Location> locToSetCadaver = new ArrayList<>();
+
+                    for (Location l : ltsc) {
+                        if(!(world.containsNonBlocking(l))) {
+                            locToSetCadaver.add(l);
+                        }
+
+                    }
+
 
                     if(!locToSetCadaver.isEmpty()) {
                         temp = locToSetCadaver.get(rd.nextInt(locToSetCadaver.size()));
+                    } else {
+                        temp = null;
                     }
 
                 } else {
                     world.delete(nonBlocking);
                 }
-
-
             }
 
-            Cadavar myCadavar = new Cadavar(world,  mushrooms,  amountOfMeat,  stepsToDecompose);
-            world.setTile(temp, myCadavar);
+            if(temp != null) {
+                Cadavar myCadavar = new Cadavar(world,  mushrooms,  amountOfMeat,  stepsToDecompose);
+                world.setTile(temp, myCadavar);
+            }
+
         }
     }
 

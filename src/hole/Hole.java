@@ -18,7 +18,6 @@ public abstract class Hole implements NonBlocking {
     public Hole(World ourWorld, Location tileLocation) {
         this.ourWorld = ourWorld;
         this.tileLocation = tileLocation;
-        Plane.increaseNonBlocking();
     }
 
     public Location getTileLocation() {

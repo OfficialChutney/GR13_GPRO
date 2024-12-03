@@ -4,6 +4,7 @@ import animal.Sex;
 import domainmodel.*;
 import foliage.Grass;
 import hole.Hole;
+import hole.RabbitHole;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.World;
@@ -333,12 +334,12 @@ public class RabbitTest {
         return getGrassOnMap(world);
     }
 
-    private LinkedList<Hole> getRabbitHolesOnMap(World world) {
+    private LinkedList<RabbitHole> getRabbitHolesOnMap(World world) {
         Map<Object, Location> entities = world.getEntities();
-        LinkedList<Hole> rabbitHoles = new LinkedList<>();
+        LinkedList<RabbitHole> rabbitHoles = new LinkedList<>();
 
         for (Object o : entities.keySet()) {
-            if (o instanceof Hole rb) {
+            if (o instanceof RabbitHole rb) {
                 rabbitHoles.add(rb);
             }
         }

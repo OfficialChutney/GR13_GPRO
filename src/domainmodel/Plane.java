@@ -1,8 +1,8 @@
 package domainmodel;
 
 import animal.*;
+import foliage.BerryBush;
 import foliage.Grass;
-import hole.Hole;
 import hole.WolfHole;
 import hole.RabbitHole;
 import itumulator.executable.DisplayInformation;
@@ -25,6 +25,7 @@ public class Plane {
     private int worldSize;
     private int simulationStepLength;
     private static int numOfNonBlocking;
+
     public Plane() {
         displaySize = 800;
         delay = 500;
@@ -34,97 +35,137 @@ public class Plane {
 
     public TestPackage startSimulation(int worldSize, boolean isTest, LinkedList<InitialConditions> icList) {
         this.worldSize = worldSize;
-        program = new Program(worldSize, displaySize, delay);
-        world = program.getWorld();
-        Helper.setDisplayInfo(program);
-        Helper.setSimulator(program.getSimulator());
+        initializeProgram();
 
-
-        for (InitialConditions ic : icList) {
-
-            String valueAsText = ic.getNumberOfObjects();
-            int value = -1;
-
-            if (valueAsText.contains("-")) {
-                String[] valueSplitted = valueAsText.split("-");
-                int min = Integer.parseInt(valueSplitted[0]);
-                int max = Integer.parseInt(valueSplitted[1]) + 1;
-                value = rd.nextInt(min, max);
-                System.out.println("I am random " + value);
-
-            } else {
-                value = Integer.parseInt(valueAsText);
-            }
-
-            if (value != -1) {
-
-                switch (ic.getObject()) {
-                    case "rabbit" -> {
-                        createObjectOnTile(Rabbit.class, value);
-                    }
-                    case "burrow" -> {
-                        createObjectOnTile(RabbitHole.class, value);
-                    }
-                    case "grass" -> {
-                        createObjectOnTile(Grass.class, value);
-                    }
-                    case "wolf" -> {
-                        createObjectOnTile(WolfPack.class, value);
-                    }
-                    case "bear" -> {
-                        createObjectOnTile(Bear.class, value, ic.getCoordinates());
-                    }
-                    default -> {
-                        System.out.println("could not determine type " + ic.getObject());
-                    }
-                }
-            }
-        }
-
+        initializeEntities(icList);
 
         long startingms = System.currentTimeMillis();
 
         if (!isTest) {
-
-            program.show();
-
-
-            for (int i = 1; i <= simulationStepLength; i++) {
-                program.simulate();
-                Map<Object, Location> entities = world.getEntities();
-                int numOfRabbitHoles = 0;
-                for (Object entity : entities.keySet()) {
-                    if(entity instanceof RabbitHole) {
-                        numOfRabbitHoles++;
-                    }
-
-                }
-                System.out.println("Number of rabbitHoles: "+numOfRabbitHoles);
-            }
+            runSimulation();
         }
 
         stopSimulation();
         long stopms = System.currentTimeMillis();
-        System.out.println("Time for simluation: " + (stopms - startingms));
+        System.out.println("Time for simulation: " + (stopms - startingms));
 
-        TestPackage tp = new TestPackage(world, program, world.getEntities());
-        return tp;
-
-
+        return createTestPackage();
     }
 
-    private void createObjectOnTile(Class<?> objectType, int numberOfUnits) {
-        createObjectOnTile(objectType, numberOfUnits, null);
+    private void initializeProgram() {
+        program = new Program(worldSize, displaySize, delay);
+        world = program.getWorld();
+        Helper.setDisplayInfo(program);
+        Helper.setSimulator(program.getSimulator());
     }
 
-    private void createObjectOnTile(Class<?> objectType, int numberOfUnits, Location locationOfBear) {
+    private void initializeEntities(LinkedList<InitialConditions> icList) {
+        for (InitialConditions ic : icList) {
+            String valueAsText = ic.getNumberOfObjects();
+            Location coordinates = ic.getCoordinates();
+            int value = parseValue(valueAsText);
+
+            if (value != -1) {
+                initializeEntity(ic.getObject(), value, coordinates);
+            } else {
+                throw new IllegalArgumentException("Number of entities not loaded correctly!");
+            }
+        }
+    }
+
+    private int parseValue(String valueAsText) {
+        int value = -1;
+        if (valueAsText.contains("-")) {
+            String[] valueSplitted = valueAsText.split("-");
+            int min = Integer.parseInt(valueSplitted[0]);
+            int max = Integer.parseInt(valueSplitted[1]) + 1;
+            value = rd.nextInt(min, max);
+            System.out.println("I am random " + value);
+        } else {
+            value = Integer.parseInt(valueAsText);
+        }
+        return value;
+    }
+
+    private void initializeEntity(String objectType, int value, Location coordinates) {
+        switch (objectType) {
+            case "rabbit" -> createObjectOnTile(Rabbit.class, value, coordinates);
+            case "burrow" -> createObjectOnTile(RabbitHole.class, value, coordinates);
+            case "grass" -> createObjectOnTile(Grass.class, value, coordinates);
+            case "wolf" -> createObjectOnTile(WolfPack.class, value, coordinates);
+            case "bear" -> createObjectOnTile(Bear.class, value, coordinates);
+            default -> System.out.println("could not determine type " + objectType);
+        }
+    }
+
+    private void runSimulation() {
+        program.show();
+        for (int i = 1; i <= simulationStepLength; i++) {
+            program.simulate();
+        }
+    }
+
+    private int countEntitiesOfType(Class<?> entityType) {
+        Map<Object, Location> entities = world.getEntities();
+        int count = 0;
+        for (Object entity : entities.keySet()) {
+            if (entityType.isInstance(entity)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private TestPackage createTestPackage() {
+        return new TestPackage(world, program, world.getEntities());
+    }
+
+
+    private void createObjectOnTile(Class<?> objectType, int numberOfUnits, Location specificLocation) {
 
         for (int i = 0; i < numberOfUnits; i++) {
             boolean tileIsEmpty = false;
             while (!tileIsEmpty) {
-                int x = rd.nextInt(worldSize);
-                int y = rd.nextInt(worldSize);
-                Location locationOfObject = new Location(x, y);
+
+                Location locationOfObject;
+                if (specificLocation == null) {
+                    locationOfObject = getRandomLocation();
+                } else {
+                    locationOfObject = specificLocation;
+
+                    if (NonBlocking.class.isAssignableFrom(objectType)) {
+
+                        while (world.getNonBlocking(locationOfObject) != null) {
+                            Location newLocation = null;
+                            while (newLocation == null) {
+                                newLocation = getRandomLocation();
+                                if (world.getNonBlocking(newLocation) != null) {
+                                    newLocation = null;
+                                } else {
+                                    Object nonBlockingObject = world.getNonBlocking(newLocation);
+                                    world.move(nonBlockingObject, newLocation);
+                                }
+                            }
+                        }
+
+
+                    } else {
+                        while (world.getTile(locationOfObject) instanceof Animal a) {
+                            Location newLocation = null;
+                            while (newLocation == null) {
+                                newLocation = getRandomLocation();
+                                if (world.getTile(newLocation) instanceof Animal) {
+                                    newLocation = null;
+                                } else {
+                                    world.move(a, newLocation);
+                                }
+                            }
+                        }
+
+
+                    }
+
+                }
 
                 if (NonBlocking.class.isAssignableFrom(objectType)) {
 
@@ -134,9 +175,12 @@ public class Plane {
                         if (objectType == Grass.class) {
                             Grass grassToPlace = new Grass(world);
                             world.setTile(locationOfObject, grassToPlace);
-                        } else if (objectType == Hole.class) {
-                            Hole holeToPlace = new RabbitHole(world, locationOfObject);
+                        } else if (objectType == RabbitHole.class) {
+                            RabbitHole holeToPlace = new RabbitHole(world, locationOfObject);
                             world.setTile(locationOfObject, holeToPlace);
+                        } else if (objectType == BerryBush.class) {
+                            BerryBush bush = new BerryBush();
+                            world.setTile(locationOfObject, bush);
                         }
                     }
 
@@ -155,14 +199,10 @@ public class Plane {
                         } else if (objectType == Bear.class) {
                             Bear bear = new Bear(world);
 
-                            if(locationOfBear == null) {
-                                world.setTile(locationOfObject, bear);
-                                System.out.println("I have placed random");
-                            } else {
-                                world.setTile(locationOfBear, bear);
-                                System.out.println("I have been placed on: ("+locationOfBear.getX() + ","+locationOfBear.getY()+")");
-                            }
+                            createObjectOnTile(BerryBush.class, rd.nextInt(1,6), null);
 
+                            world.setTile(locationOfObject, bear);
+                            System.out.println("I have been placed on: (" + locationOfObject.getX() + "," + locationOfObject.getY() + ")");
 
                         }
                     }
@@ -188,16 +228,10 @@ public class Plane {
         return program;
     }
 
-    public static void increaseNonBlocking() {
-        numOfNonBlocking++;
-    }
-
-    public static void decreaseNonBlocking() {
-        numOfNonBlocking--;
-    }
-
-    public static int getNonBlocking() {
-        return numOfNonBlocking;
+    public Location getRandomLocation() {
+        int x = rd.nextInt(worldSize);
+        int y = rd.nextInt(worldSize);
+        return new Location(x, y);
     }
 
 
