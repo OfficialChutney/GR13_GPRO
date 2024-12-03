@@ -1,5 +1,6 @@
 package domainmodel;
 
+import animal.Cadavar;
 import animal.Rabbit;
 import animal.Wolf;
 import animal.WolfPack;
@@ -15,7 +16,7 @@ import java.awt.*;
 public class TestMain {
 
     public static void main(String[] args) {
-        Program p = new Program(10,800,300);
+        Program p = new Program(7,800,600);
 
         World world = p.getWorld();
 
@@ -29,12 +30,18 @@ public class TestMain {
         DisplayInformation rabbitHole = new DisplayInformation(Color.BLACK, "hole");
         p.setDisplayInformation(RabbitHole.class, rabbitHole);
 
-        WolfPack wp1 = new WolfPack(4, new Location(7,7), world);
-
-        WolfPack wp2 = new WolfPack(4, new Location(3,3), world);
+        DisplayInformation cadavar = new DisplayInformation(Color.BLACK);
+        p.setDisplayInformation(Cadavar.class, cadavar);
 
         Rabbit rabbit = new Rabbit(world);
         world.setTile(new Location(1,1),rabbit);
+
+        WolfPack wp1 = new WolfPack(4, new Location(5,5), world);
+
+        WolfPack wp2 = new WolfPack(4, new Location(3,3), world);
+
+
+
 
         p.show();
 
