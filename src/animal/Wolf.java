@@ -40,7 +40,7 @@ public class Wolf extends Animal {
         this.world = world;
         isOnMap = true;
         energy = 30;
-        hitpoints = 30;
+        hitpoints = 10;
         maxHitpoints = hitpoints;
     }
 
@@ -53,7 +53,7 @@ public class Wolf extends Animal {
         this.world = world;
         isOnMap = true;
         energy = 30;
-        hitpoints = 30;
+        hitpoints = 10;
         maxHitpoints = hitpoints;
     }
 

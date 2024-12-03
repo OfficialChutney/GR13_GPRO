@@ -4,14 +4,12 @@ import domainmodel.Helper;
 import domainmodel.TimeOfDay;
 import foliage.BerryBush;
 import itumulator.executable.DisplayInformation;
-import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.*;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -47,11 +45,12 @@ public class Bear extends Animal {
             Object temp = world.getTile(neighbor);
             if (temp instanceof Animal animal) {
                 animal.takeDamage(5);
-                if (world.isTileEmpty(neighbor)) {
-                    updateEnergy(3);
-                }
+
             } else if (temp instanceof BerryBush bush) {
                 bush.eatBerries();
+                updateEnergy(3);
+            } else if (temp instanceof Cadavar cadavar) {
+                cadavar.reduceAmountOfMeat(3);
                 updateEnergy(3);
             }
         }
@@ -67,7 +66,7 @@ public class Bear extends Animal {
     }
 
     protected void setTerritory(Location loc) {
-        int tSize = 1;
+        int tSize = 2;
         int startX = loc.getX();
         int startY = loc.getY();
         territoryTopLeftCornor = new Location(startX - tSize, startY - tSize);
@@ -80,7 +79,7 @@ public class Bear extends Animal {
         for (int i = 0; i < territoryTileList.size(); i++) {
             Location temp = territoryTileList.get(i);
             if (!world.isTileEmpty(temp)) {
-                if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) == this))) {
+                if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) instanceof Rabbit) && !(world.getTile(temp) == this))) {
                     bearBehavior = BearBehavior.GETOFMYLAWN;
                     bearTarget = (Actor) world.getTile(temp);
                     return;
@@ -104,23 +103,29 @@ public class Bear extends Animal {
 
                 if (entity != null) {
 
+                    if (entity instanceof BerryBush bush) {
 
-                    if ((entity instanceof Animal && !(entity instanceof Bear))) {
-                        System.out.println(loc);
-                        return loc;
-
-                    } else if (entity instanceof BerryBush bush) {
                         if (bush.BerryState()) {
                             return loc;
                         }
                     }
+
+                    if (entity instanceof Cadavar) {
+                        System.out.println(loc);
+                        return loc;
+
+                    } else if ((entity instanceof Animal && !(entity instanceof Bear))) {
+                        System.out.println(loc);
+                        return loc;
+                    }
+
                 }
             }
         }
         return null;
     }
 
-    protected void beheavior() {
+    protected void behavior() {
         isItBabyMakingSeason();
 
         if (bearBehavior != BearBehavior.TIMETOSEX) {
@@ -155,7 +160,7 @@ public class Bear extends Animal {
             eat();
             updateEnergy(-1);
 
-        } else if (checktime() == TimeOfDay.NIGHT) {
+        } else if (checktime() == TimeOfDay.NIGHT && bearBehavior != BearBehavior.GETOFMYLAWN) {
             status = AnimalStatus.SLEEPING;
             updateEnergy(1);
             healHitPoints(1);
@@ -211,7 +216,7 @@ public class Bear extends Animal {
     @Override
     public DisplayInformation getInformation() {
 
-        if(status == AnimalStatus.SLEEPING) {
+        if (status == AnimalStatus.SLEEPING) {
             if (getLifeStage() == LifeStage.CHILD) {
                 return new DisplayInformation(Color.BLACK, "bear-small-sleeping");
             } else {

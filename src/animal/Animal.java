@@ -106,6 +106,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
             }
 
             Location onTheMove = new Location(movingX, movingY);
+
             if (world.isTileEmpty(onTheMove)) {
                 world.move(this, onTheMove);
             } else {
