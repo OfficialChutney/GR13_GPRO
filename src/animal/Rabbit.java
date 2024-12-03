@@ -213,8 +213,5 @@ public class Rabbit extends Animal implements Actor, DynamicDisplayInformationPr
         } else {
             return new DisplayInformation(Color.red, "rabbit-large");
         }
-
-
-
     }
 }
