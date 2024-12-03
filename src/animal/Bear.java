@@ -39,9 +39,8 @@ public class Bear extends Animal {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
-        die(false,60,160);
-
         ageAnimal();
+        die(false, 60, 160);
     }
 
     @Override
@@ -49,12 +48,12 @@ public class Bear extends Animal {
         ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
         for (Location neighbor : neighborTiles) {
             Object temp = world.getTile(neighbor);
-            if(temp instanceof Animal animal) {
+            if (temp instanceof Animal animal) {
                 animal.takeDamage(5);
-                if(world.isTileEmpty(neighbor)){
+                if (world.isTileEmpty(neighbor)) {
                     updateEnergy(3);
                 }
-            } else if(temp instanceof BerryBush bush) {
+            } else if (temp instanceof BerryBush bush) {
                 bush.eatBerries();
                 updateEnergy(3);
             }
@@ -127,7 +126,7 @@ public class Bear extends Animal {
     protected void beheavior() {
         isItBabyMakingSeason();
 
-        if(bearBehavior != BearBehavior.TIMETOSEX) {
+        if (bearBehavior != BearBehavior.TIMETOSEX) {
             isThereSomeoneInMyTerritory();
         }
 
@@ -196,10 +195,18 @@ public class Bear extends Animal {
             reproduce();
             bearBehavior = BearBehavior.PASSIVE;
         }
+        if (sex == Sex.MALE) {
+            ArrayList<Location> tempList = (ArrayList<Location>) world.getSurroundingTiles(world.getLocation(this));
+            for (Location loc : tempList) {
+                if (loc == locateMaid()) {
+                    bearBehavior = BearBehavior.PASSIVE;
+                }
+            }
+        }
     }
 
     protected void isItBabyMakingSeason() {
-        if( steps%40 == 0){
+        if (steps % 40 == 0) {
             bearBehavior = BearBehavior.TIMETOSEX;
         }
     }

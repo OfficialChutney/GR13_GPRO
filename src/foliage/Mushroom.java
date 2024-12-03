@@ -24,7 +24,6 @@ public class Mushroom implements Actor, NonBlocking {
 
            spread();
 
-
            steps++;
 
            if(steps >= stepsUntilDecompose){
@@ -43,7 +42,6 @@ public class Mushroom implements Actor, NonBlocking {
                 cadavar.setMushroomState(true);
             }
         }
-
         resetCountDown();
     }
 
