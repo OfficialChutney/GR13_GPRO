@@ -18,20 +18,17 @@ import java.util.Set;
 
 public class Helper {
 
-        Simulator sim;
+    private static Simulator sim;
 
 
-    public Helper() {
 
-    }
-
-    public Set<Location> getEmptySurroundingTiles(World world, Location location, int radius) {
+    public static Set<Location> getEmptySurroundingTiles(World world, Location location, int radius) {
         Set<Location> surroundingTiles = world.getSurroundingTiles(location, radius);
         surroundingTiles.removeIf(tile -> !world.isTileEmpty(tile));
         return surroundingTiles;
     }
 
-    public void setDisplayInfo(Program program) {
+    public static void setDisplayInfo(Program program) {
 
         //Set display for Grass
         DisplayInformation grassDisplay = new DisplayInformation(Color.black, "grass");
@@ -63,11 +60,11 @@ public class Helper {
 
     }
 
-    public void setSimulator(Simulator sim) {
-        this.sim = sim;
+    public static void setSimulator(Simulator sim) {
+        Helper.sim = sim;
     }
 
-    public int getSteps() {
+    public static int getSteps() {
         return sim.getSteps();
     }
 

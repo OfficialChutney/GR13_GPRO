@@ -25,10 +25,8 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     protected World world;
     protected Random rd;
     protected boolean isOnMap;
-    protected Helper helper;
     protected boolean canDie;
     protected boolean canGetPregnant;
-    protected int steps;
     protected int startMaxEnergy;
 
 
@@ -40,11 +38,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         rd = new Random();
         isOnMap = true;
         pregnant = false;
-        helper = new Helper();
         canDie = true;
         canGetPregnant = true;
         age = 0;
-        steps = 0;
     }
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
@@ -55,11 +51,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         rd = new Random();
         this.isOnMap = isOnMap;
         pregnant = false;
-        helper = new Helper();
         canDie = true;
         canGetPregnant = true;
         age = 0;
-        steps = 0;
     }
 
     public abstract void eat();
@@ -115,7 +109,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
             if (world.isTileEmpty(onTheMove)) {
                 world.move(this, onTheMove);
             } else {
-                ArrayList<Location> alternativeLocations = new ArrayList<>(helper.getEmptySurroundingTiles(world, start, 1));
+                ArrayList<Location> alternativeLocations = new ArrayList<>(Helper.getEmptySurroundingTiles(world, start, 1));
                 if (!alternativeLocations.isEmpty()) {
                     world.move(this, alternativeLocations.get(rd.nextInt(alternativeLocations.size())));
                 }
@@ -341,10 +335,6 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         if (hitpoints > maxHitpoints) {
             hitpoints = maxHitpoints;
         }
-    }
-
-    public void setSteps(int steps) {
-        this.steps = steps;
     }
 
     public int getMaxEnergy() {

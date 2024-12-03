@@ -25,21 +25,19 @@ public class Plane {
     private int worldSize;
     private int simulationStepLength;
     private static int numOfNonBlocking;
-    private Helper helper;
     public Plane() {
         displaySize = 800;
         delay = 500;
         simulationStepLength = 200;
         rd = new Random();
-        helper = new Helper();
     }
 
     public TestPackage startSimulation(int worldSize, boolean isTest, LinkedList<InitialConditions> icList) {
         this.worldSize = worldSize;
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
-        helper.setDisplayInfo(program);
-        helper.setSimulator(program.getSimulator());
+        Helper.setDisplayInfo(program);
+        Helper.setSimulator(program.getSimulator());
 
 
         for (InitialConditions ic : icList) {

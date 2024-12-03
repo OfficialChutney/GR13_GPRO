@@ -1,5 +1,6 @@
 package animal;
 
+import domainmodel.Helper;
 import domainmodel.TimeOfDay;
 import foliage.BerryBush;
 import itumulator.executable.DisplayInformation;
@@ -206,7 +207,7 @@ public class Bear extends Animal {
     }
 
     protected void isItBabyMakingSeason() {
-        if (steps % 40 == 0) {
+        if (Helper.getSteps() % 40 == 0) {
             bearBehavior = BearBehavior.TIMETOSEX;
         }
     }

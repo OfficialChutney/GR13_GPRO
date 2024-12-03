@@ -1,6 +1,7 @@
 package animal;
 
 
+import domainmodel.Helper;
 import domainmodel.TimeOfDay;
 import foliage.Grass;
 import hole.WolfHole;
@@ -319,7 +320,7 @@ public class Wolf extends Animal {
                 Random rd = new Random();
 
                 for (int i = 1; i <= world.getSize(); i++) {
-                    Set<Location> emptyTilesSet = helper.getEmptySurroundingTiles(world, locOfWolf, i);
+                    Set<Location> emptyTilesSet = Helper.getEmptySurroundingTiles(world, locOfWolf, i);
                     ArrayList<Location> emptyTiles = new ArrayList<>(emptyTilesSet);
                     if (!emptyTiles.isEmpty()) {
                         pathFinder(emptyTiles.get(rd.nextInt(emptyTiles.size())));
