@@ -29,11 +29,11 @@ public class Bear extends Animal {
 
     @Override
     public void act(World world) {
-            if (territoryTopLeftCornor == null) {
-                setTerritory(world.getLocation(this));
-            }
+        if (territoryTopLeftCornor == null) {
+            setTerritory(world.getLocation(this));
+        }
 
-            beheavior();
+        behavior();
         ageAnimal();
         die(false, 60, 160);
     }
