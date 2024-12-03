@@ -15,7 +15,7 @@ import java.awt.*;
 public class TestMain {
 
     public static void main(String[] args) {
-        Program p = new Program(10,800,300);
+        Program p = new Program(10,800,600);
 
         World world = p.getWorld();
 
@@ -35,6 +35,7 @@ public class TestMain {
 
         Rabbit rabbit = new Rabbit(world);
         world.setTile(new Location(1,1),rabbit);
+
 
         p.show();
 
