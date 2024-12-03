@@ -9,6 +9,7 @@ import hole.RabbitHole;
 import hole.WolfHole;
 import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
+import itumulator.simulator.Simulator;
 import itumulator.world.Location;
 import itumulator.world.World;
 
@@ -16,6 +17,9 @@ import java.awt.*;
 import java.util.Set;
 
 public class Helper {
+
+        Simulator sim;
+
 
     public Helper() {
 
@@ -58,4 +62,14 @@ public class Helper {
         program.setDisplayInformation(Cadavar.class, Cadaver);
 
     }
+
+    public void setSimulator(Simulator sim) {
+        this.sim = sim;
+    }
+
+    public int getSteps() {
+        return sim.getSteps();
+    }
+
+
 }

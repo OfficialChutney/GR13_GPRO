@@ -39,6 +39,7 @@ public class Plane {
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
         helper.setDisplayInfo(program);
+        helper.setSimulator(program.getSimulator());
 
 
         for (InitialConditions ic : icList) {
@@ -95,13 +96,6 @@ public class Plane {
                 Map<Object, Location> entities = world.getEntities();
                 int numOfRabbitHoles = 0;
                 for (Object entity : entities.keySet()) {
-                    if (entity instanceof Animal a) {
-                        a.setSteps(i);
-
-
-
-                    }
-
                     if(entity instanceof RabbitHole) {
                         numOfRabbitHoles++;
                     }
