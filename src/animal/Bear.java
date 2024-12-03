@@ -81,6 +81,7 @@ public class Bear extends Animal {
             if (!world.isTileEmpty(temp)) {
                 if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) instanceof Rabbit) && !(world.getTile(temp) == this))) {
                     bearBehavior = BearBehavior.GETOFMYLAWN;
+                    status = AnimalStatus.LOOKINGFORFOOD;
                     bearTarget = (Actor) world.getTile(temp);
                     return;
                 }
@@ -133,6 +134,7 @@ public class Bear extends Animal {
         }
 
         if (bearBehavior == BearBehavior.TIMETOSEX) {
+            status = AnimalStatus.LOOKINGFORFOOD;
             timeToSexBehavior();
             updateEnergy(-1);
 

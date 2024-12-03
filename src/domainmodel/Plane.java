@@ -185,9 +185,9 @@ public class Plane {
                         } else if (objectType == Cadavar.class) {
                             Cadavar carcass;
                             if(ic.isFungi()) {
-                                carcass = new Cadavar(world, true, 60,10);
+                                carcass = new Cadavar(world, true, 60,80);
                             } else {
-                                carcass = new Cadavar(world, false, 60,20);
+                                carcass = new Cadavar(world, false, 60,80);
                             }
 
                             world.setTile(locationOfObject, carcass);
@@ -210,6 +210,8 @@ public class Plane {
                             return;
                         } else if (objectType == Bear.class) {
                             Bear bear = new Bear(world);
+
+                            System.out.println("I am a "+bear.getSex());
 
                             InitialConditions newIc = new InitialConditions("berrybush", "1-5", null);
                             createObjectOnTile(BerryBush.class, newIc);

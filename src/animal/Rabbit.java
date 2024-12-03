@@ -19,17 +19,15 @@ public class Rabbit extends Animal {
     private boolean hiding;
 
     public Rabbit(World world) {
-        super(1, world);
-        setRandomSex();
-        hitpoints = 1;
+        super(15, world);
+        hitpoints = 5;
         maxHitpoints = hitpoints;
         hiding = false;
     }
 
     public Rabbit(World world, boolean isOnMap) {
         super(15, world, isOnMap);
-        this.setRandomSex();
-        hitpoints = 1;
+        hitpoints = 5;
         maxHitpoints = hitpoints;
         hiding = false;
     }

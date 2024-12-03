@@ -1,3 +1,5 @@
-2
-carcass fungi 1
-carcass 3
+15
+bear 1 (0,0)
+bear 1 (14,14)
+bear 1 (0,14)
+bear 1 (14,0)

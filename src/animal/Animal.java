@@ -41,6 +41,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         canDie = true;
         canGetPregnant = true;
         age = 0;
+        setRandomSex();
     }
 
     public Animal(int maxEnergy, World world, boolean isOnMap) {
@@ -54,6 +55,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         canDie = true;
         canGetPregnant = true;
         age = 0;
+        setRandomSex();
     }
 
     public abstract void eat();

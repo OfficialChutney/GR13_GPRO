@@ -20,7 +20,7 @@ public class InitialConditions {
 
     public InitialConditions(String object, String numberOfObjects, String fungi, String x, String y) {
         this.object = object;
-        this.fungi = (fungi.equals("fungi"));
+        this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = new Location(Integer.parseInt(x), Integer.parseInt(y));
 

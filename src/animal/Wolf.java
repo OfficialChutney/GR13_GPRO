@@ -53,7 +53,7 @@ public class Wolf extends Animal {
         this.leader = leader;
         this.world = world;
         isOnMap = true;
-        energy = 30;
+        energy = 10;
         hitpoints = 10;
         maxHitpoints = hitpoints;
     }
@@ -66,7 +66,7 @@ public class Wolf extends Animal {
         this.leader = leader;
         this.world = world;
         energy = 30;
-        hitpoints = 30;
+        hitpoints = 10;
         maxHitpoints = hitpoints;
     }
 
@@ -110,7 +110,7 @@ public class Wolf extends Animal {
 
                     if(wolf.getWolfPackID() != this.getWolfPackID()) {
 
-                        wolf.takeDamage(100);
+                        wolf.takeDamage(2);
                         inWolfDuel = true;
                         wolfTarget = wolf;
                         attacking = true;
@@ -120,7 +120,7 @@ public class Wolf extends Animal {
                         }
                     }
                 } else {  //if food
-                    animal.takeDamage(5);
+                    animal.takeDamage(2);
                 }
 
             } else if(temp instanceof Cadavar cadavar){
