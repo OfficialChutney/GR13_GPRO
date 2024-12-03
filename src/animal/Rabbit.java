@@ -27,7 +27,7 @@ public class Rabbit extends Animal {
     }
 
     public Rabbit(World world, boolean isOnMap) {
-        super(10000, world, isOnMap);
+        super(15, world, isOnMap);
         this.setRandomSex();
         hitpoints = 1;
         maxHitpoints = hitpoints;
@@ -56,7 +56,7 @@ public class Rabbit extends Animal {
 
         ageAnimal();
         tryToDecreaseEnergy();
-        die();
+        die(false,3,80);
     }
 
     @Override

@@ -219,6 +219,8 @@ public class Wolf extends Animal {
         }
     }
 
+        myLocation = world.getLocation(this);
+        die(false,15,100);
     public void emerge() {
         if (hiding && !isOnMap) {
             Location wolfHoleLoc = world.getLocation(myWolfHole);

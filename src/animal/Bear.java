@@ -39,6 +39,7 @@ public class Bear extends Animal {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+        die(false,60,160);
 
         ageAnimal();
     }

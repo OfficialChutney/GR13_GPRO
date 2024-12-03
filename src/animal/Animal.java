@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
+public abstract class Animal {
     protected int age;
     protected int energy;
     protected int maxEnergy;
@@ -124,10 +124,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
-    public void die() {
+    public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         if ((energy <= 0 || hitpoints <= 0) && canDie) {
-            System.out.println("Energy on death: " + energy);
-            System.out.println("Hitpoints on death: " + hitpoints);
+            Location temp = world.getLocation(this);
+            System.out.println("I died");
             world.delete(this);
             isOnMap = false;
 
@@ -137,6 +137,8 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
                 }
 
             }
+            Cadavar myCadavar = new Cadavar(world,  mushrooms,  amountOfMeat,  stepsToDecompose);
+            world.setTile(temp, myCadavar);
         }
     }
 
@@ -299,8 +301,14 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
     public void takeDamage(int damage) {
         hitpoints = hitpoints - damage;
-        if (hitpoints <= 0) {
-            die();
+        if(hitpoints <= 0) {
+            if(this instanceof Rabbit) {
+                die(false,3,80);
+            } else if (this instanceof Wolf ) {
+                die(false,15,100);
+            } else if (this instanceof Bear){
+                die(false,60,160);
+            }
         }
     }
 
