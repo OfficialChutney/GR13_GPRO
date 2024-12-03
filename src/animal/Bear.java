@@ -191,6 +191,14 @@ public class Bear extends Animal implements Actor {
             reproduce();
             bearBehavior = BearBehavior.PASSIVE;
         }
+        if (sex == Sex.MALE){
+            ArrayList<Location> tempList = (ArrayList<Location>) world.getSurroundingTiles(world.getLocation(this));
+            for (Location loc : tempList) {
+                if(loc == locateMaid()){
+                    bearBehavior = BearBehavior.PASSIVE;
+                }
+            }
+        }
     }
 
     protected void isItBabyMakingSeason() {

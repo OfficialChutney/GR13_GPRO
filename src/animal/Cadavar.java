@@ -6,7 +6,7 @@ import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
-public class Cadavar  implements Actor, NonBlocking {
+public class Cadavar implements Actor, NonBlocking {
     World world;
     int amountOfMeat;
     int stepsToDecompose;
