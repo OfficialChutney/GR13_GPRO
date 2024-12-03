@@ -90,12 +90,12 @@ public class Wolf extends Animal {
     }
 
     @Override
-    protected void die() {
+    public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         if (isLeader && hitpoints <= 0) {
             System.out.println("Find new leader");
             appointNewLeader();
         }
-        super.die();
+        super.die(mushrooms, amountOfMeat, stepsToDecompose);
     }
 
     @Override
@@ -108,8 +108,8 @@ public class Wolf extends Animal {
                 //if wolf
                 if (animal instanceof Wolf wolf) {
 
-                    if (wolf.getWolfPackID() == this.getWolfPackID()) {
-                    } else {
+                    if(wolf.getWolfPackID() != this.getWolfPackID()) {
+
                         wolf.takeDamage(100);
                         inWolfDuel = true;
                         wolfTarget = wolf;
@@ -121,11 +121,11 @@ public class Wolf extends Animal {
                     }
                 } else {  //if food
                     animal.takeDamage(5);
-                    if (world.isTileEmpty(neighbor)) {
-                        updateEnergy(3);
-                    }
                 }
 
+            } else if(temp instanceof Cadavar cadavar){
+                cadavar.reduceAmountOfMeat(3);
+                updateEnergy(3);
             }
         }
     }
@@ -175,10 +175,13 @@ public class Wolf extends Animal {
     protected void searchForPrey() {
         //if rabbit found
 
-        if (getNearestObject(Rabbit.class, 8) != null) {
+        if (getNearestObject(Cadavar.class, 8) != null) {
+            preyLocation = getNearestObject(Cadavar.class, 8);
+            attacking = true;
+        } else if(getNearestObject(Rabbit.class, 8) != null){
             preyLocation = getNearestObject(Rabbit.class, 8);
             attacking = true;
-        } else {
+        } else{
             preyLocation = null;
         }
     }
