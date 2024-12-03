@@ -12,6 +12,7 @@ import itumulator.world.World;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
@@ -79,14 +80,22 @@ public class Wolf extends Animal {
         if (attacking) {
             huntingBehavior();
             eat();
-
         } else {
             passiveBehavior();
         }
 
         tryToDecreaseEnergy();
-        die(false, 15, 100);
 
+        die(false, 15, 100);
+    }
+
+    @Override
+    protected void die() {
+        if (isLeader && hitpoints <= 0) {
+            System.out.println("Find new leader");
+            appointNewLeader();
+        }
+        super.die();
     }
 
     @Override
@@ -100,19 +109,18 @@ public class Wolf extends Animal {
                 if (animal instanceof Wolf wolf) {
 
                     if (wolf.getWolfPackID() == this.getWolfPackID()) {
-                        System.out.println("My homie");
                     } else {
                         wolf.takeDamage(100);
                         inWolfDuel = true;
                         wolfTarget = wolf;
                         attacking = true;
+                        System.out.println("attacking another wolf");
                         if (world.isTileEmpty(neighbor)) {
                             updateEnergy(3);
                         }
                     }
                 } else {  //if food
                     animal.takeDamage(5);
-                    System.out.println("damage" + animal.getClass());
                     if (world.isTileEmpty(neighbor)) {
                         updateEnergy(3);
                     }
@@ -156,8 +164,6 @@ public class Wolf extends Animal {
 
             } else { // move independently
                 pathFinder(leader.getMyLocation());
-                //System.out.println("Out of leader range");
-                //System.out.println(myLocation.toString());
             }
 
         } else { // no leader exists
@@ -169,27 +175,26 @@ public class Wolf extends Animal {
     protected void searchForPrey() {
         //if rabbit found
 
-        if (getNearestObject(Animal.class, 8) != null) {
-            preyLocation = getNearestObject(Animal.class, 8);
-            System.out.println("search");
+        if (getNearestObject(Rabbit.class, 8) != null) {
+            preyLocation = getNearestObject(Rabbit.class, 8);
             attacking = true;
-            System.out.println(preyLocation);
         } else {
             preyLocation = null;
         }
     }
 
     protected void huntingBehavior() {
-        if(!inWolfDuel){
+        if (!inWolfDuel) {
             if (getNearestObject(Rabbit.class, 8) != null) {
                 attacking = true;
                 preyLocation = getNearestObject(Rabbit.class, 8);
-                System.out.println(preyLocation);
             } else {
                 preyLocation = null;
                 attacking = false;
             }
             pathFinder(preyLocation);
+        } else if(!wolfTarget.getIsOnMap()) {
+            inWolfDuel = false;
         } else{
             pathFinder(wolfTarget.getMyLocation());
         }
@@ -208,10 +213,10 @@ public class Wolf extends Animal {
             int thisX = world.getLocation(this).getX();
             int thisY = world.getLocation(this).getY();
 
-            int rabbitHoleX = world.getLocation(myWolfHole).getX();
-            int rabbitHoleY = world.getLocation(myWolfHole).getY();
+            int wolfHoleX = world.getLocation(myWolfHole).getX();
+            int wolfHoleY = world.getLocation(myWolfHole).getY();
 
-            if (thisX == rabbitHoleX && thisY == rabbitHoleY) {
+            if (thisX == wolfHoleX && thisY == wolfHoleY) {
                 world.remove(this);
                 hiding = true;
                 isOnMap = false;
@@ -250,7 +255,7 @@ public class Wolf extends Animal {
     }
 
     private float rangeFromLeader(Wolf wolfLeader) {
-        if(wolfLeader.isOnMap) {
+        if (wolfLeader.isOnMap) {
             // Get the coordinates of "this" wolf
             int thisX = world.getLocation(this).getX();
             int thisY = world.getLocation(this).getY();
@@ -303,10 +308,8 @@ public class Wolf extends Animal {
         if ((checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT)) {
             if (isLeader) {
                 digHole();
-                System.out.println("dig hole");
             } else {
                 myWolfHole = leader.getPackHole();
-                System.out.println("look for leaders hole");
             }
 
         }
@@ -358,6 +361,48 @@ public class Wolf extends Animal {
         if (status != AnimalStatus.SLEEPING) {
             updateEnergy(-1);
         }
+    }
+
+    private void appointNewLeader() {
+        ArrayList<Wolf> wolfArrayList = new ArrayList<>(wolfPackList());
+
+        // Remove the current wolf (this) from the list
+        wolfArrayList.removeIf(wolf -> wolf.equals(this)); // Use equals if overridden
+
+        // Ensure the list is not empty before proceeding
+        if (!wolfArrayList.isEmpty()) {
+            Random random = new Random();
+
+            // Pick a random wolf from the list
+            int randomIndex = random.nextInt(wolfArrayList.size());
+            Wolf nextLeader = wolfArrayList.get(randomIndex);
+            nextLeader.isLeader = true; // Mark the new leader
+
+            // Update all wolves in the pack
+            for (Wolf wolf : wolfArrayList) {
+                wolf.leader = nextLeader;
+                wolf.setHole(); // Assume this updates their state/location
+            }
+            System.out.println(nextLeader + " is the new leader!");
+        } else {
+            System.out.println("No wolves left to appoint as leader.");
+        }
+    }
+
+    private ArrayList<Wolf> wolfPackList() {
+        HashMap<Object, Location> map = (HashMap<Object, Location>) world.getEntities();
+        ArrayList<Wolf> wolfArrayList = new ArrayList<>();
+
+        // Collect all wolves in the same pack
+        for (Object obj : map.keySet()) {
+            if (obj instanceof Wolf wolf) {
+                if (wolf.getWolfPackID() == getWolfPackID()) {
+                    wolfArrayList.add(wolf);
+                }
+            }
+        }
+        System.out.println("Wolf Pack List: " + wolfArrayList);
+        return wolfArrayList;
     }
 
     @Override
