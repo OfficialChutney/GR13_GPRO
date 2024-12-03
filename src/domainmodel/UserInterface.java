@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserInterface {
 
@@ -44,24 +46,52 @@ public class UserInterface {
 
 
                     for (int i = 1; i < lines.size(); i++) {
-                        String line = lines.get(i);
 
-                        if (!line.isBlank()) {
-                            String[] splitted = line.split(" ");
+                        String regex = "(\\w+)(?:\\s+(fungi))?(?:\\s+(\\d+(?:-\\d+)?))?(?:\\s+\\((\\d+),(\\d+)\\))?";
+                        Pattern pattern = Pattern.compile(regex);
+                        Matcher matcher = pattern.matcher(lines.get(i));
 
-                            if(splitted.length > 2) {
-                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase(), splitted[2].toLowerCase());
+
+                        while (matcher.find()) {
+
+                            String entity = matcher.group(1);
+                            String fungi = matcher.group(2);
+                            String countOrRange = matcher.group(3);
+                            String coordX = matcher.group(4);
+                            String coordY = matcher.group(5);
+
+                            if(coordX == null && coordY == null) {
+                                ic = new InitialConditions(entity, countOrRange, fungi);
                             } else {
-                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase());
+                                ic = new InitialConditions(entity, countOrRange, fungi, coordX, coordY);
                             }
+                            icList.add(ic);
 
-                            if(ic == null) {
-                                throw new NullPointerException("InitialConditions are null!");
-                            } else {
-                                icList.add(ic);
-                            }
+
+
 
                         }
+
+
+
+//                        String line = lines.get(i);
+//
+//                        if (!line.isBlank()) {
+//                            String[] splitted = line.split(" ");
+//
+//                            if(splitted.length > 2) {
+//                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase(), splitted[2].toLowerCase());
+//                            } else {
+//                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase());
+//                            }
+//
+//                            if(ic == null) {
+//                                throw new NullPointerException("InitialConditions are null!");
+//                            } else {
+//                                icList.add(ic);
+//                            }
+//
+//                        }
 
                     }
 

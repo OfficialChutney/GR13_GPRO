@@ -1,17 +1,21 @@
 package foliage;
 
 import animal.Cadavar;
+import itumulator.executable.DisplayInformation;
+import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class Mushroom implements Actor, NonBlocking {
+public class Mushroom implements Actor, NonBlocking, DynamicDisplayInformationProvider {
     World world;
     int steps = 0;
+    int age = 0;
     int stepsUntilDecompose = 80;
 
     public Mushroom(World world) {
@@ -24,6 +28,7 @@ public class Mushroom implements Actor, NonBlocking {
 
            spread();
 
+           age++;
            steps++;
 
            if(steps >= stepsUntilDecompose){
@@ -33,7 +38,7 @@ public class Mushroom implements Actor, NonBlocking {
 
     private void spread() {
         Set<Location> neighbours = world.getSurroundingTiles(world.getLocation(this));
-        ArrayList<Location> surrondingTilesList = (ArrayList) neighbours;
+        ArrayList<Location> surrondingTilesList = new ArrayList<>(neighbours);
 
         for (int i = 0; i < surrondingTilesList.size(); i++) {
             Object object = world.getTile(surrondingTilesList.get(i));
@@ -47,5 +52,15 @@ public class Mushroom implements Actor, NonBlocking {
 
     private void resetCountDown() {
         steps = 0;
+    }
+
+    @Override
+    public DisplayInformation getInformation() {
+        if(age > 20) {
+            return new DisplayInformation(Color.WHITE, "fungi");
+        } else {
+            return new DisplayInformation(Color.WHITE, "fungi-small");
+
+        }
     }
 }

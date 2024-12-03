@@ -9,31 +9,20 @@ public class InitialConditions {
     private String object;
     private String numberOfObjects;
     private Location coordinates;
+    private boolean fungi;
 
-    public InitialConditions(String object, String numberOfObjects) {
+    public InitialConditions(String object, String numberOfObjects, String fungi) {
         this.object = object;
+        this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = null;
     }
 
-    public InitialConditions(String object, String numberOfObjects, String coordinates) {
+    public InitialConditions(String object, String numberOfObjects, String fungi, String x, String y) {
         this.object = object;
+        this.fungi = (fungi.equals("fungi"));
         this.numberOfObjects = numberOfObjects;
-
-
-        Pattern pattern = Pattern.compile("\\((\\d+),(\\d+)\\)");
-
-        Matcher matcher = pattern.matcher(coordinates);
-
-        if (matcher.matches()) {
-
-            int x = Integer.parseInt(matcher.group(1));
-            int y = Integer.parseInt(matcher.group(2));
-
-            this.coordinates = new Location(x, y);
-        } else {
-            throw new NumberFormatException("Match could not be found for coordinates: " + coordinates);
-        }
+        coordinates = new Location(Integer.parseInt(x), Integer.parseInt(y));
 
     }
 
@@ -50,5 +39,7 @@ public class InitialConditions {
         return coordinates;
     }
 
-
+    public boolean isFungi() {
+        return fungi;
+    }
 }

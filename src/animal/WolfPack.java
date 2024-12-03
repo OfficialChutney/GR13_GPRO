@@ -13,14 +13,12 @@ public class WolfPack {
     private ArrayList<Wolf> wolves;
     private int wolfPackID;
     private World world;
-    private Helper helper;
 
     public WolfPack(int numberOfWolves, Location spawnLocation, World world) {
         wolves = new ArrayList<>();
         this.numberOfWolves = numberOfWolves;
         this.wolfPackID = hashCode();
         this.world = world;
-        this.helper = new Helper();
 
         createWolfList();
 
@@ -54,7 +52,7 @@ public class WolfPack {
 
 
     private void spawnWolfsInWolfPack(int numberOfWolfs, Location spawnLocation, int radius, ArrayList<Wolf> wolfs) {
-        Set<Location> set = helper.getEmptySurroundingTiles(world, spawnLocation,radius);
+        Set<Location> set = Helper.getEmptySurroundingTiles(world, spawnLocation,radius);
 
         ArrayList<Location> spawnLocations = new ArrayList<>(set);
         ArrayList<Wolf> tempWolfs = new ArrayList<>(wolfs);

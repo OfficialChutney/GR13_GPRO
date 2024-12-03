@@ -24,7 +24,6 @@ public class Plane {
     private Random rd;
     private int worldSize;
     private int simulationStepLength;
-    private static int numOfNonBlocking;
 
     public Plane() {
         displaySize = 800;
@@ -61,15 +60,8 @@ public class Plane {
 
     private void initializeEntities(LinkedList<InitialConditions> icList) {
         for (InitialConditions ic : icList) {
-            String valueAsText = ic.getNumberOfObjects();
-            Location coordinates = ic.getCoordinates();
-            int value = parseValue(valueAsText);
 
-            if (value != -1) {
-                initializeEntity(ic.getObject(), value, coordinates);
-            } else {
-                throw new IllegalArgumentException("Number of entities not loaded correctly!");
-            }
+            initializeEntity(ic);
         }
     }
 
@@ -87,13 +79,17 @@ public class Plane {
         return value;
     }
 
-    private void initializeEntity(String objectType, int value, Location coordinates) {
+    private void initializeEntity(InitialConditions ic) {
+
+        String objectType = ic.getObject();
+
         switch (objectType) {
-            case "rabbit" -> createObjectOnTile(Rabbit.class, value, coordinates);
-            case "burrow" -> createObjectOnTile(RabbitHole.class, value, coordinates);
-            case "grass" -> createObjectOnTile(Grass.class, value, coordinates);
-            case "wolf" -> createObjectOnTile(WolfPack.class, value, coordinates);
-            case "bear" -> createObjectOnTile(Bear.class, value, coordinates);
+            case "rabbit" -> createObjectOnTile(Rabbit.class, ic);
+            case "burrow" -> createObjectOnTile(RabbitHole.class, ic);
+            case "grass" -> createObjectOnTile(Grass.class, ic);
+            case "wolf" -> createObjectOnTile(WolfPack.class, ic);
+            case "bear" -> createObjectOnTile(Bear.class, ic);
+            case "carcass" -> createObjectOnTile(Cadavar.class,ic);
             default -> System.out.println("could not determine type " + objectType);
         }
     }
@@ -121,7 +117,12 @@ public class Plane {
     }
 
 
-    private void createObjectOnTile(Class<?> objectType, int numberOfUnits, Location specificLocation) {
+    private void createObjectOnTile(Class<?> objectType, InitialConditions ic) {
+        int numberOfUnits = parseValue(ic.getNumberOfObjects());
+
+        Location specificLocation = ic.getCoordinates();
+
+
 
         for (int i = 0; i < numberOfUnits; i++) {
             boolean tileIsEmpty = false;
@@ -181,6 +182,17 @@ public class Plane {
                         } else if (objectType == BerryBush.class) {
                             BerryBush bush = new BerryBush();
                             world.setTile(locationOfObject, bush);
+                        } else if (objectType == Cadavar.class) {
+                            Cadavar carcass;
+                            if(ic.isFungi()) {
+                                carcass = new Cadavar(world, true, 60,10);
+                            } else {
+                                carcass = new Cadavar(world, false, 60,20);
+                            }
+
+                            world.setTile(locationOfObject, carcass);
+
+
                         }
                     }
 
@@ -199,7 +211,8 @@ public class Plane {
                         } else if (objectType == Bear.class) {
                             Bear bear = new Bear(world);
 
-                            createObjectOnTile(BerryBush.class, rd.nextInt(1,6), null);
+                            InitialConditions newIc = new InitialConditions("berrybush", "1-5", null);
+                            createObjectOnTile(BerryBush.class, newIc);
 
                             world.setTile(locationOfObject, bear);
                             System.out.println("I have been placed on: (" + locationOfObject.getX() + "," + locationOfObject.getY() + ")");
