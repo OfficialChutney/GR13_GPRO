@@ -84,7 +84,7 @@ public class Wolf extends Animal {
         }
 
         tryToDecreaseEnergy();
-        die();
+        die(false, 15, 100);
 
     }
 
@@ -219,8 +219,6 @@ public class Wolf extends Animal {
         }
     }
 
-        myLocation = world.getLocation(this);
-        die(false,15,100);
     public void emerge() {
         if (hiding && !isOnMap) {
             Location wolfHoleLoc = world.getLocation(myWolfHole);
@@ -317,7 +315,7 @@ public class Wolf extends Animal {
         if (myWolfHole == null) {
             Location locOfWolf = world.getLocation(this);
             Object objectOnWolf = world.getNonBlocking(locOfWolf);
-            if (!(objectOnWolf instanceof Grass) && objectOnWolf != null) {
+            if (!(objectOnWolf instanceof Grass || objectOnWolf instanceof Cadavar) && objectOnWolf != null) {
                 Random rd = new Random();
 
                 for (int i = 1; i <= world.getSize(); i++) {
@@ -331,6 +329,11 @@ public class Wolf extends Animal {
 
 
             } else {
+
+                if(objectOnWolf != null) {
+                    world.delete(objectOnWolf);
+                }
+
                 WolfHole newHole = new WolfHole(world, getMyLocation(), wolfPackID);
                 world.setTile(getMyLocation(), newHole);
                 myWolfHole = newHole;

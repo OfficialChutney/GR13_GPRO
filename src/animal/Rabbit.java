@@ -72,7 +72,7 @@ public class Rabbit extends Animal {
         if (myRabbitHole == null) {
             Location locOfRabbit = world.getLocation(this);
             Object objectOnRabbit = world.getNonBlocking(locOfRabbit);
-            if (!(objectOnRabbit instanceof Grass) && objectOnRabbit != null) {
+            if (!(objectOnRabbit instanceof Grass || objectOnRabbit instanceof Cadavar) && objectOnRabbit != null) {
                 Random rd = new Random();
 
                 for (int i = 1; i <= world.getSize(); i++) {
@@ -88,6 +88,8 @@ public class Rabbit extends Animal {
             } else {
                 if (isItGrass()) {
                     eat();
+                } else if(objectOnRabbit instanceof Cadavar c) {
+                    world.delete(c);
                 }
                 RabbitHole newHole = new RabbitHole(world, world.getLocation(this));
                 world.setTile(locOfRabbit, newHole);

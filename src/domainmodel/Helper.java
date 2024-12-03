@@ -1,6 +1,7 @@
 package domainmodel;
 
 import animal.Bear;
+import animal.Cadavar;
 import animal.Rabbit;
 import animal.Wolf;
 import foliage.Grass;
@@ -51,5 +52,10 @@ public class Helper {
         //Set display for WolfHole
         DisplayInformation WolfHole = new DisplayInformation(Color.orange, "hole");
         program.setDisplayInformation(WolfHole.class, WolfHole);
+
+        //Set display for Cadaver
+        DisplayInformation Cadaver = new DisplayInformation(Color.orange, "carcass");
+        program.setDisplayInformation(Cadavar.class, Cadaver);
+
     }
 }

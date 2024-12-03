@@ -1,6 +1,7 @@
 package animal;
 
 import domainmodel.*;
+import hole.Hole;
 import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Animal {
+public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
     protected int age;
     protected int energy;
     protected int maxEnergy;
@@ -84,7 +85,6 @@ public abstract class Animal {
                 ArrayList<Location> sourroundingLocationsAsList = new ArrayList<>(sorroundingLocations);
 
                 if (!sourroundingLocationsAsList.isEmpty()) {
-                    Random rd = new Random();
 
                     world.move(this, sourroundingLocationsAsList.get(rd.nextInt(sourroundingLocationsAsList.size())));
                 }
@@ -137,6 +137,24 @@ public abstract class Animal {
                 }
 
             }
+
+            if(world.getNonBlocking(temp) instanceof NonBlocking nonBlocking) {
+
+                if(nonBlocking instanceof Hole) {
+                    Set<Location> ltsc = world.getEmptySurroundingTiles(temp);
+                    ArrayList<Location> locToSetCadaver = new ArrayList<>(ltsc);
+
+                    if(!locToSetCadaver.isEmpty()) {
+                        temp = locToSetCadaver.get(rd.nextInt(locToSetCadaver.size()));
+                    }
+
+                } else {
+                    world.delete(nonBlocking);
+                }
+
+
+            }
+
             Cadavar myCadavar = new Cadavar(world,  mushrooms,  amountOfMeat,  stepsToDecompose);
             world.setTile(temp, myCadavar);
         }
@@ -239,8 +257,7 @@ public abstract class Animal {
     }
 
     public void setRandomSex() {
-        Random r = new Random();
-        switch (r.nextInt(2)) {
+        switch (rd.nextInt(2)) {
             case 0 -> sex = Sex.MALE;
             case 1 -> sex = Sex.FEMALE;
         }
@@ -256,7 +273,6 @@ public abstract class Animal {
 
     public void birth() {
         if (pregnant) {
-            Random r = new Random();
             ArrayList<Location> tiles = surrondingEmptyLocationsList();
             System.out.println("I birthed");
             if (tiles.isEmpty()) {
@@ -271,7 +287,7 @@ public abstract class Animal {
             }
 
             if (child != null) {
-                world.setTile(tiles.get(r.nextInt(tiles.size())), child);
+                world.setTile(tiles.get(rd.nextInt(tiles.size())), child);
                 child.setOnMap(true);
                 pregnant = false;
             }
