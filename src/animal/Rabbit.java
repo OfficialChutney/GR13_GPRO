@@ -13,6 +13,9 @@ import itumulator.world.World;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * Rabbit er bunden af fødekæden, de spiser græs og graver huller.
+ */
 public class Rabbit extends Animal {
 
     private RabbitHole myRabbitHole;
@@ -32,6 +35,12 @@ public class Rabbit extends Animal {
         hiding = false;
     }
 
+    /**
+     * act styre Rabbits adfær, hvis det er morning leder de efter mad og parrer med hinanden.
+     * hvis det er evening eller nat løber Rabbits tilbage til deres hul så de kan sove.
+     * hvis det er nat og de gemmer sig i sit hul sover de.
+     * @param world providing details of the position on which the actor is currently located and much more.
+     */
     @Override
     public void act(World world) {
 
@@ -57,6 +66,9 @@ public class Rabbit extends Animal {
         die(false,3,80);
     }
 
+    /**
+     * eat tjekker om der er gras under kaninen, hvis der er græs fjerne den det og giver kaninen noget energy.
+     */
     @Override
     public void eat() {
         if (isItGrass()) {
@@ -66,6 +78,11 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * digHole, hvis kaninen ikke har et hul graver den et nyt.
+     * hvis der ikke er plads under kaninen til et hul sletter den det under, hvis der allerede er et hul der hvor den står
+     * rykker den sig egang til et tomt felt inden for range 1 og graver sit hul der, hvis der ikke er plads heller gør den intet.
+     */
     private void digHole() {
         if (myRabbitHole == null) {
             Location locOfRabbit = world.getLocation(this);
@@ -98,6 +115,10 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * findHoleWithoutOwner tjekker om der er nogen huller uden en ejer, hvis ja retuner den Rabbithole.
+     * @return
+     */
     private RabbitHole findHoleWithoutOwner() {
         Map<Object, Location> allEntities = world.getEntities();
 
@@ -111,19 +132,29 @@ public class Rabbit extends Animal {
         return null;
     }
 
+    /**
+     * tryToDecreaseEnergy  kalde updateEnergy hvis kaninen IKKE sover.
+     */
     private void tryToDecreaseEnergy() {
         if (status != AnimalStatus.SLEEPING) {
             updateEnergy(-1);
         }
     }
 
+    /**
+     * isItGrass tjekker om det felt kaninen står på også indeholder græs.
+     * @return
+     */
     private boolean isItGrass() {
         Location temp = world.getLocation(this);
 
         return world.getNonBlocking(temp) instanceof Grass;
     }
 
-
+    /**
+     * tryTohide tjekker først om kaninen har et hul, hvis ne kalder den digHole metoden, hvis ja tjekker den om den står på sit hul,
+     * hvis den gør gemmer den sig i hullet.
+     */
     private void tryTohide() {
         if (isOnMap) {
             if (myRabbitHole == null) {
@@ -152,6 +183,9 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * emerge, hvis kaninen har sit hiding = true og den ikke er på kortet, kravler den ud af sit hul, og birth bliver kaldt til sidst.
+     */
     private void emerge() {
         if (hiding && !isOnMap) {
             Location rabbitHoleLoc = world.getLocation(myRabbitHole);
@@ -165,11 +199,17 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * getStatus retunere status.
+     * @return
+     */
     public AnimalStatus getStatus() {
         return status;
     }
 
-
+    /**
+     * lookingForFoodBehaviour kalder pathfinder med getNearestObject i forhold til Grass.
+     */
     private void lookingForFoodBehaviour() {
         if (isOnMap) {
             this.status = AnimalStatus.LOOKINGFORFOOD;
@@ -180,6 +220,10 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * goingHomeBehaviour, hvis kaninen ikke har et hul prøver den at finde et, hvis den ikke kan finde et graver den et nyt.
+     * når kaninen har et hul pathfinder den imod det.
+     */
     private void goingHomeBehaviour() {
         if (isOnMap) {
             status = AnimalStatus.GOINGHOME;
@@ -199,6 +243,10 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * getLifeStage retunere LifeStage.
+     * @return
+     */
     @Override
     public LifeStage getLifeStage() {
         if (age < 2) {
@@ -208,6 +256,10 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * getInformation retunerer den korrekt DisplayInformation i forhold til kaninens status.
+     * @return
+     */
     @Override
     public DisplayInformation getInformation() {
         if (getLifeStage() == LifeStage.CHILD) {
@@ -218,6 +270,10 @@ public class Rabbit extends Animal {
 
     }
 
+    /**
+     * getMyRabbitHole retunerer kaninens RabbitHole.
+     * @return
+     */
     public RabbitHole getMyRabbitHole() {
         return myRabbitHole;
     }
