@@ -292,7 +292,7 @@ public class Wolf extends Animal {
 
     @Override
     public LifeStage getLifeStage() {
-        if (age < 100) {
+        if (age < 2) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
@@ -401,7 +401,7 @@ public class Wolf extends Animal {
         if (getLifeStage() == LifeStage.CHILD) {
             return new DisplayInformation(Color.red, "wolf-small");
         } else {
-            return new DisplayInformation(Color.red, "wolf-large");
+            return new DisplayInformation(Color.red, "wolf");
         }
 
     }
@@ -409,13 +409,13 @@ public class Wolf extends Animal {
     protected void tryGetPregnant() {
         Random rd = new Random();
 
-        if (getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < chanceToGetPregnant) {
+        if (getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < chanceToGetPregnant && getLifeStage() == LifeStage.ADULT) {
             System.out.println("single an rdy to mingle");
             ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
             for (Location neighbor : neighborTiles) {
                 Object temp = world.getTile(neighbor);
                 if (temp instanceof Wolf wolf) {
-                    if (wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE) {
+                    if (wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE && wolf.getLifeStage() == LifeStage.ADULT) {
                         pregnant = true;
                         System.out.println("pregnant");
                     }

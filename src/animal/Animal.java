@@ -239,7 +239,14 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
             try {
                 if (animal.getClass() == objectOnTile.getClass()) {
-                    return ((Animal) objectOnTile).getSex() == Sex.MALE;
+
+                    Animal maleAnimal = (Animal) objectOnTile;
+
+                    if(maleAnimal.getLifeStage() == LifeStage.ADULT) {
+                        return maleAnimal.getSex() == Sex.MALE;
+                    } else {
+                        return false;
+                    }
                 }
             } catch (NullPointerException e) {
                 return false;

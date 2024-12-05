@@ -73,13 +73,20 @@ public class RabbitTest extends TestClass {
         world.setTile(loc1, maleRabbit);
         world.setTile(loc2, femaleRabbit);
 
-        program.simulate();
-        world.setNight();
-        program.simulate();
-        world.setDay();
-        program.simulate();
+        program.show();
+        int i = 0;
+        while(i < 7) {
+            i = program.getSimulator().getSteps();
 
+            if(i == 3) {
+                world.setNight();
+            }
+            if(i == 6) {
+                world.setDay();
+            }
 
+            program.simulate();
+        }
         //ASSERT
         assertTrue(getObjectsOnMap(Rabbit.class,world).size() > 2);
     }

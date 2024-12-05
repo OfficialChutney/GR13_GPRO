@@ -56,30 +56,32 @@ public class WolfTest extends TestClass {
         Wolf femaleWolf = wolves.get(0);
         femaleWolf.setSex(Sex.FEMALE);
         femaleWolf.setCanDie(false);
+        femaleWolf.setChanceToGetPregnant(1f);
+        femaleWolf.setAge(20);
 
         Wolf maleWolf = wolves.get(1);
         maleWolf.setSex(Sex.MALE);
         maleWolf.setCanDie(false);
-
-        program.show();
+        maleWolf.setAge(20);
         int i = 0;
-        while (i < 20) {
+        while(i < 7) {
             i = program.getSimulator().getSteps();
 
-            if (i == 6) {
+            if(i == 3) {
                 world.setNight();
             }
-            if (i == 10) {
+            if(i == 6) {
                 world.setDay();
             }
+
             program.simulate();
         }
-
-        program.getFrame().setVisible(false);
-
 
         //ASSERT
         assertTrue(getObjectsOnMap(Wolf.class, world).size() > 2);
     }
+
+
+
 
 }
