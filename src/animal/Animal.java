@@ -289,14 +289,13 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
             Animal child = null;
             if (this instanceof Rabbit) {
-                child = new Rabbit(world, false);
+                child = new Rabbit(world);
             } else if (this instanceof Wolf w) {
-                child = new Wolf(world, w.getWolfPackID(), w.getWolfPack(), w.getLeader(), false);
+                child = new Wolf(world, w.getWolfPackID(), w.getWolfPack(), w.getLeader());
             }
 
             if (child != null) {
                 world.setTile(tiles.get(rd.nextInt(tiles.size())), child);
-                child.setOnMap(true);
                 pregnant = false;
             }
         }

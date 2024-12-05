@@ -39,7 +39,6 @@ public class Wolf extends Animal {
         isLeader = true;
         leader = this;
         this.world = world;
-        isOnMap = true;
         energy = 30;
         hitpoints = 10;
         maxHitpoints = hitpoints;
@@ -52,23 +51,11 @@ public class Wolf extends Animal {
         isLeader = false;
         this.leader = leader;
         this.world = world;
-        isOnMap = true;
         energy = 10;
         hitpoints = 10;
         maxHitpoints = hitpoints;
     }
 
-    Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader, boolean isOnMap) {
-        super(30, world, isOnMap);
-        this.wolfPackID = wolfPackID;
-        this.pack = pack;
-        isLeader = false;
-        this.leader = leader;
-        this.world = world;
-        energy = 30;
-        hitpoints = 10;
-        maxHitpoints = hitpoints;
-    }
 
     @Override
     public void act(World world) {

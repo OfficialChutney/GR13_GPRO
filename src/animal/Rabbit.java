@@ -25,13 +25,6 @@ public class Rabbit extends Animal {
         hiding = false;
     }
 
-    public Rabbit(World world, boolean isOnMap) {
-        super(15, world, isOnMap);
-        hitpoints = 5;
-        maxHitpoints = hitpoints;
-        hiding = false;
-    }
-
     @Override
     public void act(World world) {
 

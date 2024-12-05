@@ -3,7 +3,6 @@ import animal.Rabbit;
 import animal.Sex;
 import domainmodel.*;
 import foliage.Grass;
-import hole.Hole;
 import hole.RabbitHole;
 import itumulator.executable.Program;
 import itumulator.world.Location;
@@ -14,30 +13,12 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RabbitTest {
+public class RabbitTest extends TestClass {
 
-    private int worldSize;
-    private int display_size;
-    private int delay;
-    private int numberOfTiles;
-    private World world;
-    private Program program;
-    private Helper helper;
-
-    public RabbitTest() {
-        helper = new Helper();
-        delay = 500;
-        display_size = 800;
-        worldSize = 15;
-        numberOfTiles = worldSize * worldSize;
+    RabbitTest() {
+        super();
     }
 
-    @BeforeEach
-    public void makeWorld() {
-        program = new Program(worldSize, display_size, delay);
-        world = program.getWorld();
-        helper.setDisplayInfo(program);
-    }
 
     @Test
     public void maxedOutPlayingField() {
@@ -77,7 +58,7 @@ public class RabbitTest {
     public void hasBirthed() {
         Program program = new Program(2,display_size, delay);
         World world = program.getWorld();
-        helper.setDisplayInfo(program);
+        Helper.setDisplayInfo(program);
         //ARRANGE
         Location loc1 = new Location(0,0);
         Location loc2 = new Location(0,1);
@@ -162,7 +143,7 @@ public class RabbitTest {
         //ARRANGE
         int worldSize = 5;
         Program program = new Program(worldSize,display_size,delay);
-        helper.setDisplayInfo(program);
+        Helper.setDisplayInfo(program);
         World world = program.getWorld();
 
         Location rabbitStartLocation = new Location(0,0);

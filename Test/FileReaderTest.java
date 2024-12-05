@@ -20,30 +20,11 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileReaderTest {
-
-    private int worldSize;
-    private int display_size;
-    private int delay;
-    private int numberOfTiles;
-    private World world;
-    private Program program;
-    private Helper helper;
+public class FileReaderTest extends TestClass {
 
     public FileReaderTest() {
-        helper = new Helper();
-        delay = 500;
-        display_size = 800;
-        worldSize = 15;
+        super();
     }
-
-    @BeforeEach
-    public void makeWorld() {
-        program = new Program(worldSize, display_size, delay);
-        world = program.getWorld();
-        helper.setDisplayInfo(program);
-    }
-
 
     @Test
     public void rabbitPlacedFromFile() {
