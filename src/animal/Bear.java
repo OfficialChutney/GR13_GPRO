@@ -13,6 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 
+
 public class Bear extends Animal {
     protected Location territoryTopLeftCornor;
     protected Location territoryLowerRightCornor;
@@ -198,14 +199,23 @@ public class Bear extends Animal {
         if (sex != Sex.MALE && !pregnant && isNeighbourMale(this)) {
             reproduce();
             bearBehavior = BearBehavior.PASSIVE;
-        }
-        if (sex == Sex.MALE) {
-            ArrayList<Location> tempList = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
-            for (Location loc : tempList) {
-                if (loc == locateMaid()) {
-                    bearBehavior = BearBehavior.PASSIVE;
+            ArrayList<Location> temp = surrondingLocationsList(1);
+            for (Location loc : temp) {
+                Object entity = world.getTile(loc);
+                if( entity instanceof Bear maidBear) {
+                    if(maidBear.getSex() == Sex.MALE){
+                        maidBear.setBearBehavior(BearBehavior.PASSIVE);
+                        System.out.println("near is now passive");
+                    }
+
                 }
             }
+            if (pregnant){
+                birth();
+            }
+        }
+        if (sex == Sex.MALE && isNeighbourFemale(this)) {
+            bearBehavior = BearBehavior.PASSIVE;
         }
     }
 
@@ -232,5 +242,27 @@ public class Bear extends Animal {
                 return new DisplayInformation(Color.BLACK, "bear");
             }
         }
+    }
+    public boolean isNeighbourFemale(Animal animal) {
+        ArrayList<Location> neighbours = surrondingLocationsList();
+        for (Location neighbor : neighbours) {
+
+            Object objectOnTile = world.getTile(neighbor);
+
+            try {
+                if (animal.getClass() == objectOnTile.getClass()) {
+                    return ((Animal) objectOnTile).getSex() == Sex.FEMALE;
+                }
+            } catch (NullPointerException e) {
+                return false;
+            }
+
+
+        }
+        return false;
+    }
+
+    public void setBearBehavior(BearBehavior bearBehavior) {
+        this.bearBehavior = bearBehavior;
     }
 }
