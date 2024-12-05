@@ -177,7 +177,7 @@ public class Wolf extends Animal {
     protected void searchForPrey() {
         //if rabbit found
 
-        if (getNearestObject(Cadavar.class, 8) != null) {
+        if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
             preyLocation = getNearestObject(Cadavar.class, 8);
             attacking = true;
             System.out.println("see cadavar");
@@ -194,7 +194,7 @@ public class Wolf extends Animal {
 
     protected void huntingBehavior() {
         if (!inWolfDuel) {
-            if (getNearestObject(Cadavar.class, 8) != null) {
+            if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
                 preyLocation = getNearestObject(Cadavar.class, 8);
                 attacking = true;
                 System.out.println("see cadavar");
@@ -433,8 +433,9 @@ public class Wolf extends Animal {
     }
 
     protected void tryGetPregnant() {
-        System.out.println(getSex());
-        if (this.getSex() == Sex.FEMALE && !pregnant) {
+        Random rd = new Random();
+
+        if (this.getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < 0.3) {
             System.out.println("single an rdy to mingle");
             ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
             for (Location neighbor : neighborTiles) {
