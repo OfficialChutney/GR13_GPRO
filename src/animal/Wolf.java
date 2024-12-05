@@ -80,8 +80,10 @@ public class Wolf extends Animal {
         if (attacking) {
             huntingBehavior();
             eat();
+            System.out.println("attacking");
         } else {
             passiveBehavior();
+            tryGetPregnant();
         }
 
         tryToDecreaseEnergy();
@@ -108,7 +110,7 @@ public class Wolf extends Animal {
                 //if wolf
                 if (animal instanceof Wolf wolf) {
 
-                    if(wolf.getWolfPackID() != this.getWolfPackID()) {
+                    if (wolf.getWolfPackID() != this.getWolfPackID()) {
 
                         wolf.takeDamage(100);
                         inWolfDuel = true;
@@ -123,7 +125,7 @@ public class Wolf extends Animal {
                     animal.takeDamage(5);
                 }
 
-            } else if(temp instanceof Cadavar cadavar){
+            } else if (temp instanceof Cadavar cadavar) {
                 cadavar.reduceAmountOfMeat(3);
                 updateEnergy(3);
             }
@@ -178,8 +180,12 @@ public class Wolf extends Animal {
         if (getNearestObject(Cadavar.class, 8) != null) {
             preyLocation = getNearestObject(Cadavar.class, 8);
             attacking = true;
-        } else if(getNearestObject(Rabbit.class, 8) != null){
+            System.out.println("see cadavar");
+        } else if (getNearestObject(Rabbit.class, 8) != null) {
             preyLocation = getNearestObject(Rabbit.class, 8);
+            attacking = true;
+        } else if (getNearestObject(Bear.class, 5) != null){
+            preyLocation = getNearestObject(Bear.class, 5);
             attacking = true;
         } else{
             preyLocation = null;
@@ -188,18 +194,26 @@ public class Wolf extends Animal {
 
     protected void huntingBehavior() {
         if (!inWolfDuel) {
-            if (getNearestObject(Rabbit.class, 8) != null) {
+            if (getNearestObject(Cadavar.class, 8) != null) {
+                preyLocation = getNearestObject(Cadavar.class, 8);
                 attacking = true;
+                System.out.println("see cadavar");
+            } else if (getNearestObject(Rabbit.class, 8) != null) {
                 preyLocation = getNearestObject(Rabbit.class, 8);
-            } else {
+                attacking = true;
+            } else if (getNearestObject(Bear.class, 5) != null){
+                preyLocation = getNearestObject(Bear.class, 5);
+                attacking = true;
+            } else{
                 preyLocation = null;
                 attacking = false;
             }
             pathFinder(preyLocation);
-        } else if(!wolfTarget.getIsOnMap()) {
+        } else if (!wolfTarget.getIsOnMap()) {
             inWolfDuel = false;
-        } else{
+        } else {
             pathFinder(wolfTarget.getMyLocation());
+            System.out.println("in wolf duel");
         }
 
     }
@@ -298,7 +312,7 @@ public class Wolf extends Animal {
 
     @Override
     public LifeStage getLifeStage() {
-        if(age < 100) {
+        if (age < 100) {
             return LifeStage.CHILD;
         } else {
             return LifeStage.ADULT;
@@ -337,7 +351,7 @@ public class Wolf extends Animal {
 
             } else {
 
-                if(objectOnWolf != null) {
+                if (objectOnWolf != null) {
                     world.delete(objectOnWolf);
                 }
 
@@ -416,5 +430,22 @@ public class Wolf extends Animal {
             return new DisplayInformation(Color.red, "wolf-large");
         }
 
+    }
+
+    protected void tryGetPregnant() {
+        System.out.println(getSex());
+        if (this.getSex() == Sex.FEMALE && !pregnant) {
+            System.out.println("single an rdy to mingle");
+            ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
+            for (Location neighbor : neighborTiles) {
+                Object temp = world.getTile(neighbor);
+                if (temp instanceof Wolf wolf) {
+                    if(wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE){
+                        pregnant = true;
+                        System.out.println("pregnant");
+                    }
+                }
+            }
+        }
     }
 }
