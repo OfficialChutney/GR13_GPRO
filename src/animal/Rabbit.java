@@ -67,7 +67,7 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * eat tjekker om der er gras under kaninen, hvis der er græs fjerne den det og giver kaninen noget energy.
+     * eat tjekker om der er græs under kaninen, hvis der er græs fjerne den det og giver kaninen noget energy.
      */
     @Override
     public void eat() {
