@@ -174,41 +174,31 @@ public class Wolf extends Animal {
     }
 
 
-    protected void searchForPrey() {
+    protected Location searchForPrey() {
         //if rabbit found
 
         if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
-            preyLocation = getNearestObject(Cadavar.class, 8);
             attacking = true;
-            System.out.println("see cadavar");
+            return getNearestObject(Cadavar.class, 8);
         } else if (getNearestObject(Rabbit.class, 8) != null) {
-            preyLocation = getNearestObject(Rabbit.class, 8);
             attacking = true;
-        } else if (getNearestObject(Bear.class, 5) != null){
-            preyLocation = getNearestObject(Bear.class, 5);
+            return getNearestObject(Rabbit.class, 8);
+        } else if (getNearestObject(Bear.class, 5) != null) {
             attacking = true;
-        } else{
-            preyLocation = null;
+            return getNearestObject(Bear.class, 5);
+        } else {
+            return null;
         }
     }
 
     protected void huntingBehavior() {
         if (!inWolfDuel) {
-            if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
-                preyLocation = getNearestObject(Cadavar.class, 8);
-                attacking = true;
-                System.out.println("see cadavar");
-            } else if (getNearestObject(Rabbit.class, 8) != null) {
-                preyLocation = getNearestObject(Rabbit.class, 8);
-                attacking = true;
-            } else if (getNearestObject(Bear.class, 5) != null){
-                preyLocation = getNearestObject(Bear.class, 5);
-                attacking = true;
-            } else{
-                preyLocation = null;
+            preyLocation = searchForPrey();
+            if (preyLocation == null) {
                 attacking = false;
+            } else {
+                pathFinder(preyLocation);
             }
-            pathFinder(preyLocation);
         } else if (!wolfTarget.getIsOnMap()) {
             inWolfDuel = false;
         } else {
@@ -320,7 +310,6 @@ public class Wolf extends Animal {
     }
 
 
-    //Hole
     protected void setHole() {
         if ((checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT)) {
             if (isLeader) {
@@ -347,7 +336,6 @@ public class Wolf extends Animal {
                         break;
                     }
                 }
-
 
             } else {
 
@@ -441,7 +429,7 @@ public class Wolf extends Animal {
             for (Location neighbor : neighborTiles) {
                 Object temp = world.getTile(neighbor);
                 if (temp instanceof Wolf wolf) {
-                    if(wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE){
+                    if (wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE) {
                         pregnant = true;
                         System.out.println("pregnant");
                     }
