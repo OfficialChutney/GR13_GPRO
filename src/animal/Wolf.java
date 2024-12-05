@@ -31,6 +31,7 @@ public class Wolf extends Animal {
     protected Wolf wolfTarget = null;
     protected Location preyLocation;
     protected boolean inWolfDuel;
+    protected float chanceToGetPregnant;
 
     Wolf(World world, int wolfPackID, WolfPack pack) {
         super(30, world);
@@ -42,6 +43,7 @@ public class Wolf extends Animal {
         energy = 30;
         hitpoints = 10;
         maxHitpoints = hitpoints;
+        chanceToGetPregnant = 0.3f;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
@@ -54,6 +56,7 @@ public class Wolf extends Animal {
         energy = 10;
         hitpoints = 10;
         maxHitpoints = hitpoints;
+        chanceToGetPregnant = 0.3f;
     }
 
 
@@ -161,41 +164,31 @@ public class Wolf extends Animal {
     }
 
 
-    protected void searchForPrey() {
+    protected Location searchForPrey() {
         //if rabbit found
 
         if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
-            preyLocation = getNearestObject(Cadavar.class, 8);
             attacking = true;
-            System.out.println("see cadavar");
+            return getNearestObject(Cadavar.class, 8);
         } else if (getNearestObject(Rabbit.class, 8) != null) {
-            preyLocation = getNearestObject(Rabbit.class, 8);
             attacking = true;
-        } else if (getNearestObject(Bear.class, 5) != null){
-            preyLocation = getNearestObject(Bear.class, 5);
+            return getNearestObject(Rabbit.class, 8);
+        } else if (getNearestObject(Bear.class, 5) != null) {
             attacking = true;
-        } else{
-            preyLocation = null;
+            return getNearestObject(Bear.class, 5);
+        } else {
+            return null;
         }
     }
 
     protected void huntingBehavior() {
         if (!inWolfDuel) {
-            if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
-                preyLocation = getNearestObject(Cadavar.class, 8);
-                attacking = true;
-                System.out.println("see cadavar");
-            } else if (getNearestObject(Rabbit.class, 8) != null) {
-                preyLocation = getNearestObject(Rabbit.class, 8);
-                attacking = true;
-            } else if (getNearestObject(Bear.class, 5) != null){
-                preyLocation = getNearestObject(Bear.class, 5);
-                attacking = true;
-            } else{
-                preyLocation = null;
+            preyLocation = searchForPrey();
+            if (preyLocation == null) {
                 attacking = false;
+            } else {
+                pathFinder(preyLocation);
             }
-            pathFinder(preyLocation);
         } else if (!wolfTarget.getIsOnMap()) {
             inWolfDuel = false;
         } else {
@@ -307,7 +300,6 @@ public class Wolf extends Animal {
     }
 
 
-    //Hole
     protected void setHole() {
         if ((checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT)) {
             if (isLeader) {
@@ -335,7 +327,6 @@ public class Wolf extends Animal {
                     }
                 }
 
-
             } else {
 
                 if (objectOnWolf != null) {
@@ -355,10 +346,6 @@ public class Wolf extends Animal {
 
     public boolean getIsHiding() {
         return hiding;
-    }
-
-    public boolean isAttacking() {
-        return attacking;
     }
 
     private void tryToDecreaseEnergy() {
@@ -422,13 +409,13 @@ public class Wolf extends Animal {
     protected void tryGetPregnant() {
         Random rd = new Random();
 
-        if (this.getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < 0.3) {
+        if (getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < chanceToGetPregnant) {
             System.out.println("single an rdy to mingle");
             ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
             for (Location neighbor : neighborTiles) {
                 Object temp = world.getTile(neighbor);
                 if (temp instanceof Wolf wolf) {
-                    if(wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE){
+                    if (wolf.getWolfPackID() == this.getWolfPackID() && wolf.getSex() == Sex.MALE) {
                         pregnant = true;
                         System.out.println("pregnant");
                     }
@@ -436,4 +423,5 @@ public class Wolf extends Animal {
             }
         }
     }
+    public void setChanceToGetPregnant(float chance){chanceToGetPregnant = chance;}
 }
