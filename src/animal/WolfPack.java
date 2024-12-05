@@ -13,6 +13,7 @@ public class WolfPack {
     private ArrayList<Wolf> wolves;
     private int wolfPackID;
     private World world;
+    private Wolf leaderWolf;
 
     public WolfPack(int numberOfWolves, Location spawnLocation, World world) {
         wolves = new ArrayList<>();
@@ -26,7 +27,10 @@ public class WolfPack {
     }
 
     private void createWolfList() {
-        wolves.add(new Wolf(world, wolfPackID, this));
+        leaderWolf = new Wolf(world, wolfPackID, this);
+
+
+        wolves.add(leaderWolf);
 
         for (int i = 1; i < numberOfWolves; i++) {
             wolves.add(new Wolf(world, wolfPackID, this, wolves.getFirst()));
@@ -34,20 +38,15 @@ public class WolfPack {
     }
 
     private void spawnWolfPack(Location spawnLocation) {
-        Wolf leaderWolf = wolves.getFirst();
         leaderWolf.setMyLocation(spawnLocation);
 
         world.setTile(spawnLocation, leaderWolf);
 
         ArrayList<Wolf> tempWolves = new ArrayList<>(wolves);
-        tempWolves.remove(tempWolves.getFirst());
+        tempWolves.remove(leaderWolf);
 
         spawnWolfsInWolfPack(numberOfWolves, spawnLocation, 1, tempWolves);
 
-    }
-
-    Wolf getWolfLeader() {
-        return wolves.getFirst();
     }
 
 
@@ -72,5 +71,9 @@ public class WolfPack {
 
     public ArrayList<Wolf> getWolves() {
         return wolves;
+    }
+
+    public Wolf getLeaderWolf() {
+        return leaderWolf;
     }
 }

@@ -28,6 +28,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     protected boolean canDie;
     protected boolean canGetPregnant;
     protected int startMaxEnergy;
+    protected boolean canEnergyDecrease;
 
 
     public Animal(int maxEnergy, World world) {
@@ -42,6 +43,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         canGetPregnant = true;
         age = 0;
         setRandomSex();
+        canEnergyDecrease = true;
     }
 
     public abstract void eat();
@@ -169,6 +171,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     public void updateEnergy(int num) {
+        if(num < 0 && !canEnergyDecrease) {
+            return;
+        }
+
         energy += num;
         if (energy > maxEnergy) {
             energy = maxEnergy;
@@ -361,6 +367,17 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         return isOnMap;
     }
 
+    public void setHitpoints(int hitpoints) {
+        this.hitpoints = hitpoints;
+    }
+
+    public void setCanEnergyDecrease(boolean canEnergyDecrease) {
+        this.canEnergyDecrease = canEnergyDecrease;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
 }
 
 

@@ -73,7 +73,6 @@ public class RabbitTest extends TestClass {
         world.setTile(loc1, maleRabbit);
         world.setTile(loc2, femaleRabbit);
 
-        program.show();
         int i = 0;
         while(i < 7) {
             i = program.getSimulator().getSteps();
@@ -101,7 +100,6 @@ public class RabbitTest extends TestClass {
 
         world.setTile(startLocation,rabbit);
 
-        program.show();
         //ACT
         for (int i = 0; i < 5; i++) {
             program.simulate();
@@ -125,7 +123,6 @@ public class RabbitTest extends TestClass {
         Rabbit rabbit = new Rabbit(world);
         world.setTile(startLocation,rabbit);
 
-        program.show();
 
         //ACT
         program.simulate();
@@ -162,7 +159,6 @@ public class RabbitTest extends TestClass {
         grass.setCanSpread(false);
         world.setTile(grassLocation,grass);
 
-        program.show();
         //ACT
         for (int i = 0; i < 10; i++) {
             program.simulate();
@@ -232,7 +228,6 @@ public class RabbitTest extends TestClass {
         world.setNight();
         int numOfHolesBeforeAct = getObjectsOnMap(RabbitHole.class).size();
 
-        program.show();
         //ACT
         for (int i = 0; i < 4; i++) {
             program.simulate();
@@ -260,7 +255,6 @@ public class RabbitTest extends TestClass {
         world.setTile(rabbitStartLocation, rabbit);
         world.setNight();
 
-        program.show();
         //ACT
         for (int i = 0; i < 4; i++) {
             program.simulate();

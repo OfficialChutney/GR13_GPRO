@@ -34,6 +34,7 @@ public class TestPackage {
         wolves = new HashMap<>();
         grass = new HashMap<>();
         rabbitHoles = new HashMap<>();
+        berrybushes = new HashMap<>();
         isolateEntities();
     }
 

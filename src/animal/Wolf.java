@@ -63,13 +63,11 @@ public class Wolf extends Animal {
     @Override
     public void act(World world) {
 
-        if (isOnMap) {
-            myLocation = world.getLocation(this);
-        }
+
 
         if (attacking) {
             huntingBehavior();
-            eat();
+
             System.out.println("attacking");
         } else {
             passiveBehavior();
@@ -78,7 +76,13 @@ public class Wolf extends Animal {
 
         tryToDecreaseEnergy();
 
+        if(status != AnimalStatus.SLEEPING) {
+            eat();
+        }
         die(false, 15, 100);
+        if (isOnMap) {
+            myLocation = world.getLocation(this);
+        }
     }
 
     @Override
@@ -151,11 +155,14 @@ public class Wolf extends Animal {
             pathFinder(null);
         } else if (leader != null && leader.getIsOnMap()) { // if leader exists
 
-            if (rangeFromLeader(pack.getWolfLeader()) < 2) {
+            float rangeFromWolfLeader = rangeFromLeader(pack.getLeaderWolf());
+
+            if (rangeFromWolfLeader < 2) {
                 pathFinder(null);
 
             } else { // move independently
                 pathFinder(leader.getMyLocation());
+                System.out.println("Going to leader");
             }
 
         } else { // no leader exists

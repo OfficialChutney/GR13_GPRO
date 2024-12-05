@@ -9,6 +9,7 @@ import foliage.Grass;
 import hole.Hole;
 import hole.RabbitHole;
 import itumulator.executable.Program;
+import itumulator.world.Location;
 import itumulator.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,6 +90,28 @@ public class FileReaderTest extends TestClass {
     }
 
     @Test
+    public void BearsPlacedFromFileWithCoordinate() {
+        //ARRANGE & ACT
+        int expectedNumOfBears = 1;
+        Location locOfBearStart = new Location(4,4);
+
+        TestPackage tp = placeEntityFromFile(Bear.class, expectedNumOfBears, locOfBearStart);
+
+
+        //ASSERT
+        assertNotNull(tp);
+
+        Map<Bear, Location> bears = tp.getBears();
+        ArrayList<Bear> bearsInWorld = new ArrayList<>(bears.keySet());
+        Location locOfBearEnd = bears.get(bearsInWorld.get(0));
+        int actual = tp.getBears().size();
+
+        assertEquals(expectedNumOfBears,actual);
+        assertEquals(locOfBearStart, locOfBearEnd);
+
+    }
+
+    @Test
     public void BurrowPlacedFromFile() {
         //ARRANGE & ACT
         int expectedNumOfBurrows = 7;
@@ -101,8 +126,11 @@ public class FileReaderTest extends TestClass {
 
     }
 
-
     private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities) {
+        return placeEntityFromFile(entityToPlace, numOfEntities, null);
+    }
+
+    private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities, Location locOfEntity) {
         //ASSERT
         UserInterface ui = new UserInterface();
         String directory = ui.getInputFileDirectory();
@@ -117,13 +145,19 @@ public class FileReaderTest extends TestClass {
                 Grass.class, "grass",
                 RabbitHole.class, "burrow"
         );
+        String loc = "";
+        if(locOfEntity != null) {
+            loc = "(" + locOfEntity.getX() + "," + locOfEntity.getX() + ")";
+        }
 
 
         try {
             testFile.createNewFile();
             try (FileWriter fw = new FileWriter(testFile)) {
                 fw.write(String.valueOf(worldSize)+"\n");
-                fw.write(entityMap.get(entityToPlace)+" "+String.valueOf(numOfEntities));
+                String stringToWrite = entityMap.get(entityToPlace)+" "+String.valueOf(numOfEntities) + " " + loc;
+                stringToWrite = stringToWrite.trim();
+                fw.write(stringToWrite);
 
             }
 

@@ -70,7 +70,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * GetLifeStage retunere en lifeStage ud fra hvor mange Steps bjørnen har levet.
+     * GetLifeStage returnere en lifeStage ud fra hvor mange Steps bjørnen har levet.
      * @return LifeStage.CHILD or LifeStage.ADULT
      */
     @Override
@@ -210,7 +210,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * locateMaid finder den nærmeste mulige parrings partner, eller retunere Null hvis der ingen er
+     * locateMaid finder den nærmeste mulige parrings partner, eller returnere Null hvis der ingen er
      * @return Location or Null
      */
     protected Location locateMaid() {
@@ -234,7 +234,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * timeToSexBehavior får bjørnen til at søge mod sin partner, hvis locateMaid ikke retunered Null.
+     * timeToSexBehavior får bjørnen til at søge mod sin partner, hvis locateMaid ikke returnere Null.
      * her efter tjekker den kvindelige bjørne om de står ved siden af en mand hver step, hvis de gør;
      * bliver de gravide og deres bearBehavior bliver sat til PASSIVE, samme gælder for bjørnens partner.
      * hvis bjørnen er en mand bliver bearBehavior sat til PASSIVE hvis den står ved siden af en kvinde.
