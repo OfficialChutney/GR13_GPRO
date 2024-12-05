@@ -31,6 +31,7 @@ public class Wolf extends Animal {
     protected Wolf wolfTarget = null;
     protected Location preyLocation;
     protected boolean inWolfDuel;
+    protected float chanceToGetPregnant;
 
     Wolf(World world, int wolfPackID, WolfPack pack) {
         super(30, world);
@@ -43,6 +44,7 @@ public class Wolf extends Animal {
         energy = 30;
         hitpoints = 10;
         maxHitpoints = hitpoints;
+        chanceToGetPregnant = 0.3f;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
@@ -56,6 +58,7 @@ public class Wolf extends Animal {
         energy = 10;
         hitpoints = 10;
         maxHitpoints = hitpoints;
+        chanceToGetPregnant = 0.3f;
     }
 
     Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader, boolean isOnMap) {
@@ -68,6 +71,7 @@ public class Wolf extends Animal {
         energy = 30;
         hitpoints = 10;
         maxHitpoints = hitpoints;
+        chanceToGetPregnant = 0.3f;
     }
 
     @Override
@@ -358,10 +362,6 @@ public class Wolf extends Animal {
         return hiding;
     }
 
-    public boolean isAttacking() {
-        return attacking;
-    }
-
     private void tryToDecreaseEnergy() {
         if (status != AnimalStatus.SLEEPING) {
             updateEnergy(-1);
@@ -423,7 +423,7 @@ public class Wolf extends Animal {
     protected void tryGetPregnant() {
         Random rd = new Random();
 
-        if (this.getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < 0.3) {
+        if (this.getSex() == Sex.FEMALE && !pregnant && rd.nextFloat(1) < chanceToGetPregnant) {
             System.out.println("single an rdy to mingle");
             ArrayList<Location> neighborTiles = new ArrayList<>(surrondingLocationsList());
             for (Location neighbor : neighborTiles) {
@@ -437,4 +437,5 @@ public class Wolf extends Animal {
             }
         }
     }
+    public void setChanceToGetPregnant(float chance){chanceToGetPregnant = chance;}
 }
