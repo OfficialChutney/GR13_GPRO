@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Animal er den klasse som alle dyrene bygger på,her i finder du metoder som bliver brugt på tværs af de forskellige dyr.
+ */
 public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
     protected int age;
     protected int energy;
@@ -62,6 +65,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
     public abstract LifeStage getLifeStage();
 
+    /**
+     * reproduce sætter pregnant til true hvis en kvinde står ved siden af en mand.
+     */
     public void reproduce() {
         if (isOnMap && canGetPregnant) {
             if (sex == Sex.FEMALE && getLifeStage() == LifeStage.ADULT) {
@@ -72,6 +78,12 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * pathFinder tager en Location og bevæger det given Animal et fælt i retningen af den Location.
+     * hvis der ikke er plads på det felt som den ville rykke sig til rykker den sig til et tilfældigt felt.
+     * hvis destination er Null bevæger dyret sig tilfældigt rundt.
+     * @param destination
+     */
     public void pathFinder(Location destination) {
 
         if (isOnMap) {
@@ -121,6 +133,12 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * die sletter dyret fra world og indsætter et Cadavar istedet. input parameterne bestemmer hvisse kvaliteter af det Cadavar der bliver spawnet.
+     * @param mushrooms
+     * @param amountOfMeat
+     * @param stepsToDecompose
+     */
     public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         if ((energy <= 0 || hitpoints <= 0) && canDie) {
             Location temp = world.getLocation(this);
@@ -168,6 +186,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * sleep metoden bruges til dyr som sover i huller.
+     */
     public void sleep() {
         status = AnimalStatus.SLEEPING;
         updateEnergy(1);
@@ -182,6 +203,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * updateEnergy trækker fra eller ligger til dyres nuværende Energy, energy kan ikke være over maxEnergy
+     * @param num
+     */
     public void updateEnergy(int num) {
         energy += num;
         if (energy > maxEnergy) {
@@ -189,6 +214,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * checktime retunere et enum baseret på world.getCurrentTime.
+     * @return TimeOfDay...
+     */
     public TimeOfDay checktime() {
         if (world.getCurrentTime() < 7) {
             return TimeOfDay.MORNING;
@@ -199,6 +228,12 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * getNearestObject retunerer Location af det tætteste object af en valgfri object type, inden for en valgfri range.
+     * @param object
+     * @param range
+     * @return loc
+     */
     public Location getNearestObject(Class<?> object, int range) {
 
         for (int i = 1; i < range + 1; i++) {
@@ -223,16 +258,28 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         return null;
     }
 
-
+    /**
+     * surrondingEmptyLocationsList retunerer en ArrayList af getEmptySurroundingTiles.
+     * @return
+     */
     public ArrayList<Location> surrondingEmptyLocationsList() {
         Set<Location> neighbours = world.getEmptySurroundingTiles(world.getLocation(this));
         return new ArrayList<>(neighbours);
     }
 
+    /**
+     * surrondingLocationsList retunere en ArrayList af getSurroundingTiles inde for range 1.
+     * @return
+     */
     public ArrayList<Location> surrondingLocationsList() {
         return surrondingLocationsList(1);
     }
 
+    /**
+     * surrondingLocationsList retunere en ArrayList af getSurroundingTiles inde for en valgfri range.
+     * @param range
+     * @return
+     */
     public ArrayList<Location> surrondingLocationsList(int range) {
         Set<Location> neighbours;
         try {
@@ -245,6 +292,11 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
     }
 
+    /**
+     * isNeighbourMale tjekker alle tiles inde for range 1 og retunere true hvis der en en mand af samme type af Animal, såsom en Bear.
+     * @param animal
+     * @return
+     */
     public boolean isNeighbourMale(Animal animal) {
         ArrayList<Location> neighbours = surrondingLocationsList();
         for (Location neighbor : neighbours) {
@@ -264,6 +316,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         return false;
     }
 
+    /**
+     * setRandomSex sætter køndet af dyren til enden MALE eller FEMALE, tilfældigt.
+     */
     public void setRandomSex() {
         switch (rd.nextInt(2)) {
             case 0 -> sex = Sex.MALE;
@@ -271,14 +326,26 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * setSex setter dyres køn til det input parameter man giver.
+     * @param sex
+     */
     public void setSex(Sex sex) {
         this.sex = sex;
     }
 
+    /**
+     * retunere kønnet af Animal.
+     * @return
+     */
     public Sex getSex() {
         return sex;
     }
 
+    /**
+     * birth tjekker om det givet dyr er pregnant, hvis ja giver det fødlse.
+     * ud fra hvilket dype dyr det er spawner den nu en unge af samme type.
+     */
     public void birth() {
         if (pregnant) {
             ArrayList<Location> tiles = surrondingEmptyLocationsList();
@@ -304,27 +371,50 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * setOnMap sætter isOnMap.
+     * @param isOnMap
+     */
     public void setOnMap(boolean isOnMap) {
         this.isOnMap = isOnMap;
     }
 
+    /**
+     * setCanDie sætter canDie.
+     * @param canDie
+     */
     public void setCanDie(boolean canDie) {
         this.canDie = canDie;
     }
 
+    /**
+     * setCanGetPregnant sætter setCanGetPregnant.
+     * @param canGetPregnant
+     */
     public void setCanGetPregnant(boolean canGetPregnant) {
         this.canGetPregnant = canGetPregnant;
     }
 
+    /**
+     * isPregnant retunere boolean: pregnant.
+     * @return
+     */
     public boolean isPregnant() {
         return pregnant;
     }
 
+    /**
+     * setAge sætter dyret age.
+     * @param age
+     */
     public void setAge(int age) {
         this.age = age;
     }
 
-
+    /**
+     * takeDamage reducere dyret hitpoints, hvis dyret kommer under 1 liv kalder den die metoden.
+     * @param damage
+     */
     public void takeDamage(int damage) {
         hitpoints = hitpoints - damage;
         if(hitpoints <= 0) {
@@ -338,6 +428,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * ageAnimal gør dyret ældre hver gange world.getCurrentTime == 0;
+     */
     public void ageAnimal() {
         if (world.getCurrentTime() == 0) {
             age++;
@@ -345,6 +438,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         maxEnergy = startMaxEnergy - age;
     }
 
+    /**
+     * healHitPoints ligger et antal af hitpoints til dyrets nuværende hitpoints, den kan ikke nå over maxHitpoints.
+     * @param heal
+     */
     protected void healHitPoints(int heal) {
         hitpoints = hitpoints + heal;
 
@@ -353,18 +450,34 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         }
     }
 
+    /**
+     * getMaxEnergy retunere maxEnergy.
+     * @return
+     */
     public int getMaxEnergy() {
         return maxEnergy;
     }
 
+    /**
+     * getAge retunere age.
+     * @return
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * setEnergy sætter Energy.
+     * @param energy
+     */
     public void setEnergy(int energy) {
         this.energy = energy;
     }
 
+    /**
+     * getIsOnMap retunere true eller false baseret på om dyret er på mappet.
+     * @return
+     */
     public boolean getIsOnMap() {
         return isOnMap;
     }
