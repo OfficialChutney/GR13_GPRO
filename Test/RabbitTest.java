@@ -47,7 +47,7 @@ public class RabbitTest extends TestClass {
         });
 
         //ASSERT
-        int actual = getRabbitsOnMap().size();
+        int actual = getObjectsOnMap(Rabbit.class).size();
         int expected = numberOfTiles;
 
         assertEquals(expected, actual);
@@ -81,7 +81,7 @@ public class RabbitTest extends TestClass {
 
 
         //ASSERT
-        assertTrue(getRabbitsOnMap(world).size() > 2);
+        assertTrue(getObjectsOnMap(Rabbit.class,world).size() > 2);
     }
 
     @Test
@@ -178,11 +178,11 @@ public class RabbitTest extends TestClass {
         world.setTile(rabbitStartLocation, rabbit);
         rabbit.setEnergy(1);
 
-        int numOfRabbitsStart = getRabbitsOnMap().size();
+        int numOfRabbitsStart = getObjectsOnMap(Rabbit.class).size();
 
         program.simulate();
 
-        int numOfRabbitsEnd = getRabbitsOnMap().size();
+        int numOfRabbitsEnd = getObjectsOnMap(Rabbit.class).size();
 
         assertNotEquals(numOfRabbitsStart, numOfRabbitsEnd);
 
@@ -223,7 +223,7 @@ public class RabbitTest extends TestClass {
         rabbit.setCanDie(false);
         world.setTile(rabbitStartLocation, rabbit);
         world.setNight();
-        int numOfHolesBeforeAct = getRabbitHolesOnMap(world).size();
+        int numOfHolesBeforeAct = getObjectsOnMap(RabbitHole.class).size();
 
         program.show();
         //ACT
@@ -232,7 +232,7 @@ public class RabbitTest extends TestClass {
         }
 
         int expected = 1;
-        int actual = getRabbitHolesOnMap(world).size();
+        int actual = getObjectsOnMap(RabbitHole.class).size();
 
         assertEquals(expected, actual);
 
@@ -260,7 +260,7 @@ public class RabbitTest extends TestClass {
         }
 
         int expected = 1;
-        int actual = getRabbitHolesOnMap(world).size();
+        int actual = getObjectsOnMap(RabbitHole.class).size();
 
         assertEquals(expected, actual);
 
@@ -280,53 +280,6 @@ public class RabbitTest extends TestClass {
 
     }
 
-
-    private LinkedList<Rabbit> getRabbitsOnMap(World world) {
-        Map<Object, Location> entities = world.getEntities();
-        LinkedList<Rabbit> rabbits = new LinkedList<>();
-
-        for (Object o : entities.keySet()) {
-            if (o instanceof Rabbit r) {
-                rabbits.add(r);
-            }
-        }
-
-        return rabbits;
-    }
-
-    private LinkedList<Grass> getGrassOnMap(World world) {
-        Map<Object, Location> entities = world.getEntities();
-        LinkedList<Grass> grass = new LinkedList<>();
-
-        for (Object o : entities.keySet()) {
-            if (o instanceof Grass g) {
-                grass.add(g);
-            }
-        }
-
-        return grass;
-    }
-
-    private LinkedList<Rabbit> getRabbitsOnMap() {
-        return getRabbitsOnMap(world);
-    }
-
-    private LinkedList<Grass> getGrassOnMap() {
-        return getGrassOnMap(world);
-    }
-
-    private LinkedList<RabbitHole> getRabbitHolesOnMap(World world) {
-        Map<Object, Location> entities = world.getEntities();
-        LinkedList<RabbitHole> rabbitHoles = new LinkedList<>();
-
-        for (Object o : entities.keySet()) {
-            if (o instanceof RabbitHole rb) {
-                rabbitHoles.add(rb);
-            }
-        }
-
-        return rabbitHoles;
-    }
 
 
 }

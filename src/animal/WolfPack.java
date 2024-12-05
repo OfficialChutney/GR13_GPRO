@@ -70,4 +70,7 @@ public class WolfPack {
         }
     }
 
+    public ArrayList<Wolf> getWolves() {
+        return wolves;
+    }
 }

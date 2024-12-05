@@ -44,20 +44,6 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
         setRandomSex();
     }
 
-    public Animal(int maxEnergy, World world, boolean isOnMap) {
-        startMaxEnergy = maxEnergy;
-        this.maxEnergy = maxEnergy;
-        energy = maxEnergy;
-        this.world = world;
-        rd = new Random();
-        this.isOnMap = isOnMap;
-        pregnant = false;
-        canDie = true;
-        canGetPregnant = true;
-        age = 0;
-        setRandomSex();
-    }
-
     public abstract void eat();
 
     public abstract LifeStage getLifeStage();

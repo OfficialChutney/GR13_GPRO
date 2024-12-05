@@ -13,7 +13,7 @@ import java.util.Random;
 public class Grass implements Actor, NonBlocking {
 
     private final World ourWorld;
-    private final float chanceToGrow;
+    private float chanceToGrow;
     private final Random rd;
     private final int worldSizeSquared;
     private boolean canSpread;
@@ -72,5 +72,9 @@ public class Grass implements Actor, NonBlocking {
 
     public void setCanSpread(boolean canSpread) {
         this.canSpread = canSpread;
+    }
+
+    public void setChanceToGrow(float chanceToGrow) {
+        this.chanceToGrow = chanceToGrow;
     }
 }
