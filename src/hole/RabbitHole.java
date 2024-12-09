@@ -7,6 +7,10 @@ import itumulator.world.World;
 
 import java.util.ArrayList;
 
+/**
+ * Klassen nedarver fra den abstrakte klasse Hole. Klassen har til funktion, at kende sin placering, og have en liste over,
+ * hvilke og hvor mange kaniner er i hullet.
+ */
 public class RabbitHole extends Hole {
 
     private ArrayList<Rabbit> rabbitsInHole;
