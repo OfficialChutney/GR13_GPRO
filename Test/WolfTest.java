@@ -137,7 +137,7 @@ public class WolfTest extends TestClass {
 
         }
 
-        int numOfBearsEnd = getObjectsOnMap(Rabbit.class, world).size();
+        int numOfBearsEnd = getObjectsOnMap(Bear.class, world).size();
         int wolfEnergyEnd = wolf.getEnergy();
 
         assertNotEquals(wolfEnergyStart, wolfEnergyEnd);

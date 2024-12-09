@@ -61,7 +61,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
      * BerryState retunere hasBerries
      * @return Boolean
      */
-    public boolean BerryState() {
+    public boolean berryState() {
         return hasBerries;
     }
 

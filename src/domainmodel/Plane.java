@@ -211,13 +211,11 @@ public class Plane {
                         } else if (objectType == Bear.class) {
                             Bear bear = new Bear(world);
 
-                            System.out.println("I am a "+bear.getSex());
-
                             InitialConditions newIc = new InitialConditions("berrybush", "1-5", null);
+
                             createObjectOnTile(BerryBush.class, newIc);
 
                             world.setTile(locationOfObject, bear);
-                            System.out.println("I have been placed on: (" + locationOfObject.getX() + "," + locationOfObject.getY() + ")");
 
                         }
                     }

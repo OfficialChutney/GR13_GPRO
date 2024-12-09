@@ -32,7 +32,6 @@ public class BurrowTest extends TestClass {
 
         assertEquals(locOfRabbitHole, locOfBear);
 
-
     }
 
 

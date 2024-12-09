@@ -138,7 +138,7 @@ public class Bear extends Animal {
 
                     if (entity instanceof BerryBush bush) {
 
-                        if (bush.BerryState()) {
+                        if (bush.berryState()) {
                             return loc;
                         }
                     }
