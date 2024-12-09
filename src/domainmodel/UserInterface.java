@@ -31,10 +31,12 @@ public class UserInterface {
 
     public TestPackage startProgram() {
         TestPackage testPackage = null;
-        LinkedList<InitialConditions> icList = new LinkedList<>();
+
         for (File file : inputFileDirectory.listFiles()) {
+            LinkedList<InitialConditions> icList = new LinkedList<>();
             if (file.getName().equals(specifiedFileToRun) || specifiedFileToRun == null) {
                 InitialConditions ic = null;
+                System.out.println("Running File: " + file.getName());
 
                 try (FileReader fr = new FileReader(file.toString())) {
                     int worldSize;
@@ -49,7 +51,7 @@ public class UserInterface {
 
                         String regex = "(\\w+)(?:\\s+(fungi))?(?:\\s+(\\d+(?:-\\d+)?))?(?:\\s+\\((\\d+),(\\d+)\\))?";
                         Pattern pattern = Pattern.compile(regex);
-                        Matcher matcher = pattern.matcher(lines.get(i));
+                        Matcher matcher = pattern.matcher(lines.get(i).toLowerCase());
 
 
                         while (matcher.find()) {
@@ -60,7 +62,13 @@ public class UserInterface {
                             String coordX = matcher.group(4);
                             String coordY = matcher.group(5);
 
-                            if(coordX == null && coordY == null) {
+                            System.out.println("World size: " + worldSize);
+                            System.out.println("Object: "+entity);
+                            System.out.println("Fungi: "+ fungi);
+                            System.out.println("Number of objects: "+countOrRange);
+                            System.out.println("Coordinates: ("+coordX + "," + coordY + ")");
+
+                            if (coordX == null && coordY == null) {
                                 ic = new InitialConditions(entity, countOrRange, fungi);
                             } else {
                                 ic = new InitialConditions(entity, countOrRange, fungi, coordX, coordY);
@@ -68,34 +76,10 @@ public class UserInterface {
                             icList.add(ic);
 
 
-
-
                         }
 
 
-
-//                        String line = lines.get(i);
-//
-//                        if (!line.isBlank()) {
-//                            String[] splitted = line.split(" ");
-//
-//                            if(splitted.length > 2) {
-//                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase(), splitted[2].toLowerCase());
-//                            } else {
-//                                ic = new InitialConditions(splitted[0].toLowerCase(), splitted[1].toLowerCase());
-//                            }
-//
-//                            if(ic == null) {
-//                                throw new NullPointerException("InitialConditions are null!");
-//                            } else {
-//                                icList.add(ic);
-//                            }
-//
-//                        }
-
                     }
-
-
 
 
                     testPackage = controller.initiateSimulation(worldSize, isTest, icList);
@@ -106,7 +90,7 @@ public class UserInterface {
             }
         }
 
-        if(isTest) {
+        if (isTest) {
             return testPackage;
         } else {
             System.exit(0);
@@ -131,8 +115,6 @@ public class UserInterface {
     public void setTest(boolean isTest) {
         this.isTest = isTest;
     }
-
-
 
 
 }

@@ -37,9 +37,13 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
      */
     private void chanceToGrowBerries() {
         Random rand = new Random();
-        if (!hasBerries && rand.nextInt(8) > 5) {
+        if (!hasBerries && rand.nextInt(5) == 0) {
             hasBerries = true;
         }
+    }
+
+    public void setBerryState(boolean berryState) {
+        hasBerries = berryState;
     }
 
     /**

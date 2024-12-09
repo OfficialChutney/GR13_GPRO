@@ -16,15 +16,15 @@ public class Mushroom implements Actor, NonBlocking, DynamicDisplayInformationPr
     World world;
     int steps = 0;
     int age = 0;
-    int stepsUntilDecompose = 80;
+    int stepsUntilDecompose;
 
-    public Mushroom(World world) {
+    public Mushroom(World world, int stepsUntilDecompose) {
         this.world = world;
+        this.stepsUntilDecompose = stepsUntilDecompose;
     }
 
     @Override
     public void act(World world) {
-           boolean didItSpread = false;
 
            spread();
 
@@ -45,9 +45,10 @@ public class Mushroom implements Actor, NonBlocking, DynamicDisplayInformationPr
 
             if(object instanceof Cadavar cadavar){
                 cadavar.setMushroomState(true);
+                resetCountDown();
             }
         }
-        resetCountDown();
+
     }
 
     private void resetCountDown() {

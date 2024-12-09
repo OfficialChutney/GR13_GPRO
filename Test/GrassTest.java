@@ -26,7 +26,7 @@ public class GrassTest extends TestClass {
 
         int numOfGrassAfterSim = getObjectsOnMap(Grass.class).size();
 
-        assertNotEquals(numOfGrassBeforeSim,numOfGrassAfterSim);
+        assertTrue(numOfGrassBeforeSim < numOfGrassAfterSim);
     }
 
     @Test

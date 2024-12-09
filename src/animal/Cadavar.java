@@ -66,7 +66,7 @@ public class Cadavar implements Actor, NonBlocking {
      * setMushroomInWorld sætter en Mushroom i World på den Location som dette Cadavar er på.
      */
     private void setMushroomInWorld(){
-        Mushroom mushroom = new Mushroom(world);
+        Mushroom mushroom = new Mushroom(world, amountOfMeat);
         world.setTile(myLocation, mushroom);
     }
 
@@ -76,5 +76,9 @@ public class Cadavar implements Actor, NonBlocking {
      */
     public void setMushroomState(boolean mushrooms){
         this.mushrooms = mushrooms;
+    }
+
+    public boolean isMushrooms() {
+        return mushrooms;
     }
 }

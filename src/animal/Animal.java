@@ -128,7 +128,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
      * @param stepsToDecompose
      */
     public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
-        if ((energy <= 0 || hitpoints <= 0) && canDie) {
+        if ((energy <= 0 || hitpoints <= 0) && canDie && isOnMap) {
             Location temp = world.getLocation(this);
             System.out.println("I died");
             world.delete(this);

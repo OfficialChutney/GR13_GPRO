@@ -98,7 +98,7 @@ public class WolfTest extends TestClass {
 
         int numOfWolvesEnd = getObjectsOnMap(Wolf.class).size();
 
-        assertNotEquals(numOfWolvesStart, numOfWolvesEnd);
+        assertTrue(numOfWolvesStart > numOfWolvesEnd);
 
         assertEquals(0, numOfWolvesEnd);
     }
@@ -140,8 +140,8 @@ public class WolfTest extends TestClass {
         int numOfBearsEnd = getObjectsOnMap(Bear.class, world).size();
         int wolfEnergyEnd = wolf.getEnergy();
 
-        assertNotEquals(wolfEnergyStart, wolfEnergyEnd);
-        assertNotEquals(numOfBearsStart, numOfBearsEnd);
+        assertTrue(wolfEnergyStart < wolfEnergyEnd);
+        assertTrue(numOfBearsStart > numOfBearsEnd);
         assertTrue(thereWasCadaver);
     }
 
@@ -181,8 +181,8 @@ public class WolfTest extends TestClass {
         int numOfRabbitsEnd = getObjectsOnMap(Rabbit.class, world).size();
         int wolfEnergyEnd = wolf.getEnergy();
 
-        assertNotEquals(wolfEnergyStart, wolfEnergyEnd);
-        assertNotEquals(numOfRabbitsStart, numOfRabbitsEnd);
+        assertTrue(wolfEnergyStart < wolfEnergyEnd);
+        assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
         assertTrue(thereWasCadaver);
     }
 
@@ -226,8 +226,8 @@ public class WolfTest extends TestClass {
         int numOfWolvesEnd = getObjectsOnMap(Wolf.class, world).size();
         int wolfEnergyEnd = wolf.getEnergy();
 
-        assertNotEquals(wolfEnergyStart, wolfEnergyEnd);
-        assertNotEquals(numOfWolvesStart, numOfWolvesEnd);
+        assertTrue(wolfEnergyStart < wolfEnergyEnd);
+        assertTrue(numOfWolvesStart > numOfWolvesEnd);
         assertTrue(thereWasCadaver);
     }
 

@@ -74,7 +74,8 @@ public class RabbitTest extends TestClass {
         world.setTile(loc2, femaleRabbit);
 
         int i = 0;
-        while(i < 7) {
+        program.show();
+        while(i < 30) {
             i = program.getSimulator().getSteps();
 
             if(i == 3) {
@@ -187,7 +188,7 @@ public class RabbitTest extends TestClass {
 
         int numOfRabbitsEnd = getObjectsOnMap(Rabbit.class).size();
 
-        assertNotEquals(numOfRabbitsStart, numOfRabbitsEnd);
+        assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
 
         assertEquals(0, numOfRabbitsEnd);
     }
@@ -212,7 +213,7 @@ public class RabbitTest extends TestClass {
         int rabbitMaxEnergyEnd = rabbit.getMaxEnergy();
 
 
-        assertNotEquals(rabbitMaxEnergyStart, rabbitMaxEnergyEnd);
+        assertTrue(rabbitMaxEnergyStart > rabbitMaxEnergyEnd);
 
         assertEquals(defaultMaxEnergy - 2, rabbitMaxEnergyStart);
         assertEquals(defaultMaxEnergy - 10, rabbitMaxEnergyEnd);

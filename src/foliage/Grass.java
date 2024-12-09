@@ -20,7 +20,7 @@ public class Grass implements Actor, NonBlocking {
 
     public Grass(World ourWorld) {
         this.ourWorld = ourWorld;
-        chanceToGrow = 0.5f;
+        chanceToGrow = 0.2f;
         rd = new Random();
         worldSizeSquared = ourWorld.getSize() * ourWorld.getSize();
         canSpread = true;

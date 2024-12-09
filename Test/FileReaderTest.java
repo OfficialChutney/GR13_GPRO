@@ -1,4 +1,5 @@
 import animal.Bear;
+import animal.Cadavar;
 import animal.Rabbit;
 import animal.Wolf;
 import domainmodel.Helper;
@@ -95,7 +96,7 @@ public class FileReaderTest extends TestClass {
         int expectedNumOfBears = 1;
         Location locOfBearStart = new Location(4,4);
 
-        TestPackage tp = placeEntityFromFile(Bear.class, expectedNumOfBears, locOfBearStart);
+        TestPackage tp = placeEntityFromFile(Bear.class, expectedNumOfBears, locOfBearStart, false);
 
 
         //ASSERT
@@ -126,11 +127,56 @@ public class FileReaderTest extends TestClass {
 
     }
 
-    private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities) {
-        return placeEntityFromFile(entityToPlace, numOfEntities, null);
+    @Test
+    public void BerryBushPlacedFromFile() {
+        //ARRANGE & ACT
+        int expectedNumOfBerryBush = 7;
+        TestPackage tp = placeEntityFromFile(BerryBush.class, expectedNumOfBerryBush);
+
+
+        //ASSERT
+        assertNotNull(tp);
+        int actual = tp.getBerrybushes().size();
+
+        assertEquals(expectedNumOfBerryBush,actual);
+
     }
 
-    private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities, Location locOfEntity) {
+    @Test
+    public void CadaverWithoutFungiPlacedFromFile() {
+        //ARRANGE & ACT
+        int expectedNumOfCadavers = 7;
+        TestPackage tp = placeEntityFromFile(Cadavar.class, expectedNumOfCadavers);
+
+
+        //ASSERT
+        assertNotNull(tp);
+        int actual = tp.getCadaversWithoutFungi().size();
+
+        assertEquals(expectedNumOfCadavers,actual);
+
+    }
+
+    @Test
+    public void CadaverWithFungiPlacedFromFile() {
+        //ARRANGE & ACT
+        int expectedNumOfCadavers = 7;
+        TestPackage tp = placeEntityFromFile(Cadavar.class, expectedNumOfCadavers, null, true);
+
+
+        //ASSERT
+        assertNotNull(tp);
+        int actual = tp.getCadaversWithFungi().size();
+
+        assertEquals(expectedNumOfCadavers,actual);
+
+    }
+
+    private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities) {
+        return placeEntityFromFile(entityToPlace, numOfEntities, null, false);
+    }
+
+    private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities, Location locOfEntity, boolean fungi) {
         //ASSERT
         UserInterface ui = new UserInterface();
         String directory = ui.getInputFileDirectory();
@@ -143,7 +189,9 @@ public class FileReaderTest extends TestClass {
                 Bear.class, "bear",
                 Wolf.class, "wolf",
                 Grass.class, "grass",
-                RabbitHole.class, "burrow"
+                RabbitHole.class, "burrow",
+                Cadavar.class, "carcass",
+                BerryBush.class, "berry"
         );
         String loc = "";
         if(locOfEntity != null) {
@@ -155,13 +203,20 @@ public class FileReaderTest extends TestClass {
             testFile.createNewFile();
             try (FileWriter fw = new FileWriter(testFile)) {
                 fw.write(String.valueOf(worldSize)+"\n");
-                String stringToWrite = entityMap.get(entityToPlace)+" "+String.valueOf(numOfEntities) + " " + loc;
+
+                String fungiString = (fungi) ? " fungi " : " ";
+
+                String stringToWrite = entityMap.get(entityToPlace)+fungiString+String.valueOf(numOfEntities) + " " + loc;
                 stringToWrite = stringToWrite.trim();
                 fw.write(stringToWrite);
 
             }
 
+
+
             TestPackage tp = ui.startProgram();
+
+            testFile.delete();
 
             return tp;
 

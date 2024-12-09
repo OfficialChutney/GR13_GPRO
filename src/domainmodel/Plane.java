@@ -3,17 +3,13 @@ package domainmodel;
 import animal.*;
 import foliage.BerryBush;
 import foliage.Grass;
-import hole.WolfHole;
 import hole.RabbitHole;
-import itumulator.executable.DisplayInformation;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Plane {
 
@@ -27,8 +23,8 @@ public class Plane {
 
     public Plane() {
         displaySize = 800;
-        delay = 500;
-        simulationStepLength = 200;
+        delay = 300;
+        simulationStepLength = 40;
         rd = new Random();
     }
 
@@ -90,6 +86,7 @@ public class Plane {
             case "wolf" -> createObjectOnTile(WolfPack.class, ic);
             case "bear" -> createObjectOnTile(Bear.class, ic);
             case "carcass" -> createObjectOnTile(Cadavar.class,ic);
+            case "berry" -> createObjectOnTile(BerryBush.class,ic);
             default -> System.out.println("could not determine type " + objectType);
         }
     }
@@ -227,14 +224,7 @@ public class Plane {
     }
 
     private void stopSimulation() {
-        try {
-            Thread.sleep(2000);
-
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
-
-        program.getFrame().setVisible(false);
+        program.getFrame().dispose();
     }
 
     public Program getProgram() {
@@ -246,6 +236,4 @@ public class Plane {
         int y = rd.nextInt(worldSize);
         return new Location(x, y);
     }
-
-
 }

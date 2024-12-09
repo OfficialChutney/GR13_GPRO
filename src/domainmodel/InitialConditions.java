@@ -16,6 +16,10 @@ public class InitialConditions {
         this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = null;
+        System.out.println("Object: "+object);
+        System.out.println("Fungi: "+ fungi);
+        System.out.println("Number of objects: "+numberOfObjects);
+        System.out.println("Coordinates: "+coordinates);
     }
 
     public InitialConditions(String object, String numberOfObjects, String fungi, String x, String y) {
@@ -23,6 +27,10 @@ public class InitialConditions {
         this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = new Location(Integer.parseInt(x), Integer.parseInt(y));
+        System.out.println("Object: "+object);
+        System.out.println("Fungi: "+ fungi);
+        System.out.println("Number of objects: "+numberOfObjects);
+        System.out.println("Coordinates: "+coordinates);
 
     }
 

@@ -231,7 +231,6 @@ public class Bear extends Animal {
      * @return Location or Null
      */
     protected Location locateMaid() {
-        Map<Object, Location> entitiesOnMap = world.getEntities();
         for (int i = 1; i < 11; i++) {
             ArrayList<Location> temp = surrondingLocationsList(i);
 
@@ -289,6 +288,7 @@ public class Bear extends Animal {
      * isItBabyMakingSeason sætter bearBehavior til TIMETOSEX hver 40'ende step i simulationen.
      */
     protected void isItBabyMakingSeason() {
+
         if (Helper.getSteps() % 40 == 0) {
             bearBehavior = BearBehavior.TIMETOSEX;
         }
@@ -359,12 +359,12 @@ public class Bear extends Animal {
     protected boolean haveILeftHome(){
         for (Location temp : territoryTileList) {
             if (!world.isTileEmpty(temp)) {
-                if (!(world.getTile(temp) == this)) {
-                    System.out.println("I have Left Home");
-                    return true;
+                if ((world.getTile(temp) == this)) {
+                    return false;
                 }
             }
         }
-        return false;
+        System.out.println("I have Left Home");
+        return true;
     }
 }

@@ -6,13 +6,46 @@ import itumulator.world.Location;
 import itumulator.world.World;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BearTest extends TestClass {
 
+    @Test
+    public void maxedOutPlayingField() {
+        //ASSERT
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < numberOfTiles; i++) {
+            x = i % worldSize;
+            y = y + ((x == 0 && i > 0) ? 1 : 0);
+            Bear bear = new Bear(world);
+            bear.setCanDie(false);
+            bear.setCanGetPregnant(false);
+            Location loc = new Location(x, y);
 
+            //ACT & ASSERT
+            assertDoesNotThrow(() -> {
+                world.setTile(loc, bear);
+            });
+        }
 
+        //ACT & ASSERT
+        assertDoesNotThrow(() -> {
+            for (int i = 0; i < 25; i++) {
+                program.simulate();
+            }
+        });
+
+        //ASSERT
+        int actual = getObjectsOnMap(Bear.class).size();
+        int expected = numberOfTiles;
+
+        assertEquals(expected, actual);
+
+    }
 
     @Test
     public void BearAttacksBearAndEatsCadaver() {
@@ -50,8 +83,8 @@ public class BearTest extends TestClass {
         int numOfBearsEnd = getObjectsOnMap(Bear.class, world).size();
         int bearEnergyEnd = bear.getEnergy();
 
-        assertNotEquals(bearEnergyStart, bearEnergyEnd);
-        assertNotEquals(numOfBearsStart, numOfBearsEnd);
+        assertTrue(bearEnergyStart < bearEnergyEnd);
+        assertTrue(numOfBearsStart > numOfBearsEnd);
         assertTrue(thereWasCadaver);
     }
 
@@ -91,8 +124,8 @@ public class BearTest extends TestClass {
         int numOfRabbitsEnd = getObjectsOnMap(Rabbit.class, world).size();
         int bearEnergyEnd = bear.getEnergy();
 
-        assertNotEquals(bearEnergyStart, bearEnergyEnd);
-        assertNotEquals(numOfRabbitsStart, numOfRabbitsEnd);
+        assertTrue(bearEnergyStart < bearEnergyEnd);
+        assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
         assertTrue(thereWasCadaver);
     }
 
@@ -134,8 +167,8 @@ public class BearTest extends TestClass {
         int numOfWolvesEnd = getObjectsOnMap(Wolf.class, world).size();
         int bearEnergyEnd = bear.getEnergy();
 
-        assertNotEquals(bearEnergyStart, bearEnergyEnd);
-        assertNotEquals(numOfWolvesStart, numOfWolvesEnd);
+        assertTrue(bearEnergyStart < bearEnergyEnd);
+        assertTrue(numOfWolvesStart > numOfWolvesEnd);
         assertTrue(thereWasCadaver);
     }
 
@@ -153,7 +186,7 @@ public class BearTest extends TestClass {
         bear.setEnergy(1);
         world.setTile(bearStartLocation, bear);
 
-        Location locationOfBerryBush = new Location(0,1);
+        Location locationOfBerryBush = new Location(0, 1);
         BerryBush berrybush = new BerryBush();
         world.setTile(locationOfBerryBush, berrybush);
 
@@ -162,7 +195,7 @@ public class BearTest extends TestClass {
         boolean berriesHaveDisappeared = false;
         for (int i = 0; i < 40; i++) {
             program.simulate();
-            if(!berriesHaveDisappeared) {
+            if (!berriesHaveDisappeared) {
                 berriesHaveDisappeared = !berrybush.berryState();
             }
         }
@@ -170,8 +203,7 @@ public class BearTest extends TestClass {
         int bearEnergyEnd = bear.getEnergy();
 
 
-
-        assertNotEquals(bearEnergyStart, bearEnergyEnd);
+        assertTrue(bearEnergyStart < bearEnergyEnd);
         assertTrue(berriesHaveDisappeared);
 
     }
@@ -183,18 +215,54 @@ public class BearTest extends TestClass {
         Bear bear = new Bear(world);
         bear.setCanDie(false);
         world.setTile(bearStartLocation, bear);
-        program.show();
         for (int i = 0; i < 100; i++) {
             program.simulate();
             Location currentLoc = world.getLocation(bear);
 
             float distance = pythagoras(currentLoc, bearStartLocation);
-            System.out.println(distance);
-            System.out.println(bear.getBearBehavior());
+            assertTrue(distance < 5.5);
         }
-
-
     }
 
+    @Test
+    public void bearMatesInMatingSeason() {
+        Program program = new Program(10, display_size, delay);
+        World world = program.getWorld();
+        Helper.setDisplayInfo(program);
+        Helper.setSimulator(program.getSimulator());
+
+
+        int matingSeason = 40;
+        Location locOfMaleBear = new Location(0, 0);
+        Bear maleBear = new Bear(world);
+        maleBear.setCanDie(false);
+        maleBear.setSex(Sex.MALE);
+        world.setTile(locOfMaleBear, maleBear);
+
+        Location locOfFemaleBear = new Location(9, 9);
+        Bear femaleBear = new Bear(world);
+        femaleBear.setCanDie(false);
+        femaleBear.setSex(Sex.FEMALE);
+        world.setTile(locOfFemaleBear, femaleBear);
+
+
+        boolean hasMadeBaby = false;
+        for (int i = 0; i < 80; i++) {
+            int steps = Helper.getSteps();
+            program.simulate();
+            if (steps < matingSeason) {
+                assertTrue(getObjectsOnMap(Bear.class, world).size() <= 2);
+            } else {
+
+                if (getObjectsOnMap(Bear.class, world).size() > 2) {
+                    hasMadeBaby = true;
+                    break;
+                }
+
+            }
+        }
+        assertTrue(hasMadeBaby);
+
+    }
 
 }

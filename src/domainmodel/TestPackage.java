@@ -1,6 +1,7 @@
 package domainmodel;
 
 import animal.Bear;
+import animal.Cadavar;
 import animal.Rabbit;
 import animal.Wolf;
 import foliage.BerryBush;
@@ -24,6 +25,8 @@ public class TestPackage {
     Map<Grass, Location> grass;
     Map<BerryBush, Location> berrybushes;
     Map<RabbitHole, Location> rabbitHoles;
+    Map<Cadavar, Location> cadaversWithoutFungi;
+    Map<Cadavar, Location> cadaversWithFungi;
 
     public TestPackage(World world, Program program, Map<Object, Location> entities) {
         this.world = world;
@@ -35,6 +38,8 @@ public class TestPackage {
         grass = new HashMap<>();
         rabbitHoles = new HashMap<>();
         berrybushes = new HashMap<>();
+        cadaversWithoutFungi = new HashMap<>();
+        cadaversWithFungi = new HashMap<>();
         isolateEntities();
     }
 
@@ -67,6 +72,12 @@ public class TestPackage {
                 berrybushes.put(b,locationOfObject);
             } else if(o instanceof RabbitHole rb) {
                 rabbitHoles.put(rb, locationOfObject );
+            } else if(o instanceof Cadavar c) {
+                if(c.isMushrooms()) {
+                    cadaversWithFungi.put(c, locationOfObject);
+                } else {
+                    cadaversWithoutFungi.put(c,locationOfObject);
+                }
             }
         }
 
@@ -94,5 +105,13 @@ public class TestPackage {
 
     public Map<BerryBush, Location> getBerrybushes() {
         return berrybushes;
+    }
+
+    public Map<Cadavar, Location> getCadaversWithoutFungi() {
+        return cadaversWithoutFungi;
+    }
+
+    public Map<Cadavar, Location> getCadaversWithFungi() {
+        return cadaversWithFungi;
     }
 }
