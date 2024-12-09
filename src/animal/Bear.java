@@ -34,6 +34,7 @@ public class Bear extends Animal {
 
     /**
      * act starter med at sætte Bjørnenes territorie, derefter starter den bjørnenes behavior, kalder ageAnimal og metoden die.
+     *
      * @param world providing details of the position on which the actor is currently located and much more.
      */
     @Override
@@ -71,6 +72,7 @@ public class Bear extends Animal {
 
     /**
      * GetLifeStage returnere en lifeStage ud fra hvor mange Steps bjørnen har levet.
+     *
      * @return LifeStage.CHILD or LifeStage.ADULT
      */
     @Override
@@ -84,6 +86,7 @@ public class Bear extends Animal {
 
     /**
      * setTerritory sætter bjørnens territorie ud fra en fixed størrelse som er 2
+     *
      * @param loc
      */
     protected void setTerritory(Location loc) {
@@ -101,14 +104,16 @@ public class Bear extends Animal {
      * Hvis der er nogen i territoriet sætter den BearTarget til det Animal.
      */
     protected void isThereSomeoneInMyTerritory() {
-        for (int i = 0; i < territoryTileList.size(); i++) {
-            Location temp = territoryTileList.get(i);
+        for (Location temp : territoryTileList) {
             if (!world.isTileEmpty(temp)) {
-                if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) instanceof Rabbit) && !(world.getTile(temp) == this))) {
-                    bearBehavior = BearBehavior.GETOFMYLAWN;
-                    status = AnimalStatus.LOOKINGFORFOOD;
-                    bearTarget = (Actor) world.getTile(temp);
-                    return;
+                if (!(world.getTile(temp) instanceof NonBlocking && !(world.getTile(temp) instanceof Rabbit))) {
+                    if ((world.getTile(temp) != this)) {
+
+                        bearBehavior = BearBehavior.GETOFMYLAWN;
+                        status = AnimalStatus.LOOKINGFORFOOD;
+                        bearTarget = (Actor) world.getTile(temp);
+                        return;
+                    }
                 }
             }
         }
@@ -124,6 +129,7 @@ public class Bear extends Animal {
 
     /**
      * getNearestBearFood finder det nærmeste som bjørnen kan spise.
+     *
      * @return Location or Null
      */
     protected Location getNearestBearFood() {
@@ -211,6 +217,7 @@ public class Bear extends Animal {
 
     /**
      * locateMaid finder den nærmeste mulige parrings partner, eller returnere Null hvis der ingen er
+     *
      * @return Location or Null
      */
     protected Location locateMaid() {
@@ -251,15 +258,15 @@ public class Bear extends Animal {
             ArrayList<Location> temp = surrondingLocationsList(1);
             for (Location loc : temp) {
                 Object entity = world.getTile(loc);
-                if( entity instanceof Bear maidBear) {
-                    if(maidBear.getSex() == Sex.MALE){
+                if (entity instanceof Bear maidBear) {
+                    if (maidBear.getSex() == Sex.MALE) {
                         maidBear.setBearBehavior(BearBehavior.PASSIVE);
                         System.out.println("near is now passive");
                     }
 
                 }
             }
-            if (pregnant){
+            if (pregnant) {
                 birth();
             }
         }
@@ -279,6 +286,7 @@ public class Bear extends Animal {
 
     /**
      * getInformation retunere den korrekte DisplayInformation baseret på bjørnens nuværende tilstand.
+     *
      * @return DisplayInformation
      */
     @Override
@@ -302,6 +310,7 @@ public class Bear extends Animal {
 
     /**
      * isNeighbourFemale tjekker om naboen er en Female.
+     *
      * @param animal
      * @return boolean
      */
@@ -326,9 +335,14 @@ public class Bear extends Animal {
 
     /**
      * setBearBehavior kan bruges til at sætte bjørnens bearBehavior.
+     *
      * @param bearBehavior
      */
     public void setBearBehavior(BearBehavior bearBehavior) {
         this.bearBehavior = bearBehavior;
+    }
+
+    public BearBehavior getBearBehavior() {
+        return bearBehavior;
     }
 }

@@ -177,7 +177,22 @@ public class BearTest extends TestClass {
     }
 
     @Test
-    public void bearDefendsTerritory() {
+    public void bearStaysInTerritory() {
+
+        Location bearStartLocation = new Location(4, 4);
+        Bear bear = new Bear(world);
+        bear.setCanDie(false);
+        world.setTile(bearStartLocation, bear);
+        program.show();
+        for (int i = 0; i < 100; i++) {
+            program.simulate();
+            Location currentLoc = world.getLocation(bear);
+
+            float distance = pythagoras(currentLoc, bearStartLocation);
+            System.out.println(distance);
+            System.out.println(bear.getBearBehavior());
+        }
+
 
     }
 

@@ -50,4 +50,19 @@ public abstract class TestClass {
         return getObjectsOnMap(objectType, world);
     }
 
+    protected float pythagoras(Location loc1, Location loc2) {
+        int loc1X = loc1.getX();
+        int loc1Y = loc1.getY();
+
+        // Get the coordinates of the leader wolf
+        int loc2X = loc2.getX();
+        int loc2Y = loc2.getY();
+
+        // Calculate the distance using the Pythagorean theorem
+        int deltaX = Math.abs(loc2X - loc1X);
+        int deltaY = Math.abs(loc2Y - loc1Y);
+
+        return (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+    }
+
 }
