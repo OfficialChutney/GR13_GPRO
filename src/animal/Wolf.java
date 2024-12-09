@@ -16,7 +16,13 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
-
+/**
+ * Ulve klassen bliver skabt af klassen WolfPack. Ulve har forskellige adfærd afhængigt af tiden på dagen,
+ * lederens position, og andre ulveflokkes tilstedeværelse. Ulven har mulighed for selv at bevæge sig rundt,
+ * men bevæger sig altid inden for en vis afstand af en udpeget ulveleder. Ulven har mulighed for at
+ * jage bytte som opdager inden for en rækkevide. Hvis en ulv møder en anden kommer de to ulve i duel. Ulveflokke deler
+ * ulvehuller, hvor de sover og føder nye ulve unger.
+ */
 public class Wolf extends Animal {
 
     private boolean isLeader;
@@ -100,12 +106,9 @@ public class Wolf extends Animal {
         for (Location neighbor : neighborTiles) {
             Object temp = world.getTile(neighbor);
             if (temp instanceof Animal animal) {
-
                 //if wolf
                 if (animal instanceof Wolf wolf) {
-
                     if (wolf.getWolfPackID() != this.getWolfPackID()) {
-
                         wolf.takeDamage(2);
                         inWolfDuel = true;
                         wolfTarget = wolf;
@@ -126,7 +129,13 @@ public class Wolf extends Animal {
         }
     }
 
-    // pack behavior
+    /**
+     * Definerer den passive tilstand af objektet, på baggrund af tidspunktet på dagen.
+     * Om dagen søger objektet for bytte samtidig med, at den bevæger sig rundt.
+     * Når det bliver aften og senere nat, begynder ulven at søge mod sit hul. Her forsøger den at gemme sig i hullet, hvis den er tæt nok.
+     * Hvis hullet ikke findes (er lig null), forsøger ulven sætte sit hul.
+     * Når det bliver morgen, og ulven er i sit hul, forlader ulven så sit hul.
+     */
     protected void passiveBehavior() {
         if (isOnMap) {
             if (checktime() == TimeOfDay.MORNING) {
@@ -142,13 +151,20 @@ public class Wolf extends Animal {
             }
         }
 
-
-        //wakey wakey
         if (checktime() == TimeOfDay.MORNING && hiding && !isOnMap) {
             emerge();
         }
     }
 
+    /**
+     * roamBehaviour er en type af objektets adfærd, som rykker på objektet.
+     * Hvis objektet kalder roamBehaviour, bliver der først tjekket for, om objektet er leder.
+     * Hvis dette er sandt, bevæger objektet sig uafhængtigt af flokken, ved at sætte pathfinder lig null.
+     * Hvis objektet ikke er leder af flokken, og har en leder er der to måder hvorpå objektet kan bevæge sig.
+     * Hvis dens afstand bliver udregnet til at være inden for en specifik radius af lederen, bevæger objektet sig tilfældigt rundt.
+     * Hvis objektet er for langt fra lederen, søger den hen i mod lederen.
+     * Hvis ingen leder findes, bevæger objektet sig tilfældigt rundt.
+     */
     protected void roamBehaviour() {
         if (isLeader) { // pack leader
             // move independently
@@ -162,7 +178,6 @@ public class Wolf extends Animal {
 
             } else { // move independently
                 pathFinder(leader.getMyLocation());
-                System.out.println("Going to leader");
             }
 
         } else { // no leader exists
@@ -170,10 +185,13 @@ public class Wolf extends Animal {
         }
     }
 
-
+    /**
+     * Når metoden searchForPrey leder objektet efter andre objekter inden for en designeret radius.
+     * Rækkefølgen af if-statements, gør at det er muligt at prioriterer nogle objekter før andre.
+     * Hvis ikke nogle af specifikationerne for prey bliver mødt, returneres null.
+     * @return Location
+     */
     protected Location searchForPrey() {
-        //if rabbit found
-
         if (getNearestObject(Cadavar.class, 8) != null && checktime() != TimeOfDay.NIGHT) {
             attacking = true;
             return getNearestObject(Cadavar.class, 8);
@@ -188,6 +206,10 @@ public class Wolf extends Animal {
         }
     }
 
+    /**
+     * huntingBehaviour bevæger objektet mod en lokation.
+     * Afhængigt af, om
+     */
     protected void huntingBehavior() {
         if (!inWolfDuel) {
             preyLocation = searchForPrey();
@@ -205,13 +227,18 @@ public class Wolf extends Animal {
 
     }
 
-
+    /**
+     * goingHomeBehaviour sætter objektets vejfinder til hjem, hvis objektet er i verdenen.
+     */
     protected void goingHomeBehaviour() {
         if (isOnMap) {
             pathFinder(world.getLocation(myWolfHole));
         }
     }
 
+    /**
+     *tryToHide tjekker om objektet er i verdenen. Herefter tjekker den om objektet er tæt no på sit hul, til at gå ned i det.
+     */
     private void tryToHide() {
         if (isOnMap) {
             int thisX = world.getLocation(this).getX();
@@ -229,6 +256,10 @@ public class Wolf extends Animal {
         }
     }
 
+    /**
+     * emerge metoden bruges til at smide alle objekterne ud af hullet. Først smides lederen ud, da de andre ulve er afhængige af lederen.
+     * Hvis lederen er ude, kan andre ulve herefter frit gå ud af hullet, via ledige tomme pladser rundt om hullet.
+     */
     public void emerge() {
         if (hiding && !isOnMap) {
             Location wolfHoleLoc = world.getLocation(myWolfHole);
@@ -258,6 +289,13 @@ public class Wolf extends Animal {
         }
     }
 
+    /**
+     * Kalkulerer afstanden fra objektet selv til lederen.
+     * Benytter pythagoras bevis.
+     * Hvis lederen ikke er i verdenen, returneres nul.
+     * @param wolfLeader
+     * @return float
+     */
     private float rangeFromLeader(Wolf wolfLeader) {
         if (wolfLeader.isOnMap) {
             // Get the coordinates of "this" wolf
@@ -272,6 +310,7 @@ public class Wolf extends Animal {
             int deltaX = Math.abs(leaderX - thisX);
             int deltaY = Math.abs(leaderY - thisY);
 
+            System.out.println((float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)));
             return (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
         } else return 0;
 
@@ -307,6 +346,13 @@ public class Wolf extends Animal {
     }
 
 
+    /**
+     * setHole har to forskellige funktionaliteter på baggrund af, om objektet, som kalder det er leder.
+     * Først tjekker metoden tidspunktet af dagen.
+     * Hvis det er aften eller nat, tjekker metoden efterfølgende om objektet er leder.
+     * Hvis objektet er en leder, har den ansvar for at placerer et hul til flokken.
+     * Hvis ikke objektet er leder, skal den tage floklederens hul.
+     */
     protected void setHole() {
         if ((checktime() == TimeOfDay.EVENING || checktime() == TimeOfDay.NIGHT)) {
             if (isLeader) {
@@ -318,6 +364,13 @@ public class Wolf extends Animal {
         }
     }
 
+    /**
+     * digHole har til ansvar, at placerer et hul i verdenen.
+     * Først tjekkes om objektet i forvejen har et hul. Metoden forsøger derefter at placere et hul oven på objektets placering.
+     * Hvis et non-blocking objekt i forvejen findes, som hverken er græs eller et kadaver, bevæger objektet sig til en anden nærlæggende lokation
+     * Hvis et non-blocking objekt ikke findes i lokationen, eller består af enten græs eller et kadaver, placeres hullet, efter at have fjernet det eventuelt eksisterende non-blocking objekt.
+     * Objektets reference til eget hul bliver her sat til det nyligt skabte hul.
+     */
     protected void digHole() {
         if (myWolfHole == null) {
             Location locOfWolf = world.getLocation(this);
@@ -351,16 +404,22 @@ public class Wolf extends Animal {
         return myWolfHole;
     }
 
-    public boolean getIsHiding() {
-        return hiding;
-    }
-
+    /**
+     * tryToDecreaseEnergy forsøger at opdatere objektets energi med -1, hvis dyret ikke sover.
+     */
     private void tryToDecreaseEnergy() {
         if (status != AnimalStatus.SLEEPING) {
             updateEnergy(-1);
         }
     }
 
+    /**
+     * appointNewLeader udpeger en ny leder for ulveflokken ved at vælge en tilfældig ulv fra flokken,
+     *  eksklusiv det nuværende objekt. Den valgte ulv markeres som leder, og
+     *  alle ulve i flokken opdateres til at referere til den nye leder.
+     *  Hvis flokken er tom (bortset fra det nuværende objekt), udskrives en besked om,
+     *  at der ikke er nogen tilgængelige ulve at udpege som leder.
+     */
     private void appointNewLeader() {
         ArrayList<Wolf> wolfArrayList = new ArrayList<>(wolfPackList());
 
@@ -387,6 +446,12 @@ public class Wolf extends Animal {
         }
     }
 
+    /**
+     * wolfPackList tager alle enheder i verdenen, sorterer objekterne baseret på deres instanstype.
+     * Hvis enheden er af typen ulv og har samme flok ID som objektet der kalder metoden, bliver den tilføjet til en ArrayListe.
+     * Denne ArrayListe af ulve med samme flok ID bliver returneret.
+     * @return ArrayList<Wolf>
+     */
     private ArrayList<Wolf> wolfPackList() {
         HashMap<Object, Location> map = (HashMap<Object, Location>) world.getEntities();
         ArrayList<Wolf> wolfArrayList = new ArrayList<>();
@@ -413,6 +478,13 @@ public class Wolf extends Animal {
 
     }
 
+    /**
+     * tryGetPregnant metoden forsøger at sætte sandhedsværdien "pregnant" til sand, hvis specifikke krav er opnået.
+     * Metoden kontrollerer, om objektet er en voksen hunulv, der ikke allerede er gravid. Derudover
+     * kaldes en tilfældig værdi, for at skabe tilfældighed til om graviditet kan ske. Derefter undersøges
+     * nærliggende felter for en voksen hanulv fra samme ulveflok. Hvis alle betingelser er
+     * opfyldt, markeres objektet som gravid.
+     */
     protected void tryGetPregnant() {
         Random rd = new Random();
 
@@ -430,5 +502,68 @@ public class Wolf extends Animal {
             }
         }
     }
-    public void setChanceToGetPregnant(float chance){chanceToGetPregnant = chance;}
+
+    /**
+     * Indstiller sandsynligheden for, at objektet kan blive gravid.
+     * @param chance float
+     */
+    public void setChanceToGetPregnant(float chance) {
+        chanceToGetPregnant = chance;
+    }
+
+    /**
+     * Indstiller lokationen for objektet som kalder den.
+     * @param myLocation Location
+     */
+    public void setMyLocation(Location myLocation) {
+        this.myLocation = myLocation;
+    }
+
+    /**
+     * Returnerer lokationen for objektet som kalder den.
+     * @return Location
+     */
+    public Location getMyLocation() {
+        return myLocation;
+    }
+
+    /**
+     * Returnerer flok ID, for den flok som objektet er i.
+     * @return int
+     */
+    public int getWolfPackID() {
+        return wolfPackID;
+    }
+
+    /**
+     * Returnerer objektets leder.
+     * @return Wolf
+     */
+    public Wolf getLeader() {
+        return leader;
+    }
+
+    /**
+     * Returnerer et objekt af typen WolfPack
+     * @return WolfPack
+     */
+    public WolfPack getWolfPack() {
+        return pack;
+    }
+
+    /**
+     * Returnerer det WolfHole som objektet er knyttet til.
+     * @return WolfHole
+     */
+    public WolfHole getPackHole() {
+        return myWolfHole;
+    }
+
+    /**
+     * Returnerer en sandhedsværdi omkring hvorvidt objektet gemmer sig.
+     * @return boolean
+     */
+    public boolean getIsHiding() {
+        return hiding;
+    }
 }

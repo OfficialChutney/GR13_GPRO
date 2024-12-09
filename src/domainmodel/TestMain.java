@@ -12,6 +12,7 @@ import itumulator.world.World;
 import hole.WolfHole;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class TestMain {
 
@@ -38,7 +39,19 @@ public class TestMain {
 
         WolfPack wp1 = new WolfPack(4, new Location(5, 5), world);
 
+        ArrayList<Wolf> wolves1 = wp1.getWolves();
+
         WolfPack wp2 = new WolfPack(4, new Location(3, 3), world);
+
+        ArrayList<Wolf> wolves2 = wp2.getWolves();
+
+        for(Wolf wolf : wolves1) {
+            wolf.setAge(10);
+        }
+
+        for(Wolf wolf : wolves2) {
+            wolf.setAge(10);
+        }
 
 
         p.show();
