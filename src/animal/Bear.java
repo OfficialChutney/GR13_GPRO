@@ -342,6 +342,10 @@ public class Bear extends Animal {
         this.bearBehavior = bearBehavior;
     }
 
+    /**
+     * haveILeftHome tjekker om bjørnen er ud for sit territory, hvis ja retunere den TURE.
+     * @return
+     */
     protected boolean haveILeftHome(){
         for (Location temp : territoryTileList) {
             if (!world.isTileEmpty(temp)) {
