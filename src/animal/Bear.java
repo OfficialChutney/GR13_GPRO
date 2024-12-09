@@ -24,6 +24,7 @@ public class Bear extends Animal {
     protected ArrayList<Location> territoryTileList;
     protected BearBehavior bearBehavior;
     protected Actor bearTarget;
+    protected Location centerOfTerritory;
 
 
     public Bear(World world) {
@@ -90,13 +91,14 @@ public class Bear extends Animal {
      * @param loc
      */
     protected void setTerritory(Location loc) {
-        int tSize = 2;
+        int tSize = 3;
         int startX = loc.getX();
         int startY = loc.getY();
         territoryTopLeftCornor = new Location(startX - tSize, startY - tSize);
         territoryLowerRightCornor = new Location(startX + tSize, startY + tSize);
 
         territoryTileList = new ArrayList<>(world.getSurroundingTiles(tSize));
+        centerOfTerritory = world.getLocation(this);
     }
 
     /**
@@ -198,13 +200,21 @@ public class Bear extends Animal {
     protected void normalBehavior() {
         if (checktime() == TimeOfDay.MORNING) {
             status = AnimalStatus.LOOKINGFORFOOD;
-            pathFinder(getNearestBearFood());
+            if(!haveILeftHome()) {
+                pathFinder(getNearestBearFood());
+            } else {
+                pathFinder(centerOfTerritory);
+            }
             eat();
             updateEnergy(-1);
 
         } else if (checktime() == TimeOfDay.EVENING) {
             status = AnimalStatus.LOOKINGFORFOOD;
-            pathFinder(getNearestBearFood());
+            if(!haveILeftHome()) {
+                pathFinder(getNearestBearFood());
+            } else {
+                pathFinder(centerOfTerritory);
+            }
             eat();
             updateEnergy(-1);
 
@@ -344,5 +354,17 @@ public class Bear extends Animal {
 
     public BearBehavior getBearBehavior() {
         return bearBehavior;
+    }
+
+    protected boolean haveILeftHome(){
+        for (Location temp : territoryTileList) {
+            if (!world.isTileEmpty(temp)) {
+                if (!(world.getTile(temp) == this)) {
+                    System.out.println("I have Left Home");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
