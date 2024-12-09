@@ -316,26 +316,6 @@ public class Wolf extends Animal {
 
     }
 
-    public void setMyLocation(Location myLocation) {
-        this.myLocation = myLocation;
-    }
-
-    public Location getMyLocation() {
-        return myLocation;
-    }
-
-    public int getWolfPackID() {
-        return wolfPackID;
-    }
-
-    public Wolf getLeader() {
-        return leader;
-    }
-
-    public WolfPack getWolfPack() {
-        return pack;
-    }
-
     @Override
     public LifeStage getLifeStage() {
         if (age < 2) {
@@ -398,10 +378,6 @@ public class Wolf extends Animal {
                 myWolfHole = newHole;
             }
         }
-    }
-
-    public WolfHole getPackHole() {
-        return myWolfHole;
     }
 
     /**
