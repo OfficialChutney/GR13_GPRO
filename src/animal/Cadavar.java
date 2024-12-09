@@ -6,6 +6,9 @@ import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+/**
+ * cadavar er en mad kilde til de dyr som spiser kød, samtidigt giver de også chance for at svampe spawner.
+ */
 public class Cadavar implements Actor, NonBlocking {
     World world;
     int amountOfMeat;
@@ -22,6 +25,10 @@ public class Cadavar implements Actor, NonBlocking {
 
     }
 
+    /**
+     * act bruges til at tælde mod cadaveres decomposeOrDelete.
+     * @param world providing details of the position on which the actor is currently located and much more.
+     */
     @Override
     public void act(World world) {
         if(myLocation == null) {
@@ -34,6 +41,9 @@ public class Cadavar implements Actor, NonBlocking {
         }
     }
 
+    /**
+     * decomposeOrDelete sletter dette Cadavar hvis steps matcher stepsToDecompose eller amountOfMeat er 0 eller under.
+     */
     private void decomposeOrDelete(){
         if(currentSteps >= stepsToDecompose || amountOfMeat <= 0){
             world.delete(this);
@@ -44,15 +54,26 @@ public class Cadavar implements Actor, NonBlocking {
         }
     }
 
+    /**
+     * reduceAmountOfMeat reducere amountOfMeat med det givet parameter.
+     * @param amountOfMeat
+     */
     public void reduceAmountOfMeat(int amountOfMeat){
         this.amountOfMeat -= amountOfMeat;
     }
 
+    /**
+     * setMushroomInWorld sætter en Mushroom i World på den Location som dette Cadavar er på.
+     */
     private void setMushroomInWorld(){
         Mushroom mushroom = new Mushroom(world);
         world.setTile(myLocation, mushroom);
     }
 
+    /**
+     * setMushroomState sætter mushrooms til enden true eller false.
+     * @param mushrooms
+     */
     public void setMushroomState(boolean mushrooms){
         this.mushrooms = mushrooms;
     }
