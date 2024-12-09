@@ -16,14 +16,26 @@ public class RabbitHole extends Hole {
         rabbitsInHole = new ArrayList<>();
     }
 
+    /**
+     * Tilføjer argumentet Rabbit til listen af rabbitsInHole
+     * @param rabbit
+     */
     public void addRabbit(Rabbit rabbit) {
         rabbitsInHole.add(rabbit);
     }
 
+    /**
+     * Fjerner argumentet Rabbit fra listen af rabbitsInHole
+     * @param rabbit
+     */
     public void removeRabbit(Rabbit rabbit) {
         rabbitsInHole.remove(rabbit);
     }
 
+    /**
+     * Returnere listen af rabbitsInHole
+     * @return rabbitsInHole
+     */
     public ArrayList<Rabbit> getRabbitsInHole() {
         return rabbitsInHole;
     }

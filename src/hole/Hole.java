@@ -10,6 +10,9 @@ import itumulator.world.World;
 import java.awt.*;
 
 
+/**
+ * En abstrakt klasse som håndtere placeringen af huller
+ */
 public abstract class Hole implements NonBlocking {
 
     private final World ourWorld;
@@ -20,6 +23,10 @@ public abstract class Hole implements NonBlocking {
         this.tileLocation = tileLocation;
     }
 
+    /**
+     * Returnere lokationen af objektet
+     * @return Location
+     */
     public Location getTileLocation() {
         return tileLocation;
     }

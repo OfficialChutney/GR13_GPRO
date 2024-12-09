@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Random;
 
+/**
+ * Græsset har til funktion at kunne sprede sig afhængigt af en defineret chance parameter. Græsset skal dertil også
+ * kunne slettes.
+ */
 public class Grass implements Actor, NonBlocking {
 
     private final World ourWorld;
@@ -34,6 +38,11 @@ public class Grass implements Actor, NonBlocking {
     }
 
 
+    /**
+     * spreadGrass tjekker først om den er inden for en chance parameter, og returnere hvis den ikke er.
+     * Hvis metoden når videre fra denne chance tjek, tjekker den efterfølgende for ledige pladser rundt om sig selv.
+     * Efterfølgende vælger den en tilfældig af disse, og placere en ny grls.
+     */
     public void spreadGrass() {
 
         if(canSpread) {
@@ -66,14 +75,25 @@ public class Grass implements Actor, NonBlocking {
         }
     }
 
+    /**
+     * Sletter sig selv
+     */
     public void deleteGrass() {
         ourWorld.delete(this);
     }
 
+    /**
+     * Sætter en sandhedsværdi, afhængigt af, om græsset skal kunne sprede sig.
+     * @param canSpread
+     */
     public void setCanSpread(boolean canSpread) {
         this.canSpread = canSpread;
     }
 
+    /**
+     * Sætter attributten chanceToGrow til argumentet som indsættes.
+     * @param chanceToGrow
+     */
     public void setChanceToGrow(float chanceToGrow) {
         this.chanceToGrow = chanceToGrow;
     }
