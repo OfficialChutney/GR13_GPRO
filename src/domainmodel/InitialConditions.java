@@ -2,9 +2,9 @@ package domainmodel;
 
 import itumulator.world.Location;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+/**
+ * Klassen som indeholder startparametrene for 1 objekt, der skal initialiseres.
+ */
 public class InitialConditions {
     private String object;
     private String numberOfObjects;
@@ -16,10 +16,6 @@ public class InitialConditions {
         this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = null;
-        System.out.println("Object: "+object);
-        System.out.println("Fungi: "+ fungi);
-        System.out.println("Number of objects: "+numberOfObjects);
-        System.out.println("Coordinates: "+coordinates);
     }
 
     public InitialConditions(String object, String numberOfObjects, String fungi, String x, String y) {
@@ -27,26 +23,36 @@ public class InitialConditions {
         this.fungi = !(fungi == null);
         this.numberOfObjects = numberOfObjects;
         coordinates = new Location(Integer.parseInt(x), Integer.parseInt(y));
-        System.out.println("Object: "+object);
-        System.out.println("Fungi: "+ fungi);
-        System.out.println("Number of objects: "+numberOfObjects);
-        System.out.println("Coordinates: "+coordinates);
-
     }
 
 
+    /**
+     * Returnere objektet der ønskes at initialisering.
+     * @return Den {@link String} som korrespondere til det objekt der ønskes at initialiseres.
+     */
     public String getObject() {
         return object;
     }
 
+    /**
+     * Returnere antallet af objekter der ønskes at initialisering.
+     * @return Den {@link String} som korrespondere til det antal af objekter der ønskes at initialiseres. Såfremt det er et range, returneres det
+     * i formatet "min-max."
+     */
     public String getNumberOfObjects() {
         return numberOfObjects;
     }
-
+    /**
+     * Returnere den {@link Location} der ønskes at objektet skal starte på.
+     * @return Den {@link String} som korrespondere til den {@link Location} som objektet ønskes at initialiseres på.
+     */
     public Location getCoordinates() {
         return coordinates;
     }
-
+    /**
+     * Returnere hvorvidt objektet er inficeret af fungi. Relateret til {@link foliage.Mushroom} klassen.
+     * @return boolean om objektet er inficeret af fungi eller ej.
+     */
     public boolean isFungi() {
         return fungi;
     }

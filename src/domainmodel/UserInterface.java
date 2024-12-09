@@ -4,14 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * UserInterface indlæser alle input filerne. Input filerne skal ligge i den mappe kaldet "InputFiles."
+ * UserInterface indlæser alle filer, og kører simulationer for hver fil.
+ * UserInterface opgave er også at kører regex på hver linje af en input fil, og omdanner tekst i filerne til individuelle inputs, som sendes videre til {@link Controller}
+ * */
 public class UserInterface {
 
 
@@ -29,6 +32,12 @@ public class UserInterface {
         isTest = false;
     }
 
+    /**
+     * startProgram initialisere UserInterface til at begynde at indlæse filerne fra Inputfilerne. Når der er kørt regex på tekstlinjerne fra input filerne,
+     * sættes de individuelle start parametre ind i en ny instans af {@link InitialConditions}. Hver instans indeholder startparametre for 1 objekt.
+     * En liste af {@link InitialConditions} sendes videre til vores {@link Controller}.
+     * @return {@link TestPackage}. Slutparametrene efter en simulation er kørt. Benyttes ved UnitTests.
+     */
     public TestPackage startProgram() {
         TestPackage testPackage = null;
 
@@ -100,18 +109,26 @@ public class UserInterface {
 
     }
 
+    /**
+     * Sætter en specifik fil til at blive kørt, istedet for alle filerne i InputFiles mappen. Bruges kun ved UnitTests,
+     * @param file tager imod en {@link String} for filnavnet for den specifikke fil, der skal køres af UserInterface.
+     */
     public void setSpecifiedFileToRun(String file) {
         specifiedFileToRun = file;
     }
 
-    public Controller getController() {
-        return controller;
-    }
-
+    /**
+     * Returnere filstien på den mappe, som alle input filerne ligger i.
+     * @return {@link String} som er navnet på den filsti/mappe, som alle input filerne ligge i.
+     */
     public String getInputFileDirectory() {
         return inputFileDirectoryString;
     }
 
+    /**
+     * Bruges til at sætte UserInterface til om denne kørsel er en UnitTest eller ej.
+     * @param isTest boolean for om denne kørsel er en UnitTest eller ej.
+     */
     public void setTest(boolean isTest) {
         this.isTest = isTest;
     }

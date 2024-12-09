@@ -11,6 +11,9 @@ import itumulator.world.World;
 
 import java.util.*;
 
+/**
+ * Klassen ansvarlig for simulation af en verden.
+ */
 public class Plane {
 
     private Program program;
@@ -28,6 +31,15 @@ public class Plane {
         rd = new Random();
     }
 
+    /**
+     * Starter en simulation af en verden. Kalder først {@link #initializeProgram()} som initalisere programmet,
+     * og derefter {@link #initializeEntities(LinkedList)} som initialisere objekterne ud fra startparametrene.
+     * Derefter kaldes {@link #runSimulation()} som kører simulationen. Efter simulationen kaldes {@link #stopSimulation()}.
+     * @param worldSize størrelsen på verdenen.
+     * @param isTest hvorvidt denne simulation er en del af en UnitTest
+     * @param icList listen af startparametre.
+     * @return {@link TestPackage} som indeholder slutParametre for verden.
+     */
     public TestPackage startSimulation(int worldSize, boolean isTest, LinkedList<InitialConditions> icList) {
         this.worldSize = worldSize;
         initializeProgram();
@@ -47,6 +59,12 @@ public class Plane {
         return createTestPackage();
     }
 
+    /**
+     * Initialisere {@link Program} og fra program henter {@link World}.
+     * Den sætter også {@link itumulator.executable.DisplayInformation} for alle de {@link itumulator.simulator.Actor} og {@link NonBlocking} objekter,
+     * som ikke implementere {@link itumulator.executable.DynamicDisplayInformationProvider}. Dette gør den via klassen {@link Helper}.
+     * Den sætter også den nuværende {@link itumulator.simulator.Simulator} inde i {@link Helper} klassen.
+     */
     private void initializeProgram() {
         program = new Program(worldSize, displaySize, delay);
         world = program.getWorld();
@@ -54,6 +72,11 @@ public class Plane {
         Helper.setSimulator(program.getSimulator());
     }
 
+    /**
+     * Initialisere alle vores {@link itumulator.simulator.Actor} og {@link NonBlocking} elementer fra vores startparametre.
+     * Sender hver individuelle objekt videre til {@link #initializeEntity(InitialConditions)}
+     * @param icList en {@link LinkedList} af {@link InitialConditions}, som er alle startparametre for hvert objekt der skal placeres i verdenen.
+     */
     private void initializeEntities(LinkedList<InitialConditions> icList) {
         for (InitialConditions ic : icList) {
 
@@ -75,6 +98,11 @@ public class Plane {
         return value;
     }
 
+    /**
+     * Tager det objekt der ønskes at initialiseres fra {@link InitialConditions}, og sender det specifikke objekt videre til
+     * initialisering i {@link #createObjectOnTile(Class, InitialConditions)}.
+     * @param ic {@link InitialConditions} startparametrene for objektet.
+     */
     private void initializeEntity(InitialConditions ic) {
 
         String objectType = ic.getObject();
@@ -91,6 +119,9 @@ public class Plane {
         }
     }
 
+    /**
+     * Starter simulationen efter at startparametrene for verdenen er blevet initaliseret.
+     */
     private void runSimulation() {
         program.show();
         for (int i = 1; i <= simulationStepLength; i++) {
@@ -98,22 +129,19 @@ public class Plane {
         }
     }
 
-    private int countEntitiesOfType(Class<?> entityType) {
-        Map<Object, Location> entities = world.getEntities();
-        int count = 0;
-        for (Object entity : entities.keySet()) {
-            if (entityType.isInstance(entity)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
+    /**
+     * Laver den {@link TestPackage} som returneres ved en simulations afslutning.
+     * @return {@link TestPackage} som indeholder slutparametrene.
+     */
     private TestPackage createTestPackage() {
         return new TestPackage(world, program, world.getEntities());
     }
 
-
+    /**
+     * Står for at instanisere og placere vores {@link itumulator.simulator.Actor} og {@link NonBlocking} objekter på spillefladen.
+     * @param objectType er den specifikke klassetype, som der ønskes at blive instansieret.
+     * @param ic er startparametrene for klassen.
+     */
     private void createObjectOnTile(Class<?> objectType, InitialConditions ic) {
         int numberOfUnits = parseValue(ic.getNumberOfObjects());
 
@@ -223,14 +251,25 @@ public class Plane {
         }
     }
 
+    /**
+     * Ved endt simulation, lukker denne metode {@link itumulator.display.Frame}.
+     */
     private void stopSimulation() {
         program.getFrame().dispose();
     }
 
+    /**
+     * Returnere det aktive {@link Program}.
+     * @return {@link Program} som er aktivt.
+     */
     public Program getProgram() {
         return program;
     }
 
+    /**
+     * Metode for at få en tilfældig lokation fra spillefladen. Tager ikke højde for, hvorvidt der allerede er et objekt på spillefladen.
+     * @return Den {@link Location} der er tilfældigt genereret.
+     */
     public Location getRandomLocation() {
         int x = rd.nextInt(worldSize);
         int y = rd.nextInt(worldSize);

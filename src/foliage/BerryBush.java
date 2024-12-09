@@ -23,7 +23,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
 
     /**
      * act tjekker om busken har bær, hvis den ikke har kalder den chanceToGrowBerries.
-     * @param world providing details of the position on which the actor is currently located and much more.
+     * @param world den verden som objektet befinder sig i.
      */
     @Override
     public void act(World world) {

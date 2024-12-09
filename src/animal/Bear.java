@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Bear er klassen til bjørnen, denne står for adfæren af bjørnen.
- * Bear implimentere Actor og arver fra Animal
+ * Bear er klassen til bjørnen. Denne står for adfærden af bjørnen.
+ * Bear implementere {@link Actor} og nedarver fra {@link Animal}
  */
 
 public class Bear extends Animal {
@@ -34,8 +34,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * act starter med at sætte Bjørnenes territorie, derefter starter den bjørnenes behavior, kalder ageAnimal og metoden die.
-     * @param world providing details of the position on which the actor is currently located and much more.
+     * Starter med at sætte Bjørnenes territorie, derefter kaldes {@link #behavior()}, {@link #ageAnimal()} og metoden {@link #die(boolean, int, int)}.
+     * @param world den verden som objektet befinder sig i.
      */
     @Override
     public void act(World world) {
@@ -49,8 +49,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * eat metoden kalder animal.takeDamage(5) hvis der står et dyr ved siden af bjørnen, efterfulgt af at bjørnen enden
-     * spiser bær fra en busk, eller spiser af et Cadavar.
+     * Metoden kalder {@link #takeDamage(int)} hvis der står et dyr ved siden af bjørnen, som bjørnen skal angribe, efterfulgt af at bjørnen enten
+     * spiser bær fra en {@link BerryBush}, eller spiser af et {@link Cadavar}.
      */
     @Override
     public void eat() {
@@ -71,8 +71,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * GetLifeStage retunere en lifeStage ud fra hvor mange Steps bjørnen har levet.
-     * @return LifeStage.CHILD or LifeStage.ADULT
+     * Retunere en lifeStage ud fra hvor mange Steps bjørnen har levet.
+     * @return {@link LifeStage}
      */
     @Override
     public LifeStage getLifeStage() {
@@ -84,8 +84,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * setTerritory sætter bjørnens territorie ud fra en fixed størrelse som er 2
-     * @param loc
+     * Sætter bjørnens territorie ud fra en fixed størrelse som er 2.
+     * @param loc den {@link Location} som dens territorie skal sættes ud fra.
      */
     protected void setTerritory(Location loc) {
         int tSize = 3;
@@ -99,8 +99,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * isThereSomeoneInMyTerritory tjekker om der befinder sig et Animal som IKKE er en Rabbit eller sig selv i territoriet.
-     * Hvis der er nogen i territoriet sætter den BearTarget til det Animal.
+     * Tjekker om der befinder sig et {@link Animal} som IKKE er en {@link Rabbit} eller sig selv i territoriet.
+     * Hvis der er nogen i territoriet sætter den {@link #bearTarget} til det {@link Animal}.
      */
     protected void isThereSomeoneInMyTerritory() {
         for (Location temp : territoryTileList) {
@@ -120,15 +120,15 @@ public class Bear extends Animal {
     }
 
     /**
-     * chaseIntruder kalder pathFinder med World.getLocation til BearTarget.
+     * Kalder {@link #pathFinder(Location)} med {@link World#getLocation(Object)} til det {@link Animal} objekt som {@link #bearTarget} er sat til.
      */
     protected void chaseIntruder() {
         pathFinder(world.getLocation(bearTarget));
     }
 
     /**
-     * getNearestBearFood finder det nærmeste som bjørnen kan spise.
-     * @return Location or Null
+     * Finder det nærmeste som bjørnen kan spise.
+     * @return en {@link Location} såfremt der blev fundet noget mad. Ellers returneres null.
      */
     protected Location getNearestBearFood() {
         for (int i = 1; i < 11; i++) {
@@ -163,9 +163,9 @@ public class Bear extends Animal {
     }
 
     /**
-     * behavior kalder først isItBabyMakingSeason og isThereSomeoneInMyTerritory,
-     * efterfulgt tjekker den på bearBehavior og kalder det bestemte metoder ud fra situationen.
-     * såsom; timeToSexBehavior, chaseIntruder, eat og normalBehavior.
+     * Kalder først {@link #isItBabyMakingSeason()} og {@link #isThereSomeoneInMyTerritory()}
+     * efterfulgt tjekker den på {@link #bearBehavior} og kalder bestemte metoder ud fra situationen.
+     * Såsom; {@link #timeToSexBehavior()}, {@link #chaseIntruder()}, {@link #eat()}  og {@link #normalBehavior()}
      */
     protected void behavior() {
         isItBabyMakingSeason();
@@ -191,7 +191,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * normalBehavior styre den Passive Behavior, enden leder bjørnen efter mad eller sover.
+     * Styre dens {@link BearBehavior#PASSIVE} Behavior. Enten leder bjørnen efter mad ved kald af {@link #pathFinder(Location)} eller sover.
+     * Bjørnen vil dog altid vandre tilbage til centrum af dens territorie, såfremt den bevæger sig ud (dog ved mindre dens {@link #bearBehavior} er sat til {@link BearBehavior#TIMETOSEX}.
      */
     protected void normalBehavior() {
         if (checktime() == TimeOfDay.MORNING) {
@@ -222,8 +223,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * locateMaid finder den nærmeste mulige parrings partner, eller retunere Null hvis der ingen er
-     * @return Location or Null
+     * Finder den nærmeste mulige {@link Bear}/parrings partner, eller returnere Null hvis der ingen er.
+     * @return {@link Location} af nærmeste parrings partner {@link Bear} eller Null.
      */
     protected Location locateMaid() {
         for (int i = 1; i < 11; i++) {
@@ -245,10 +246,10 @@ public class Bear extends Animal {
     }
 
     /**
-     * timeToSexBehavior får bjørnen til at søge mod sin partner, hvis locateMaid ikke retunered Null.
-     * her efter tjekker den kvindelige bjørne om de står ved siden af en mand hver step, hvis de gør;
-     * bliver de gravide og deres bearBehavior bliver sat til PASSIVE, samme gælder for bjørnens partner.
-     * hvis bjørnen er en mand bliver bearBehavior sat til PASSIVE hvis den står ved siden af en kvinde.
+     * Får bjørnen til at søge mod sin partner, hvis {@link #locateMaid()} ikke returnere Null.
+     * Herefter tjekker den {@link Bear} som har sat sin {@link #sex} til {@link Sex#FEMALE} om den står ved siden af en {@link Bear} som har sat sin {@link #sex} til {@link Sex#MALE}
+     * Hvis de gør; {@link #pregnant} sat til true og deres {@link #bearBehavior} bliver sat til {@link BearBehavior#PASSIVE}. Det samme gælder for bjørnens partner.
+     * Hvis {@link Bear} {@link #sex} er {@link Sex#MALE} bliver {@link #bearBehavior} sat til {@link BearBehavior#PASSIVE} hvis den står ved siden af en {@link Bear} hvis {@link #sex} er {@link Sex#FEMALE}.
      */
     protected void timeToSexBehavior() {
         if (locateMaid() == null) {
@@ -280,7 +281,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * isItBabyMakingSeason sætter bearBehavior til TIMETOSEX hver 40'ende step i simulationen.
+     * Sætter {@link #bearBehavior} til {@link BearBehavior#TIMETOSEX} hvert 40'ende step i simulationen.
      */
     protected void isItBabyMakingSeason() {
         if (Helper.getSteps() % 40 == 0) {
@@ -289,8 +290,8 @@ public class Bear extends Animal {
     }
 
     /**
-     * getInformation retunere den korrekte DisplayInformation baseret på bjørnens nuværende tilstand.
-     * @return DisplayInformation
+     * Retunere den korrekte DisplayInformation baseret på bjørnens nuværende tilstand.
+     * @return {@link DisplayInformation}
      */
     @Override
     public DisplayInformation getInformation() {
@@ -312,9 +313,9 @@ public class Bear extends Animal {
     }
 
     /**
-     * isNeighbourFemale tjekker om naboen er en Female.
-     * @param animal
-     * @return boolean
+     * Tjekker om det {@link Object} som er nabo til bjørnen har sit {@link #sex} sat til {@link Sex#FEMALE}.
+     * @param animal det animal der skal tjekkes.
+     * @return boolean hvorvidt det er en {@link Bear} og om den har sit {@link #sex} sat til {@link Sex#FEMALE}.
      */
     public boolean isNeighbourFemale(Animal animal) {
         ArrayList<Location> neighbours = surrondingLocationsList();
@@ -336,20 +337,16 @@ public class Bear extends Animal {
     }
 
     /**
-     * setBearBehavior kan bruges til at sætte bjørnens bearBehavior.
-     * @param bearBehavior
+     * Kan bruges til at sætte bjørnens {@link #bearBehavior}.
+     * @param bearBehavior er den {@link BearBehavior} man ønsker bjørnen skal have.
      */
     public void setBearBehavior(BearBehavior bearBehavior) {
         this.bearBehavior = bearBehavior;
     }
 
-    public BearBehavior getBearBehavior() {
-        return bearBehavior;
-    }
-
     /**
-     * haveILeftHome tjekker om bjørnen er ud for sit territory, hvis ja retunere den TURE.
-     * @return
+     * Tjekker om bjørnen er ud for sit territory, hvis ja retunere den TRUE.
+     * @return boolean
      */
     protected boolean haveILeftHome(){
         for (Location temp : territoryTileList) {
@@ -359,7 +356,6 @@ public class Bear extends Animal {
                 }
             }
         }
-        System.out.println("I have Left Home");
         return true;
     }
 }

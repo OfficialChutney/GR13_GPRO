@@ -7,7 +7,7 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 /**
- * cadavar er en mad kilde til de dyr som spiser kød, samtidigt giver de også chance for at svampe spawner.
+ * Cadavar er en mad kilde til de dyr som spiser kød, samtidigt giver de også chance for at {@link Mushroom} spawner.
  */
 public class Cadavar implements Actor, NonBlocking {
     World world;
@@ -26,8 +26,8 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * act bruges til at tælde mod cadaveres decomposeOrDelete.
-     * @param world providing details of the position on which the actor is currently located and much more.
+     * act bruges til at tælle mod cadaveres decomposeOrDelete.
+     * @param world den verden som objektet befinder sig i.
      */
     @Override
     public void act(World world) {
@@ -42,7 +42,7 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * decomposeOrDelete sletter dette Cadavar hvis steps matcher stepsToDecompose eller amountOfMeat er 0 eller under.
+     * Sletter dette Cadavar hvis steps matcher {@link #stepsToDecompose} eller {@link #amountOfMeat} er 0 eller under.
      */
     private void decomposeOrDelete(){
         if(currentSteps >= stepsToDecompose || amountOfMeat <= 0){
@@ -55,15 +55,15 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * reduceAmountOfMeat reducere amountOfMeat med det givet parameter.
-     * @param amountOfMeat
+     * Reducere {@link #amountOfMeat} med det givet parameter.
+     * @param amountOfMeat mængden som {@link #amountOfMeat} skal reduceres med.
      */
     public void reduceAmountOfMeat(int amountOfMeat){
         this.amountOfMeat -= amountOfMeat;
     }
 
     /**
-     * setMushroomInWorld sætter en Mushroom i World på den Location som dette Cadavar er på.
+     * Sætter en {@link Mushroom} i World på den Location som dette {@link Cadavar} er på.
      */
     private void setMushroomInWorld(){
         Mushroom mushroom = new Mushroom(world, amountOfMeat);
@@ -71,13 +71,17 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * setMushroomState sætter mushrooms til enden true eller false.
-     * @param mushrooms
+     * Sætter mushrooms til enten true eller false.
+     * @param mushrooms boolean som repræsentere, om der er svamp i dette cadaver.
      */
     public void setMushroomState(boolean mushrooms){
         this.mushrooms = mushrooms;
     }
 
+    /**
+     * Returnere hvorvidt der er svamp i dette cadavar.
+     * @return boolean som repræsentere hvorvidt der er svamp i dette cadavar.
+     */
     public boolean isMushrooms() {
         return mushrooms;
     }

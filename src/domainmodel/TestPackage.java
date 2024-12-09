@@ -15,6 +15,10 @@ import itumulator.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Klasse der indeholder alle informationer om en verden, ved endt simulation. Benyttes til UnitTests, for at kunne se de parametre såsom antal af objekter,
+ * antallet af typerne af objekter, selve {@link World} og {@link Program} objekterne som simulationen blev kørt på.
+ */
 public class TestPackage {
     World world;
     Program program;
@@ -43,18 +47,32 @@ public class TestPackage {
         isolateEntities();
     }
 
+    /**
+     * Returnere {@link World} fra den verden som er blevet simuleret.
+     * @return {@link World}
+     */
     public World getWorld() {
         return world;
     }
-
+    /**
+     * Returnere {@link Program} fra den verden som er blevet simuleret.
+     * @return {@link Program}
+     */
     public Program getProgram() {
         return program;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Object} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle objekterne på spillefladen.
+     */
     public Map<Object, Location> getEntities() {
         return entities;
     }
 
+    /**
+     * Den tager listen af alle {@link Object} som er i verdenen, og sortere dem ud i individuelle {@link Map}, hvor objekterne downcastes til den
+     * klasse de er instansieret som.
+     */
     private void isolateEntities() {
 
         for(Object o : entities.keySet()) {
@@ -82,35 +100,59 @@ public class TestPackage {
         }
 
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Rabbit} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Rabbit} objekterne på spillefladen.
+     */
     public Map<Rabbit, Location> getRabbits() {
         return rabbits;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Bear} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Bear} objekterne på spillefladen.
+     */
     public Map<Bear, Location> getBears() {
         return bears;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Wolf} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Wolf} objekterne på spillefladen.
+     */
     public Map<Wolf, Location> getWolves() {
         return wolves;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link RabbitHole} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link RabbitHole} objekterne på spillefladen.
+     */
     public Map<RabbitHole, Location> getRabbitHoles() {
         return rabbitHoles;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Grass} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Grass} objekterne på spillefladen.
+     */
     public Map<Grass, Location> getGrass() {
         return grass;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link BerryBush} og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link BerryBush} objekterne på spillefladen.
+     */
     public Map<BerryBush, Location> getBerrybushes() {
         return berrybushes;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Cadavar} der ikke er inficeret af fungi, og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Cadavar} objekterne på spillefladen.
+     */
     public Map<Cadavar, Location> getCadaversWithoutFungi() {
         return cadaversWithoutFungi;
     }
-
+    /**
+     * Returnere et {@link Map} af alle {@link Cadavar} der er inficeret af fungi, og deres {@link Location} som var på verdenen ved endt simulation
+     * @return {@link Map} af alle {@link Cadavar} objekterne på spillefladen.
+     */
     public Map<Cadavar, Location> getCadaversWithFungi() {
         return cadaversWithFungi;
     }
