@@ -35,7 +35,6 @@ public class Bear extends Animal {
 
     /**
      * act starter med at sætte Bjørnenes territorie, derefter starter den bjørnenes behavior, kalder ageAnimal og metoden die.
-     *
      * @param world providing details of the position on which the actor is currently located and much more.
      */
     @Override
@@ -72,8 +71,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * GetLifeStage returnere en lifeStage ud fra hvor mange Steps bjørnen har levet.
-     *
+     * GetLifeStage retunere en lifeStage ud fra hvor mange Steps bjørnen har levet.
      * @return LifeStage.CHILD or LifeStage.ADULT
      */
     @Override
@@ -87,7 +85,6 @@ public class Bear extends Animal {
 
     /**
      * setTerritory sætter bjørnens territorie ud fra en fixed størrelse som er 2
-     *
      * @param loc
      */
     protected void setTerritory(Location loc) {
@@ -131,7 +128,6 @@ public class Bear extends Animal {
 
     /**
      * getNearestBearFood finder det nærmeste som bjørnen kan spise.
-     *
      * @return Location or Null
      */
     protected Location getNearestBearFood() {
@@ -226,8 +222,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * locateMaid finder den nærmeste mulige parrings partner, eller returnere Null hvis der ingen er
-     *
+     * locateMaid finder den nærmeste mulige parrings partner, eller retunere Null hvis der ingen er
      * @return Location or Null
      */
     protected Location locateMaid() {
@@ -250,7 +245,7 @@ public class Bear extends Animal {
     }
 
     /**
-     * timeToSexBehavior får bjørnen til at søge mod sin partner, hvis locateMaid ikke returnere Null.
+     * timeToSexBehavior får bjørnen til at søge mod sin partner, hvis locateMaid ikke retunered Null.
      * her efter tjekker den kvindelige bjørne om de står ved siden af en mand hver step, hvis de gør;
      * bliver de gravide og deres bearBehavior bliver sat til PASSIVE, samme gælder for bjørnens partner.
      * hvis bjørnen er en mand bliver bearBehavior sat til PASSIVE hvis den står ved siden af en kvinde.
@@ -288,7 +283,6 @@ public class Bear extends Animal {
      * isItBabyMakingSeason sætter bearBehavior til TIMETOSEX hver 40'ende step i simulationen.
      */
     protected void isItBabyMakingSeason() {
-
         if (Helper.getSteps() % 40 == 0) {
             bearBehavior = BearBehavior.TIMETOSEX;
         }
@@ -296,7 +290,6 @@ public class Bear extends Animal {
 
     /**
      * getInformation retunere den korrekte DisplayInformation baseret på bjørnens nuværende tilstand.
-     *
      * @return DisplayInformation
      */
     @Override
@@ -320,7 +313,6 @@ public class Bear extends Animal {
 
     /**
      * isNeighbourFemale tjekker om naboen er en Female.
-     *
      * @param animal
      * @return boolean
      */
@@ -345,7 +337,6 @@ public class Bear extends Animal {
 
     /**
      * setBearBehavior kan bruges til at sætte bjørnens bearBehavior.
-     *
      * @param bearBehavior
      */
     public void setBearBehavior(BearBehavior bearBehavior) {
@@ -356,6 +347,10 @@ public class Bear extends Animal {
         return bearBehavior;
     }
 
+    /**
+     * haveILeftHome tjekker om bjørnen er ud for sit territory, hvis ja retunere den TURE.
+     * @return
+     */
     protected boolean haveILeftHome(){
         for (Location temp : territoryTileList) {
             if (!world.isTileEmpty(temp)) {
