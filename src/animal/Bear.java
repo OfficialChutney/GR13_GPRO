@@ -343,8 +343,7 @@ public class Bear extends Animal {
     }
 
     protected boolean haveILeftHome(){
-        for (int i = 0; i < territoryTileList.size(); i++) {
-            Location temp = territoryTileList.get(i);
+        for (Location temp : territoryTileList) {
             if (!world.isTileEmpty(temp)) {
                 if (!(world.getTile(temp) == this)) {
                     System.out.println("I have Left Home");
