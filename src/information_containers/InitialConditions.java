@@ -1,4 +1,4 @@
-package domainmodel;
+package information_containers;
 
 import itumulator.world.Location;
 

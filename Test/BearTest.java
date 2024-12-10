@@ -1,12 +1,14 @@
 import animal.*;
+import animal.carnivores.Bear;
+import animal.carnivores.Wolf;
+import animal.carnivores.WolfPack;
+import animal.herbivore.Rabbit;
 import domainmodel.Helper;
 import foliage.BerryBush;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.World;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package animal;
+package animal.carnivores;
 
 import java.util.ArrayList;
 import java.util.Set;

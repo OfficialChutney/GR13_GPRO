@@ -1,14 +1,8 @@
-import animal.Bear;
-import animal.Rabbit;
+import animal.carnivores.Bear;
 import foliage.Grass;
-import hole.RabbitHole;
 import itumulator.world.Location;
-import itumulator.world.World;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.LinkedList;
-import java.util.Map;
 
 public class GrassTest extends TestClass {
 

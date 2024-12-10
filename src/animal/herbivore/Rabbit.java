@@ -1,11 +1,10 @@
-package animal;
+package animal.herbivore;
 
+import animal.*;
 import foliage.Grass;
-import hole.Hole;
 import domainmodel.*;
 import hole.RabbitHole;
 import itumulator.executable.DisplayInformation;
-import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.World;

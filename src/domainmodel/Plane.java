@@ -1,9 +1,14 @@
 package domainmodel;
 
 import animal.*;
+import animal.carnivores.Bear;
+import animal.carnivores.WolfPack;
+import animal.herbivore.Rabbit;
 import foliage.BerryBush;
 import foliage.Grass;
 import hole.RabbitHole;
+import information_containers.InitialConditions;
+import information_containers.TestPackage;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;

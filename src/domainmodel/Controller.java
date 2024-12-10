@@ -1,6 +1,8 @@
 package domainmodel;
 
-import java.util.HashMap;
+import information_containers.InitialConditions;
+import information_containers.TestPackage;
+
 import java.util.LinkedList;
 
 /**

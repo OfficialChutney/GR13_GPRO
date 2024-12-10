@@ -1,5 +1,5 @@
 import animal.LifeStage;
-import animal.Rabbit;
+import animal.herbivore.Rabbit;
 import animal.Sex;
 import domainmodel.*;
 import foliage.Grass;
@@ -8,8 +8,6 @@ import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.World;
 import org.junit.jupiter.api.*;
-import java.util.LinkedList;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,9 +1,9 @@
 package domainmodel;
 
-import animal.Bear;
+import animal.carnivores.Bear;
 import animal.Cadavar;
-import animal.Rabbit;
-import animal.Wolf;
+import animal.herbivore.Rabbit;
+import animal.carnivores.Wolf;
 import foliage.Grass;
 import hole.RabbitHole;
 import hole.WolfHole;

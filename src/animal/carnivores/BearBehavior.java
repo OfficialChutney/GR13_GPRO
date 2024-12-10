@@ -1,4 +1,4 @@
-package animal;
+package animal.carnivores;
 
 public enum BearBehavior {
     GETOFMYLAWN,

@@ -1,8 +1,7 @@
 package hole;
 
-import animal.Rabbit;
+import animal.herbivore.Rabbit;
 import itumulator.world.Location;
-import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.ArrayList;

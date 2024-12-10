@@ -1,12 +1,11 @@
-package domainmodel;
+package information_containers;
 
-import animal.Bear;
+import animal.carnivores.Bear;
 import animal.Cadavar;
-import animal.Rabbit;
-import animal.Wolf;
+import animal.herbivore.Rabbit;
+import animal.carnivores.Wolf;
 import foliage.BerryBush;
 import foliage.Grass;
-import hole.Hole;
 import hole.RabbitHole;
 import itumulator.executable.Program;
 import itumulator.world.Location;

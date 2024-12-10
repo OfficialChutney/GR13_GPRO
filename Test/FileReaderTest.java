@@ -1,25 +1,19 @@
-import animal.Bear;
+import animal.carnivores.Bear;
 import animal.Cadavar;
-import animal.Rabbit;
-import animal.Wolf;
-import domainmodel.Helper;
-import domainmodel.TestPackage;
+import animal.herbivore.Rabbit;
+import animal.carnivores.Wolf;
+import information_containers.TestPackage;
 import domainmodel.UserInterface;
 import foliage.BerryBush;
 import foliage.Grass;
-import hole.Hole;
 import hole.RabbitHole;
-import itumulator.executable.Program;
 import itumulator.world.Location;
-import itumulator.world.World;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;

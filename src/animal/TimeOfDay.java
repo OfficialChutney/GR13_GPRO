@@ -1,4 +1,4 @@
-package domainmodel;
+package animal;
 
 public enum TimeOfDay {
     MORNING,

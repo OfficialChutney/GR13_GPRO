@@ -1,6 +1,9 @@
 import animal.*;
+import animal.carnivores.Bear;
+import animal.carnivores.Wolf;
+import animal.carnivores.WolfPack;
+import animal.herbivore.Rabbit;
 import domainmodel.Helper;
-import hole.RabbitHole;
 import hole.WolfHole;
 import itumulator.executable.Program;
 import itumulator.world.Location;

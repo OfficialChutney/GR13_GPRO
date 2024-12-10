@@ -1,5 +1,8 @@
 package animal;
 
+import animal.carnivores.Bear;
+import animal.carnivores.Wolf;
+import animal.herbivore.Rabbit;
 import domainmodel.*;
 import hole.Hole;
 import itumulator.executable.DynamicDisplayInformationProvider;

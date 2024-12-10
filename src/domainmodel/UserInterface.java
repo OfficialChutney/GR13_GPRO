@@ -1,5 +1,8 @@
 package domainmodel;
 
+import information_containers.InitialConditions;
+import information_containers.TestPackage;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

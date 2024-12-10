@@ -1,8 +1,9 @@
-package animal;
+package animal.carnivores;
 
 
+import animal.*;
+import animal.herbivore.Rabbit;
 import domainmodel.Helper;
-import domainmodel.TimeOfDay;
 import foliage.Grass;
 import hole.WolfHole;
 import itumulator.executable.DisplayInformation;

@@ -1,7 +1,8 @@
-package animal;
+package animal.carnivores;
 
+import animal.*;
+import animal.herbivore.Rabbit;
 import domainmodel.Helper;
-import domainmodel.TimeOfDay;
 import foliage.BerryBush;
 import itumulator.executable.DisplayInformation;
 import itumulator.simulator.Actor;
@@ -11,7 +12,6 @@ import itumulator.world.World;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Bear er klassen til bjørnen. Denne står for adfærden af bjørnen.

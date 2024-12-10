@@ -1,5 +1,4 @@
-import animal.Bear;
-import foliage.Grass;
+import animal.carnivores.Bear;
 import hole.RabbitHole;
 import itumulator.world.Location;
 import org.junit.jupiter.api.Test;
