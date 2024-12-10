@@ -21,7 +21,7 @@ public class RabbitHole extends Hole {
     }
 
     /**
-     * TilfÃ¸jer argumentet Rabbit til listen af rabbitsInHole
+     * Tilføjer argumentet Rabbit til listen af rabbitsInHole
      * @param rabbit
      */
     public void addRabbit(Rabbit rabbit) {

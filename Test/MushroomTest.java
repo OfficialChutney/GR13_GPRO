@@ -8,8 +8,15 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test af {@link Mushroom} klassen.
+ */
 public class MushroomTest extends TestClass {
 
+    /**
+     * Test om et {@link Mushroom} kan sprede sig til andre {@link Cadavar} uden fungi.
+     * Svare til test af krav K3-2b.
+     */
     @Test
     public void mushroomCanSpreadToCadaver() {
         Mushroom mushroom = new Mushroom(world, 100);
@@ -46,7 +53,10 @@ public class MushroomTest extends TestClass {
 
 
     }
-
+    /**
+     * Test om et {@link Mushroom} fra et større {@link Cadavar} dør senere end en {@link Mushroom} fra et mindre {@link Cadavar}.
+     * Svare til test af krav K3-2b.
+     */
     @Test
     public void biggerCavadarMushroomsDecomposeLater() {
         Cadavar biggerCadaver = new Cadavar(world,true,30,10);

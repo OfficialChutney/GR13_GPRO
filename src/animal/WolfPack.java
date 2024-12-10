@@ -8,8 +8,8 @@ import itumulator.world.Location;
 import itumulator.world.World;
 
 /**
- * WolfPack er en klasse, som stÃ¥r for at initialisere en ulveflok med et unikt flok-ID, samt en dedikeret ulveleder.
- * Klassen tager i sin konstruktÃ¸r mod parametre afhÃ¦ngigt af flokkens stÃ¸rrelse.
+ * WolfPack er en klasse, som står for at initialisere en ulveflok med et unikt flok-ID, samt en dedikeret ulveleder.
+ * Klassen tager i sin konstruktør mod parametre afhængigt af flokkens størrelse.
  */
 public class WolfPack {
 
@@ -31,8 +31,8 @@ public class WolfPack {
     }
 
     /**
-     * Denne metode tilfÃ¸jer ulve til atributten wolves. Den fÃ¸rste ulv bliver her tildelt leder rollen, hvorefter de resterende
-     * ulve bliver tilfÃ¸jet med reference til denne ulv.
+     * Denne metode tilføjer ulve til atributten wolves. Den første ulv bliver her tildelt leder rollen, hvorefter de resterende
+     * ulve bliver tilføjet med reference til denne ulv.
      */
     private void createWolfList() {
         leaderWolf = new Wolf(world, wolfPackID, this);
@@ -46,8 +46,8 @@ public class WolfPack {
     }
 
     /**
-     * Denne metode sÃ¦tter lederulven pÃ¥ en lokation, som bliver givet som argument i metoden.
-     * EfterfÃ¸lgende bliver en arrayListe lavet, med alle ulve udover lederen.
+     * Denne metode sætter lederulven på en lokation, som bliver givet som argument i metoden.
+     * Efterfølgende bliver en arrayListe lavet, med alle ulve udover lederen.
      * Denne liste bliver herefter brugt som argument i metoden spawnWolfsInWolfPack
      * @param spawnLocation
      */
@@ -73,8 +73,8 @@ public class WolfPack {
 
 
     /**
-     * Denne metode benytter rekursion til at sÃ¦tte ulve sÃ¥ tÃ¦t pÃ¥ lederens initielle placering som muligt.
-     * Hvis der ikke er flere pladser direkte rundt om leder ulven, inkrementeres radius med 1, og ulve forsÃ¸ges at sÃ¦ttes igen.
+     * Denne metode benytter rekursion til at sætte ulve så tæt på lederens initielle placering som muligt.
+     * Hvis der ikke er flere pladser direkte rundt om leder ulven, inkrementeres radius med 1, og ulve forsøges at sættes igen.
      * Metoden tager antallet af ulve, leder ulvens spawn lokation, radius og en flok liste som argumenter.
      * @param numberOfWolfs
      * @param spawnLocation

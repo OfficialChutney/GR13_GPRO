@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.Random;
 
 /**
- * GrÃ¦sset har til funktion at kunne sprede sig afhÃ¦ngigt af en defineret chance parameter. GrÃ¦sset skal dertil ogsÃ¥
+ * Græsset har til funktion at kunne sprede sig afhængigt af en defineret chance parameter. Græsset skal dertil også
  * kunne slettes.
  */
 public class Grass implements Actor, NonBlocking {
@@ -39,9 +39,9 @@ public class Grass implements Actor, NonBlocking {
 
 
     /**
-     * spreadGrass tjekker fÃ¸rst om den er inden for en chance parameter, og returnere hvis den ikke er.
-     * Hvis metoden nÃ¥r videre fra denne chance tjek, tjekker den efterfÃ¸lgende for ledige pladser rundt om sig selv.
-     * EfterfÃ¸lgende vÃ¦lger den en tilfÃ¦ldig af disse, og placere en ny grls.
+     * spreadGrass tjekker først om den er inden for en chance parameter, og returnere hvis den ikke er.
+     * Hvis metoden når videre fra denne chance tjek, tjekker den efterfølgende for ledige pladser rundt om sig selv.
+     * Efterfølgende vælger den en tilfældig af disse, og placere en ny grls.
      */
     public void spreadGrass() {
 
@@ -83,7 +83,7 @@ public class Grass implements Actor, NonBlocking {
     }
 
     /**
-     * SÃ¦tter en sandhedsvÃ¦rdi, afhÃ¦ngigt af, om grÃ¦sset skal kunne sprede sig.
+     * Sætter en sandhedsværdi, afhængigt af, om græsset skal kunne sprede sig.
      * @param canSpread
      */
     public void setCanSpread(boolean canSpread) {
@@ -91,7 +91,7 @@ public class Grass implements Actor, NonBlocking {
     }
 
     /**
-     * SÃ¦tter attributten chanceToGrow til argumentet som indsÃ¦ttes.
+     * Sætter attributten chanceToGrow til argumentet som indsættes.
      * @param chanceToGrow
      */
     public void setChanceToGrow(float chanceToGrow) {

@@ -19,7 +19,10 @@ public class RabbitTest extends TestClass {
         super();
     }
 
-
+    /**
+     * Stress test af {@link Rabbit} klassen.
+     * Tilhører ikke et formelt krav.
+     */
     @Test
     public void maxedOutPlayingField() {
         //ASSERT
@@ -53,7 +56,10 @@ public class RabbitTest extends TestClass {
         assertEquals(expected, actual);
 
     }
-
+    /**
+     * Test om {@link Rabbit} kan formere sig.
+     * Test af krav K1-2e.
+     */
     @Test
     public void hasBirthed() {
         Program program = new Program(2,display_size, delay);
@@ -90,7 +96,10 @@ public class RabbitTest extends TestClass {
         //ASSERT
         assertTrue(getObjectsOnMap(Rabbit.class,world).size() > 2);
     }
-
+    /**
+     * Test om {@link Rabbit} kan bevæge sig.
+     * Ikke test af et formelt krav.
+     */
     @Test
     public void rabbitHasMoved() {
         //ARRANGE
@@ -114,7 +123,10 @@ public class RabbitTest extends TestClass {
         //ASSERT Y COORDINATE HAS CHANGED
         assertTrue(startX != endX || startY != endY);
     }
-
+    /**
+     * Test om {@link Rabbit} kun bevæger sig 1 felt af gangen.
+     * Ikke test af et formelt krav.
+     */
     @Test
     public void rabbitOnlyMovedOneTile() {
         //ARRANGE
@@ -142,7 +154,10 @@ public class RabbitTest extends TestClass {
         assertEquals(expected, actual);
 
     }
-
+    /**
+     * Test om {@link Rabbit} kan spise {@link Grass} og få energi af det.
+     * Test af krav K1-2c.
+     */
     @Test
     public void hasEatenGrass() {
         //ARRANGE
@@ -173,7 +188,10 @@ public class RabbitTest extends TestClass {
         assertEquals(expected,actual);
 
     }
-
+    /**
+     * Test om {@link Rabbit} kan dø.
+     * Test af krav K1-2b.
+     */
     @Test
     public void rabbitsCanDie() {
         //ARRANGE
@@ -192,7 +210,10 @@ public class RabbitTest extends TestClass {
 
         assertEquals(0, numOfRabbitsEnd);
     }
-
+    /**
+     * Test om {@link Rabbit} max energi påvirkes af deres age.
+     * Test af krav K1-2d.
+     */
     @Test
     public void rabbitAgeChangeMaxEnergy() {
         //ARRANGE
@@ -218,7 +239,10 @@ public class RabbitTest extends TestClass {
         assertEquals(defaultMaxEnergy - 2, rabbitMaxEnergyStart);
         assertEquals(defaultMaxEnergy - 10, rabbitMaxEnergyEnd);
     }
-
+    /**
+     * Test om {@link Rabbit} kan grave et {@link RabbitHole}.
+     * Test af krav K1-2f og K1-3a.
+     */
     @Test
     public void hasDugHole() {
         //ARRANGE
@@ -246,7 +270,10 @@ public class RabbitTest extends TestClass {
 
 
     }
-
+    /**
+     * Test om {@link Rabbit} søger mod deres huller.
+     * Test af krav K1-2g.
+     */
     @Test
     public void hasReachedHole() {
         //ARRANGE

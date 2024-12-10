@@ -13,9 +13,16 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Denne klasse har til formål at teste de krav der er stillet til {@link Wolf} klassen, og den tilhørende {@link WolfPack} klasse.
+ */
 public class WolfTest extends TestClass {
 
 
+    /**
+     * Stress test for {@link Wolf}.
+     * Har ikke et formelt krav.
+     */
     @Test
     public void maxedOutPlayingField() {
         //ASSERT
@@ -45,6 +52,10 @@ public class WolfTest extends TestClass {
 
     }
 
+    /**
+     * Test af, om {@link Wolf} kan parre sig.
+     * Test af krav K2-3a.
+     */
     @Test
     public void hasBirthed() {
         Program program = new Program(2, display_size, delay);
@@ -83,7 +94,10 @@ public class WolfTest extends TestClass {
         //ASSERT
         assertTrue(getObjectsOnMap(Wolf.class, world).size() > 2);
     }
-
+    /**
+     * Test af, om {@link Wolf} kan dø sig.
+     * Ikke et formelt krav.
+     */
     @Test
     public void wolvesCanDie() {
         //ARRANGE
@@ -103,6 +117,10 @@ public class WolfTest extends TestClass {
         assertEquals(0, numOfWolvesEnd);
     }
 
+    /**
+     * Test om {@link Wolf} dræber {@link Bear} og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b og K2-1c.
+     */
     @Test
     public void wolfAttacksBearAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -144,7 +162,10 @@ public class WolfTest extends TestClass {
         assertTrue(numOfBearsStart > numOfBearsEnd);
         assertTrue(thereWasCadaver);
     }
-
+    /**
+     * Test om {@link Wolf} dræber {@link Rabbit} og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b og K2-1c.
+     */
     @Test
     public void wolfAttacksRabbitAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -185,7 +206,10 @@ public class WolfTest extends TestClass {
         assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
         assertTrue(thereWasCadaver);
     }
-
+    /**
+     * Test om {@link Wolf} dræber andre {@link Wolf} udenfor sin pack og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b, K2-1c og K2-3a.
+     */
     @Test
     public void wolfAttacksWolfOutSideOfPackAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -231,6 +255,10 @@ public class WolfTest extends TestClass {
         assertTrue(thereWasCadaver);
     }
 
+    /**
+     * Test om {@link Wolf} ikke angriber andre {@link Wolf} fra den samme {@link WolfPack}.
+     * Test af krav K2-3a.
+     */
     @Test
     public void wolfDoesNotAttackWolfFromSamePack() {
         Location leaderLoc = new Location(0, 0);
@@ -255,7 +283,10 @@ public class WolfTest extends TestClass {
         assertEquals(wolf1.getWolfPackID(), wolf2.getWolfPackID());
 
     }
-
+    /**
+     * Test om 2 {@link Wolf} reelt er en del af samme {@link WolfPack}.
+     * Test af krav K2-3a og K2-2a.
+     */
     @Test
     public void isApartOfSamePack() {
         Location leaderLoc = new Location(4, 4);
@@ -293,6 +324,10 @@ public class WolfTest extends TestClass {
 
     }
 
+    /**
+     * Test af om {@link Wolf} fra samme {@link WolfPack} forbliver tæt sammen på deres leder.
+     * Test af krav K2-2a.
+     */
     @Test
     public void wolvesAreCloseToLeader() {
         Location leaderLoc = new Location(4, 4);
@@ -335,6 +370,10 @@ public class WolfTest extends TestClass {
 
     }
 
+    /**
+     * Test af om {@link Wolf} fra samme {@link WolfPack} sover i samme {@link WolfHole} og graver {@link WolfHole} hvis de ikke har et tilkoblet.
+     * Test af krav K2-3a.
+     */
     @Test
     public void wolfPackDigsDenAndSleepsInSameDen() {
         Location locOfLeader = new Location(4, 4);

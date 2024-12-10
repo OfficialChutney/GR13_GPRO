@@ -7,7 +7,7 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 /**
- * Cadavar er en mad kilde til de dyr som spiser kÃ¸d, samtidigt giver de ogsÃ¥ chance for at {@link Mushroom} spawner.
+ * Cadavar er en mad kilde til de dyr som spiser kød, samtidigt giver de også chance for at {@link Mushroom} spawner.
  */
 public class Cadavar implements Actor, NonBlocking {
     World world;
@@ -26,7 +26,7 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * act bruges til at tÃ¦lle mod cadaveres decomposeOrDelete.
+     * act bruges til at tælle mod cadaveres decomposeOrDelete.
      * @param world den verden som objektet befinder sig i.
      */
     @Override
@@ -56,14 +56,14 @@ public class Cadavar implements Actor, NonBlocking {
 
     /**
      * Reducere {@link #amountOfMeat} med det givet parameter.
-     * @param amountOfMeat mÃ¦ngden som {@link #amountOfMeat} skal reduceres med.
+     * @param amountOfMeat mængden som {@link #amountOfMeat} skal reduceres med.
      */
     public void reduceAmountOfMeat(int amountOfMeat){
         this.amountOfMeat -= amountOfMeat;
     }
 
     /**
-     * SÃ¦tter en {@link Mushroom} i World pÃ¥ den Location som dette {@link Cadavar} er pÃ¥.
+     * Sætter en {@link Mushroom} i World på den Location som dette {@link Cadavar} er på.
      */
     private void setMushroomInWorld(){
         Mushroom mushroom = new Mushroom(world, amountOfMeat);
@@ -71,8 +71,8 @@ public class Cadavar implements Actor, NonBlocking {
     }
 
     /**
-     * SÃ¦tter mushrooms til enten true eller false.
-     * @param mushrooms boolean som reprÃ¦sentere, om der er svamp i dette cadaver.
+     * Sætter mushrooms til enten true eller false.
+     * @param mushrooms boolean som repræsentere, om der er svamp i dette cadaver.
      */
     public void setMushroomState(boolean mushrooms){
         this.mushrooms = mushrooms;
@@ -80,7 +80,7 @@ public class Cadavar implements Actor, NonBlocking {
 
     /**
      * Returnere hvorvidt der er svamp i dette cadavar.
-     * @return boolean som reprÃ¦sentere hvorvidt der er svamp i dette cadavar.
+     * @return boolean som repræsentere hvorvidt der er svamp i dette cadavar.
      */
     public boolean isMushrooms() {
         return mushrooms;

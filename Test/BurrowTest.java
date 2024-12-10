@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test af {@link RabbitHole} klassen.
+ */
 public class BurrowTest extends TestClass {
 
 
@@ -15,7 +18,10 @@ public class BurrowTest extends TestClass {
         super();
     }
 
-
+    /**
+     * Test af om et {@link animal.Animal} kan stå på et {@link RabbitHole} uden fejl.
+     * Test af krav K1-3b.
+     */
     @Test
     public void animalStandOnBurrow() {
         Location rabbitHoleLoc = new Location(4,4);

@@ -47,6 +47,10 @@ public class BearTest extends TestClass {
 
     }
 
+    /**
+     * Test om {@link Bear} dræber andre {@link Bear} og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b og K2-4b.
+     */
     @Test
     public void BearAttacksBearAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -87,7 +91,10 @@ public class BearTest extends TestClass {
         assertTrue(numOfBearsStart > numOfBearsEnd);
         assertTrue(thereWasCadaver);
     }
-
+    /**
+     * Test om {@link Bear} dræber {@link Rabbit} og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b og K2-4b.
+     */
     @Test
     public void BearAttacksRabbitAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -128,7 +135,10 @@ public class BearTest extends TestClass {
         assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
         assertTrue(thereWasCadaver);
     }
-
+    /**
+     * Test om {@link Bear} dræber {@link Wolf} og spiser det efterladte {@link Cadavar}.
+     * Svare til test af krav K3-1b og K2-4b.
+     */
     @Test
     public void BearAttacksWolfAndEatsCadaver() {
         Program program = new Program(2, display_size, delay);
@@ -171,7 +181,10 @@ public class BearTest extends TestClass {
         assertTrue(numOfWolvesStart > numOfWolvesEnd);
         assertTrue(thereWasCadaver);
     }
-
+    /**
+     * Test om {@link Bear} spiser bær fra {@link BerryBush}.
+     * Svare til test af krav K2-6a.
+     */
     @Test
     public void bearEatsBerriesFromBushes() {
         Program program = new Program(2, display_size, delay);
@@ -208,6 +221,10 @@ public class BearTest extends TestClass {
 
     }
 
+    /**
+     * Test om {@link Bear} forbliver i dens territorie.
+     * Test af krav K2-5a.
+     */
     @Test
     public void bearStaysInTerritory() {
 
@@ -224,6 +241,10 @@ public class BearTest extends TestClass {
         }
     }
 
+    /**
+     * Test af om {@link Bear} parre sig i parringssæsonen.
+     * Ikke noget formelt krav, som dette er en test af.
+     */
     @Test
     public void bearMatesInMatingSeason() {
         Program program = new Program(10, display_size, delay);

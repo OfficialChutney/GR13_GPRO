@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * Denne klasse nedarver alle Testklasser fra. Den indeholder hjælpemetoder til UnitTests samt instansiere testverdenen.
+ */
 public abstract class TestClass {
 
     protected int worldSize;
@@ -33,6 +36,12 @@ public abstract class TestClass {
         Helper.setSimulator(program.getSimulator());
     }
 
+    /**
+     * Metode til at finde antallet af objekter i en verden.
+     * @param objectType det objekt man gerne vil have antallet på.
+     * @param world den verden man vil iterere igennem.
+     * @return returnere en {@link LinkedList<Object>}.
+     */
     protected LinkedList<Object> getObjectsOnMap(Class<?> objectType, World world) {
         Map<Object, Location> entities = world.getEntities();
         LinkedList<Object> objects = new LinkedList<>();
@@ -45,11 +54,21 @@ public abstract class TestClass {
 
         return objects;
     }
-
+    /**
+     * Metode til at finde antallet af objekter i en verden.
+     * @param objectType det objekt man gerne vil have antallet på.
+     * @return returnere en {@link LinkedList<Object>}.
+     */
     protected LinkedList<Object> getObjectsOnMap(Class<?> objectType) {
         return getObjectsOnMap(objectType, world);
     }
 
+    /**
+     * Klasse der kan beregne afstanden imellem 2 {@link Location} via Pythagoras.
+     * @param loc1 første {@link Location}
+     * @param loc2 anden {@link Location}
+     * @return returnere et float, som er afstanden i antallet af tiles.
+     */
     protected float pythagoras(Location loc1, Location loc2) {
         int loc1X = loc1.getX();
         int loc1Y = loc1.getY();

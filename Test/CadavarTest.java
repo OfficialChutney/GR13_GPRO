@@ -6,8 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test for {@link Cadavar} klassen.
+ */
+
 public class CadavarTest extends TestClass {
 
+    /**
+     * Test for om {@link Rabbit} efterlader ådsler ved død. Svare til test af krav K3-1b
+     */
     @Test
     public void rabbitLeavesCadaver() {
         Rabbit rb = new Rabbit(world);
@@ -28,7 +35,9 @@ public class CadavarTest extends TestClass {
         assertTrue(numOfRabbitsStart > numOfRabbitsEnd);
         assertTrue(numOfCadavarsStart < numOfCadavarsEnd);
     }
-
+    /**
+     * Test for om {@link Bear} efterlader ådsler ved død. Svare til test af krav K3-1b
+     */
     @Test
     public void BearLeavesCadaver() {
         Bear bear = new Bear(world);
@@ -50,6 +59,9 @@ public class CadavarTest extends TestClass {
         assertTrue(numOfCadavarsStart < numOfCadavarsEnd);
     }
 
+    /**
+     * Test for om {@link Wolf} efterlader ådsler ved død. Svare til test af krav K3-1b
+     */
     @Test
     public void WolfLeavesCadaver() {
         Location loc = new Location(0,0);
@@ -71,6 +83,9 @@ public class CadavarTest extends TestClass {
         assertTrue(numOfCadavarsStart < numOfCadavarsEnd);
     }
 
+    /**
+     * Test af om {@link Cadavar} forsvinder over tid. Svare til krav K3-1c.
+     */
     @Test
     public void CadaverDecayesOverTime() {
         Cadavar cadaver = new Cadavar(world, false, 160, 20);
@@ -89,6 +104,10 @@ public class CadavarTest extends TestClass {
         assertTrue(numOfCadavarsStart > numOfCadavarsEnd);
     }
 
+    /**
+     * Test om et {@link Cadavar} der forsvinder over tid bliver til en {@link Mushroom}.
+     * Svare til test af krav K3-2a.
+     */
     @Test
     public void CadaverDecayesOverTimeAndProducesMushroom() {
         Cadavar cadaver = new Cadavar(world, true, 160, 20);
@@ -110,7 +129,10 @@ public class CadavarTest extends TestClass {
         assertTrue(numOfMushroomsStart < numOfMushroomsEnd);
 
     }
-
+    /**
+     * Test af om {@link Cadavar} forsvinder såfremt de bliver spist, før deres decay time.
+     * Svare til krav K3-1c.
+     */
     @Test
     public void CadaverCanBeEatenBeforeDecay() {
         Cadavar cadaver = new Cadavar(world, false, 20, 30);

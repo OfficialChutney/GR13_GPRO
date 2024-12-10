@@ -13,6 +13,10 @@ import java.util.Map;
 public class GrassTest extends TestClass {
 
 
+    /**
+     * Test af om {@link Grass} kan sprede sig.
+     * Test af krav K1-1b.
+     */
     @Test
     public void grassCanSpread() {
 
@@ -28,7 +32,10 @@ public class GrassTest extends TestClass {
 
         assertTrue(numOfGrassBeforeSim < numOfGrassAfterSim);
     }
-
+    /**
+     * Test af om et {@link animal.Animal} kan stå på et {@link Grass} uden fejl.
+     * Test af krav K1-1c.
+     */
     @Test
     public void animalStandOnGrass() {
         Grass grass = new Grass(world);

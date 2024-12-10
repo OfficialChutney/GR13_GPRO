@@ -17,11 +17,11 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Ulve klassen bliver skabt af klassen WolfPack. Ulve har forskellige adfÃ¦rd afhÃ¦ngigt af tiden pÃ¥ dagen,
- * lederens position, og andre ulveflokkes tilstedevÃ¦relse. Ulven har mulighed for selv at bevÃ¦ge sig rundt,
- * men bevÃ¦ger sig altid inden for en vis afstand af en udpeget ulveleder. Ulven har mulighed for at
- * jage bytte som opdager inden for en rÃ¦kkevide. Hvis en ulv mÃ¸der en anden kommer de to ulve i duel. Ulveflokke deler
- * ulvehuller, hvor de sover og fÃ¸der nye ulve unger.
+ * Ulve klassen bliver skabt af klassen WolfPack. Ulve har forskellige adfærd afhængigt af tiden på dagen,
+ * lederens position, og andre ulveflokkes tilstedeværelse. Ulven har mulighed for selv at bevæge sig rundt,
+ * men bevæger sig altid inden for en vis afstand af en udpeget ulveleder. Ulven har mulighed for at
+ * jage bytte som opdager inden for en rækkevide. Hvis en ulv møder en anden kommer de to ulve i duel. Ulveflokke deler
+ * ulvehuller, hvor de sover og føder nye ulve unger.
  */
 public class Wolf extends Animal {
 
@@ -130,11 +130,11 @@ public class Wolf extends Animal {
     }
 
     /**
-     * Definerer den passive tilstand af objektet, pÃ¥ baggrund af tidspunktet pÃ¥ dagen.
-     * Om dagen sÃ¸ger objektet for bytte samtidig med, at den bevÃ¦ger sig rundt.
-     * NÃ¥r det bliver aften og senere nat, begynder ulven at sÃ¸ge mod sit hul. Her forsÃ¸ger den at gemme sig i hullet, hvis den er tÃ¦t nok.
-     * Hvis hullet ikke findes (er lig null), forsÃ¸ger ulven sÃ¦tte sit hul.
-     * NÃ¥r det bliver morgen, og ulven er i sit hul, forlader ulven sÃ¥ sit hul.
+     * Definerer den passive tilstand af objektet, på baggrund af tidspunktet på dagen.
+     * Om dagen søger objektet for bytte samtidig med, at den bevæger sig rundt.
+     * Når det bliver aften og senere nat, begynder ulven at søge mod sit hul. Her forsøger den at gemme sig i hullet, hvis den er tæt nok.
+     * Hvis hullet ikke findes (er lig null), forsøger ulven sætte sit hul.
+     * Når det bliver morgen, og ulven er i sit hul, forlader ulven så sit hul.
      */
     protected void passiveBehavior() {
         if (isOnMap) {
@@ -157,13 +157,13 @@ public class Wolf extends Animal {
     }
 
     /**
-     * roamBehaviour er en type af objektets adfÃ¦rd, som rykker pÃ¥ objektet.
-     * Hvis objektet kalder roamBehaviour, bliver der fÃ¸rst tjekket for, om objektet er leder.
-     * Hvis dette er sandt, bevÃ¦ger objektet sig uafhÃ¦ngtigt af flokken, ved at sÃ¦tte pathfinder lig null.
-     * Hvis objektet ikke er leder af flokken, og har en leder er der to mÃ¥der hvorpÃ¥ objektet kan bevÃ¦ge sig.
-     * Hvis dens afstand bliver udregnet til at vÃ¦re inden for en specifik radius af lederen, bevÃ¦ger objektet sig tilfÃ¦ldigt rundt.
-     * Hvis objektet er for langt fra lederen, sÃ¸ger den hen i mod lederen.
-     * Hvis ingen leder findes, bevÃ¦ger objektet sig tilfÃ¦ldigt rundt.
+     * roamBehaviour er en type af objektets adfærd, som rykker på objektet.
+     * Hvis objektet kalder roamBehaviour, bliver der først tjekket for, om objektet er leder.
+     * Hvis dette er sandt, bevæger objektet sig uafhængtigt af flokken, ved at sætte pathfinder lig null.
+     * Hvis objektet ikke er leder af flokken, og har en leder er der to måder hvorpå objektet kan bevæge sig.
+     * Hvis dens afstand bliver udregnet til at være inden for en specifik radius af lederen, bevæger objektet sig tilfældigt rundt.
+     * Hvis objektet er for langt fra lederen, søger den hen i mod lederen.
+     * Hvis ingen leder findes, bevæger objektet sig tilfældigt rundt.
      */
     protected void roamBehaviour() {
         if (isLeader) { // pack leader
@@ -186,9 +186,9 @@ public class Wolf extends Animal {
     }
 
     /**
-     * NÃ¥r metoden searchForPrey leder objektet efter andre objekter inden for en designeret radius.
-     * RÃ¦kkefÃ¸lgen af if-statements, gÃ¸r at det er muligt at prioriterer nogle objekter fÃ¸r andre.
-     * Hvis ikke nogle af specifikationerne for prey bliver mÃ¸dt, returneres null.
+     * Når metoden searchForPrey leder objektet efter andre objekter inden for en designeret radius.
+     * Rækkefølgen af if-statements, gør at det er muligt at prioriterer nogle objekter før andre.
+     * Hvis ikke nogle af specifikationerne for prey bliver mødt, returneres null.
      * @return Location
      */
     protected Location searchForPrey() {
@@ -207,8 +207,8 @@ public class Wolf extends Animal {
     }
 
     /**
-     * huntingBehaviour bevÃ¦ger objektet mod en lokation.
-     * AfhÃ¦ngigt af, om
+     * huntingBehaviour bevæger objektet mod en lokation.
+     * Afhængigt af, om
      */
     protected void huntingBehavior() {
         if (!inWolfDuel) {
@@ -228,7 +228,7 @@ public class Wolf extends Animal {
     }
 
     /**
-     * goingHomeBehaviour sÃ¦tter objektets vejfinder til hjem, hvis objektet er i verdenen.
+     * goingHomeBehaviour sætter objektets vejfinder til hjem, hvis objektet er i verdenen.
      */
     protected void goingHomeBehaviour() {
         if (isOnMap) {
@@ -237,7 +237,7 @@ public class Wolf extends Animal {
     }
 
     /**
-     *tryToHide tjekker om objektet er i verdenen. Herefter tjekker den om objektet er tÃ¦t no pÃ¥ sit hul, til at gÃ¥ ned i det.
+     *tryToHide tjekker om objektet er i verdenen. Herefter tjekker den om objektet er tæt no på sit hul, til at gå ned i det.
      */
     private void tryToHide() {
         if (isOnMap) {
@@ -257,14 +257,14 @@ public class Wolf extends Animal {
     }
 
     /**
-     * emerge metoden bruges til at smide alle objekterne ud af hullet. FÃ¸rst smides lederen ud, da de andre ulve er afhÃ¦ngige af lederen.
-     * Hvis lederen er ude, kan andre ulve herefter frit gÃ¥ ud af hullet, via ledige tomme pladser rundt om hullet.
+     * emerge metoden bruges til at smide alle objekterne ud af hullet. Først smides lederen ud, da de andre ulve er afhængige af lederen.
+     * Hvis lederen er ude, kan andre ulve herefter frit gå ud af hullet, via ledige tomme pladser rundt om hullet.
      */
     public void emerge() {
         if (hiding && !isOnMap) {
             Location wolfHoleLoc = world.getLocation(myWolfHole);
 
-            //leader bliver skubbet ud af hulen fÃ¸rst.
+            //leader bliver skubbet ud af hulen først.
             if (!isLeader && !leader.getIsOnMap() && leader.getIsHiding()) {
                 leader.emerge();
             }
@@ -327,9 +327,9 @@ public class Wolf extends Animal {
 
 
     /**
-     * setHole har to forskellige funktionaliteter pÃ¥ baggrund af, om objektet, som kalder det er leder.
-     * FÃ¸rst tjekker metoden tidspunktet af dagen.
-     * Hvis det er aften eller nat, tjekker metoden efterfÃ¸lgende om objektet er leder.
+     * setHole har to forskellige funktionaliteter på baggrund af, om objektet, som kalder det er leder.
+     * Først tjekker metoden tidspunktet af dagen.
+     * Hvis det er aften eller nat, tjekker metoden efterfølgende om objektet er leder.
      * Hvis objektet er en leder, har den ansvar for at placerer et hul til flokken.
      * Hvis ikke objektet er leder, skal den tage floklederens hul.
      */
@@ -346,9 +346,9 @@ public class Wolf extends Animal {
 
     /**
      * digHole har til ansvar, at placerer et hul i verdenen.
-     * FÃ¸rst tjekkes om objektet i forvejen har et hul. Metoden forsÃ¸ger derefter at placere et hul oven pÃ¥ objektets placering.
-     * Hvis et non-blocking objekt i forvejen findes, som hverken er grÃ¦s eller et kadaver, bevÃ¦ger objektet sig til en anden nÃ¦rlÃ¦ggende lokation
-     * Hvis et non-blocking objekt ikke findes i lokationen, eller bestÃ¥r af enten grÃ¦s eller et kadaver, placeres hullet, efter at have fjernet det eventuelt eksisterende non-blocking objekt.
+     * Først tjekkes om objektet i forvejen har et hul. Metoden forsøger derefter at placere et hul oven på objektets placering.
+     * Hvis et non-blocking objekt i forvejen findes, som hverken er græs eller et kadaver, bevæger objektet sig til en anden nærlæggende lokation
+     * Hvis et non-blocking objekt ikke findes i lokationen, eller består af enten græs eller et kadaver, placeres hullet, efter at have fjernet det eventuelt eksisterende non-blocking objekt.
      * Objektets reference til eget hul bliver her sat til det nyligt skabte hul.
      */
     protected void digHole() {
@@ -381,7 +381,7 @@ public class Wolf extends Animal {
     }
 
     /**
-     * tryToDecreaseEnergy forsÃ¸ger at opdatere objektets energi med -1, hvis dyret ikke sover.
+     * tryToDecreaseEnergy forsøger at opdatere objektets energi med -1, hvis dyret ikke sover.
      */
     private void tryToDecreaseEnergy() {
         if (status != AnimalStatus.SLEEPING) {
@@ -390,11 +390,11 @@ public class Wolf extends Animal {
     }
 
     /**
-     * appointNewLeader udpeger en ny leder for ulveflokken ved at vÃ¦lge en tilfÃ¦ldig ulv fra flokken,
-     *  eksklusiv det nuvÃ¦rende objekt. Den valgte ulv markeres som leder, og
+     * appointNewLeader udpeger en ny leder for ulveflokken ved at vælge en tilfældig ulv fra flokken,
+     *  eksklusiv det nuværende objekt. Den valgte ulv markeres som leder, og
      *  alle ulve i flokken opdateres til at referere til den nye leder.
-     *  Hvis flokken er tom (bortset fra det nuvÃ¦rende objekt), udskrives en besked om,
-     *  at der ikke er nogen tilgÃ¦ngelige ulve at udpege som leder.
+     *  Hvis flokken er tom (bortset fra det nuværende objekt), udskrives en besked om,
+     *  at der ikke er nogen tilgængelige ulve at udpege som leder.
      */
     private void appointNewLeader() {
         ArrayList<Wolf> wolfArrayList = new ArrayList<>(wolfPackList());
@@ -423,8 +423,8 @@ public class Wolf extends Animal {
     }
 
     /**
-     * wolfPackList tager alle enheder i verdenen, sorterer objekterne baseret pÃ¥ deres instanstype.
-     * Hvis enheden er af typen ulv og har samme flok ID som objektet der kalder metoden, bliver den tilfÃ¸jet til en ArrayListe.
+     * wolfPackList tager alle enheder i verdenen, sorterer objekterne baseret på deres instanstype.
+     * Hvis enheden er af typen ulv og har samme flok ID som objektet der kalder metoden, bliver den tilføjet til en ArrayListe.
      * Denne ArrayListe af ulve med samme flok ID bliver returneret.
      * @return ArrayList<Wolf>
      */
@@ -455,10 +455,10 @@ public class Wolf extends Animal {
     }
 
     /**
-     * tryGetPregnant metoden forsÃ¸ger at sÃ¦tte sandhedsvÃ¦rdien "pregnant" til sand, hvis specifikke krav er opnÃ¥et.
+     * tryGetPregnant metoden forsøger at sætte sandhedsværdien "pregnant" til sand, hvis specifikke krav er opnået.
      * Metoden kontrollerer, om objektet er en voksen hunulv, der ikke allerede er gravid. Derudover
-     * kaldes en tilfÃ¦ldig vÃ¦rdi, for at skabe tilfÃ¦ldighed til om graviditet kan ske. Derefter undersÃ¸ges
-     * nÃ¦rliggende felter for en voksen hanulv fra samme ulveflok. Hvis alle betingelser er
+     * kaldes en tilfældig værdi, for at skabe tilfældighed til om graviditet kan ske. Derefter undersøges
+     * nærliggende felter for en voksen hanulv fra samme ulveflok. Hvis alle betingelser er
      * opfyldt, markeres objektet som gravid.
      */
     protected void tryGetPregnant() {
@@ -536,7 +536,7 @@ public class Wolf extends Animal {
     }
 
     /**
-     * Returnerer en sandhedsvÃ¦rdi omkring hvorvidt objektet gemmer sig.
+     * Returnerer en sandhedsværdi omkring hvorvidt objektet gemmer sig.
      * @return boolean
      */
     public boolean getIsHiding() {

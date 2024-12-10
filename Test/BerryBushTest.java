@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BerryBushTest extends TestClass {
 
 
-
-
+    /**
+     * Test af om {@link BerryBush} gror bær ved det korrekte tilfældige interval, med en diskrepant på 0.2.
+     * Test af krav K2-6a.
+     */
     @Test
     public void BerrysGrowOverTime() {
         BerryBush bb = new BerryBush();

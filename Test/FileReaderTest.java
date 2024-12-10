@@ -24,12 +24,18 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test for {@link UserInterface} klassen.
+ */
 public class FileReaderTest extends TestClass {
 
     public FileReaderTest() {
         super();
     }
-
+    /**
+     * Test af om {@link Rabbit} placeres når inputfilen kræver dette.
+     * Svare til krav K1-2a.
+     */
     @Test
     public void rabbitPlacedFromFile() {
         //ARRANGE & ACT
@@ -44,7 +50,10 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfRabbits,actual);
 
     }
-
+    /**
+     * Test af om {@link Grass} placeres når inputfilen kræver dette.
+     * Svare til krav K1-1a.
+     */
     @Test
     public void GrassPlacedFromFile() {
         //ARRANGE & ACT
@@ -59,7 +68,10 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfGrass,actual);
 
     }
-
+    /**
+     * Test af om {@link Wolf} placeres når inputfilen kræver dette.
+     * Svare til krav K2-1a.
+     */
     @Test
     public void wolvesPlacedFromFile() {
         //ARRANGE & ACT
@@ -74,7 +86,10 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfWolves,actual);
 
     }
-
+    /**
+     * Test af om {@link Bear} placeres når inputfilen kræver dette.
+     * Svare til krav K2-4a.
+     */
     @Test
     public void BearsPlacedFromFile() {
         //ARRANGE & ACT
@@ -89,7 +104,10 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfBears,actual);
 
     }
-
+    /**
+     * Test af om {@link Bear} placeres når inputfilen kræver dette, og placeres på den {@link Location} som inputfilen beskriver.
+     * Svare til krav K2-4a og K2-5a.
+     */
     @Test
     public void BearsPlacedFromFileWithCoordinate() {
         //ARRANGE & ACT
@@ -111,7 +129,10 @@ public class FileReaderTest extends TestClass {
         assertEquals(locOfBearStart, locOfBearEnd);
 
     }
-
+    /**
+     * Test af om {@link RabbitHole} placeres når inputfilen kræver dette.
+     * Svare til krav K1-3a.
+     */
     @Test
     public void BurrowPlacedFromFile() {
         //ARRANGE & ACT
@@ -127,6 +148,10 @@ public class FileReaderTest extends TestClass {
 
     }
 
+    /**
+     * Test af om {@link BerryBush} placeres når inputfilen kræver dette.
+     * Svare indirekte til krav K2-6a.
+     */
     @Test
     public void BerryBushPlacedFromFile() {
         //ARRANGE & ACT
@@ -142,6 +167,9 @@ public class FileReaderTest extends TestClass {
 
     }
 
+    /**
+     * Test der svare til krav K3-1a. {@link Cadavar} uden fungi.
+     */
     @Test
     public void CadaverWithoutFungiPlacedFromFile() {
         //ARRANGE & ACT
@@ -156,7 +184,9 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfCadavers,actual);
 
     }
-
+    /**
+     * Test der svare til krav K3-1a. {@link Cadavar} med fungi.
+     */
     @Test
     public void CadaverWithFungiPlacedFromFile() {
         //ARRANGE & ACT
@@ -171,11 +201,24 @@ public class FileReaderTest extends TestClass {
         assertEquals(expectedNumOfCadavers,actual);
 
     }
-
+    /**
+     * Hjælpemetode til at placere {@link Object} på spillefladen, ved at oprette en midlertidig fil.
+     * @param entityToPlace Klassen på det {@link Object} der skal placeres
+     * @param numOfEntities Antallet af entities der skal placeres
+     * @return returnere den {@link TestPackage} fra {@link UserInterface}, hvor der kan se som de korrekte dyr er blevet placeret i verdenen ud fra inputfilerne.
+     */
     private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities) {
         return placeEntityFromFile(entityToPlace, numOfEntities, null, false);
     }
 
+    /**
+     * Hjælpemetode til at placere {@link Object} på spillefladen, ved at oprette en midlertidig fil.
+     * @param entityToPlace Klassen på det {@link Object} der skal placeres
+     * @param numOfEntities Antallet af entities der skal placeres
+     * @param locOfEntity Den {@link Location} hvor {@link Object} skal placeres
+     * @param fungi en boolean hvorvidt hvis det er et {@link Cadavar}, om det har et {@link foliage.Mushroom} i sig
+     * @return returnere den {@link TestPackage} fra {@link UserInterface}, hvor der kan se som de korrekte dyr er blevet placeret i verdenen ud fra inputfilerne.
+     */
     private TestPackage placeEntityFromFile(Class<?> entityToPlace, int numOfEntities, Location locOfEntity, boolean fungi) {
         //ASSERT
         UserInterface ui = new UserInterface();

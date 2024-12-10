@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Rabbit er bunden af fÃ¸dekÃ¦den, de spiser grÃ¦s og graver huller.
+ * Rabbit er bunden af fødekæden, de spiser græs og graver huller.
  */
 public class Rabbit extends Animal {
 
@@ -29,8 +29,8 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Styrer Rabbits adfÃ¦r. Hvis det er morgen leder de efter mad og parrer med hinanden. Her kalder de, i rÃ¦kkefÃ¸lge, {@link #emerge()}, {@link #lookingForFoodBehaviour()} og {@link #tryTohide()}
-     * Hvis det er evening eller nat lÃ¸ber Rabbits tilbage til deres hul sÃ¥ de kan sove. Her kalder de, i rÃ¦kkefÃ¸lge, {@link #goingHomeBehaviour()}, {@link #tryTohide()}
+     * Styrer Rabbits adfærd. Hvis det er morgen leder de efter mad og parrer med hinanden. Her kalder de, i rækkefølge, {@link #emerge()}, {@link #lookingForFoodBehaviour()} og {@link #tryTohide()}
+     * Hvis det er evening eller nat løber Rabbits tilbage til deres hul så de kan sove. Her kalder de, i rækkefølge, {@link #goingHomeBehaviour()}, {@link #tryTohide()}
      * Hvis det er nat og de gemmer sig i sit hul og sover. Her kalder de {@link #sleep()}
      * @param world world den verden som objektet befinder sig i.
      */
@@ -60,7 +60,7 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Tjekker om der er {@link Grass} under kaninen. Hvis der er grÃ¦s fjerner den det ved kald af {@link Grass#deleteGrass()} og giver kaninen noget energi ved kald af {@link #updateEnergy(int)}.
+     * Tjekker om der er {@link Grass} under kaninen. Hvis der er græs fjerner den det ved kald af {@link Grass#deleteGrass()} og giver kaninen noget energi ved kald af {@link #updateEnergy(int)}.
      */
     @Override
     public void eat() {
@@ -73,8 +73,8 @@ public class Rabbit extends Animal {
 
     /**
      * Hvis kaninen ikke har et {@link RabbitHole} graver den et nyt.
-     * Hvis der ikke er plads under kaninen til et hul sletter den det under, hvis der allerede er et hul der hvor den stÃ¥r
-     * rykker den sig ved at kalde {@link #pathFinder(Location)} Ã©n gang til et tomt felt inden for range af 1 og graver sit hul der. Hvis der ikke er nogle tomme felter, gÃ¸r den intet.
+     * Hvis der ikke er plads under kaninen til et hul sletter den det under, hvis der allerede er et hul der hvor den står
+     * rykker den sig ved at kalde {@link #pathFinder(Location)} én gang til et tomt felt inden for range af 1 og graver sit hul der. Hvis der ikke er nogle tomme felter, gør den intet.
      */
     private void digHole() {
         if (myRabbitHole == null) {
@@ -126,7 +126,7 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Kalder {@link #updateEnergy(int)} hvis kaninen IKKE sover. ForsÃ¸ger at sÃ¦nke kaninens energi.
+     * Kalder {@link #updateEnergy(int)} hvis kaninen IKKE sover. Forsøger at sænke kaninens energi.
      */
     private void tryToDecreaseEnergy() {
         if (status != AnimalStatus.SLEEPING) {
@@ -135,8 +135,8 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Tjekker om det felt kaninen stÃ¥r pÃ¥ ogsÃ¥ indeholder et {@link Grass} objekt.
-     * @return en boolean. True sÃ¥fremt der er {@link Grass} pÃ¥ den {@link Location}, ellers false
+     * Tjekker om det felt kaninen står på også indeholder et {@link Grass} objekt.
+     * @return en boolean. True såfremt der er {@link Grass} på den {@link Location}, ellers false
      */
     private boolean isItGrass() {
         Location temp = world.getLocation(this);
@@ -145,9 +145,9 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * tryTohide tjekker fÃ¸rst om kaninen har et {@link RabbitHole}. Hvis den ikke har, kaldes {@link #digHole()}.
+     * tryTohide tjekker først om kaninen har et {@link RabbitHole}. Hvis den ikke har, kaldes {@link #digHole()}.
      * Hvis den har et {@link RabbitHole}, men der er mere end 6 kaniner, graver den et nyt hul alligeven ved at kalde {@link #digHole()}.
-     * Hvis ikke ovenstÃ¥ende er sandt, fjernes (ikke slettes) kaninen fra hullet, nÃ¥r den stÃ¥r pÃ¥ sit hul.
+     * Hvis ikke ovenstående er sandt, fjernes (ikke slettes) kaninen fra hullet, når den står på sit hul.
      */
     private void tryTohide() {
         if (isOnMap) {
@@ -178,8 +178,8 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Tjekker om kaninen er i sit {@link RabbitHole}. SÃ¥fremt den er, kravler den ud af sit hul.
-     * NÃ¥r en kanin kravler ud af sit hul, vil den i samme Ã¸jeblik kalde {@link #birth()}.
+     * Tjekker om kaninen er i sit {@link RabbitHole}. Såfremt den er, kravler den ud af sit hul.
+     * Når en kanin kravler ud af sit hul, vil den i samme øjeblik kalde {@link #birth()}.
      */
     private void emerge() {
         if (hiding && !isOnMap) {
@@ -203,7 +203,7 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Kalder {@link #pathFinder(Location)} med {@link #getNearestObject(Class, int)} hvor class er {@link Grass} samt en range pÃ¥ 10.
+     * Kalder {@link #pathFinder(Location)} med {@link #getNearestObject(Class, int)} hvor class er {@link Grass} samt en range på 10.
      */
     private void lookingForFoodBehaviour() {
         if (isOnMap) {
@@ -216,8 +216,8 @@ public class Rabbit extends Animal {
     }
 
     /**
-     * Hvis kaninen ikke har et {@link RabbitHole} prÃ¸ver den at finde et. Hvis den ikke kan finde et graver den et nyt hul via {@link #digHole()}.
-     * nÃ¥r kaninen har et hul kaldes {@link #pathFinder(Location)} for at finde imod sit hul.
+     * Hvis kaninen ikke har et {@link RabbitHole} prøver den at finde et. Hvis den ikke kan finde et graver den et nyt hul via {@link #digHole()}.
+     * når kaninen har et hul kaldes {@link #pathFinder(Location)} for at finde imod sit hul.
      */
     private void goingHomeBehaviour() {
         if (isOnMap) {

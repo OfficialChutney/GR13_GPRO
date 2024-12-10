@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Animal er den klasse som alle dyrene nedarver fra. Her findes metoder som bliver brugt pÃ¥ tvÃ¦rs af de forskellige dyr.
+ * Animal er den klasse som alle dyrene nedarver fra. Her findes metoder som bliver brugt på tværs af de forskellige dyr.
  */
 public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
     protected int age;
@@ -54,7 +54,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     public abstract LifeStage getLifeStage();
 
     /**
-     * SÃ¦tter {@link #pregnant} til true hvis en Animal stÃ¥r ved siden af har sin {@link #sex} sat til {@link Sex#MALE}.
+     * Sætter {@link #pregnant} til true hvis en Animal står ved siden af har sin {@link #sex} sat til {@link Sex#MALE}.
      */
     public void reproduce() {
         if (isOnMap && canGetPregnant) {
@@ -67,10 +67,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * tager en {@link Location} og bevÃ¦ger det given Animal et fÃ¦lt i retningen af den {@link Location}.
-     * Hvis der ikke er plads pÃ¥ det felt som den ville rykke sig til rykker den sig til et tilfÃ¦ldigt felt.
-     * Hvis {@link Location} er Null bevÃ¦ger dyret sig tilfÃ¦ldigt rundt.
-     * @param destination den {@link Location} som Animal skal bevÃ¦ge sig imod.
+     * tager en {@link Location} og bevæger det given Animal et fælt i retningen af den {@link Location}.
+     * Hvis der ikke er plads på det felt som den ville rykke sig til rykker den sig til et tilfældigt felt.
+     * Hvis {@link Location} er Null bevæger dyret sig tilfældigt rundt.
+     * @param destination den {@link Location} som Animal skal bevæge sig imod.
      */
     public void pathFinder(Location destination) {
 
@@ -122,10 +122,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Sletter dyret fra {@link World} og indsÃ¦tter et {@link Cadavar} istedet. Input parameterne bestemmer visse kvaliteter af det Cadavar der bliver spawnet.
+     * Sletter dyret fra {@link World} og indsætter et {@link Cadavar} istedet. Input parameterne bestemmer visse kvaliteter af det Cadavar der bliver spawnet.
      * @param mushrooms boolean der bestemmer, hvorvidt {@link Cadavar} er inficeret med fungi, og skal kunne spawn en {@link foliage.Mushroom}
-     * @param amountOfMeat int der bestemmer mÃ¦ngden af kÃ¸d {@link Cadavar} indeholder.
-     * @param stepsToDecompose int der bestemer hvor mange steps fra det er spawned, der skal gÃ¥ fÃ¸r {@link Cadavar} despawner.
+     * @param amountOfMeat int der bestemmer mængden af kød {@link Cadavar} indeholder.
+     * @param stepsToDecompose int der bestemer hvor mange steps fra det er spawned, der skal gå før {@link Cadavar} despawner.
      */
     public void die(boolean mushrooms, int amountOfMeat, int stepsToDecompose) {
         if ((energy <= 0 || hitpoints <= 0) && canDie && isOnMap) {
@@ -192,7 +192,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * TrÃ¦kker fra eller ligger til dyrs nuvÃ¦rende {@link #energy}. {@link #energy} kan ikke vÃ¦re over {@link #maxEnergy}
+     * Trækker fra eller ligger til dyrs nuværende {@link #energy}. {@link #energy} kan ikke være over {@link #maxEnergy}
      * @param num
      */
     public void updateEnergy(int num) {
@@ -207,8 +207,8 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Returnere et enum baseret pÃ¥ {@link World#getCurrentTime()}
-     * @return {@link TimeOfDay} som er et enum baseret pÃ¥ hvilken tid pÃ¥ dagen der er, baseret pÃ¥ {@link World#getCurrentTime()}.
+     * Returnere et enum baseret på {@link World#getCurrentTime()}
+     * @return {@link TimeOfDay} som er et enum baseret på hvilken tid på dagen der er, baseret på {@link World#getCurrentTime()}.
      */
     public TimeOfDay checktime() {
         if (world.getCurrentTime() < 7) {
@@ -221,10 +221,10 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Returnere {@link Location} af det nÃ¦rmeste {@link Object} af en valgfri object type, inden for en valgfri range.
-     * @param object det {@link Object} man Ã¸nsker at finde
-     * @param range den range (int) man Ã¸nsker at sÃ¸ge indenfor.
-     * @return Returnere den {@link Location} for det nÃ¦rmeste objekt. Blev der ikke fundet Ã©t objekt indenfor den angivne range, returneres Null.
+     * Returnere {@link Location} af det nærmeste {@link Object} af en valgfri object type, inden for en valgfri range.
+     * @param object det {@link Object} man ønsker at finde
+     * @param range den range (int) man ønsker at søge indenfor.
+     * @return Returnere den {@link Location} for det nærmeste objekt. Blev der ikke fundet ét objekt indenfor den angivne range, returneres Null.
      */
     public Location getNearestObject(Class<?> object, int range) {
 
@@ -269,7 +269,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
 
     /**
      * Retunerer en {@link ArrayList<Location>} fra {@link #surrondingLocationsList(int)} inde for valgfri range.
-     * @param range den range man Ã¸nsker at sÃ¸ge fra.
+     * @param range den range man ønsker at søge fra.
      * @return {@link ArrayList<Location>} som er listen af {@link Location} rundt om dette objekt.
      */
     public ArrayList<Location> surrondingLocationsList(int range) {
@@ -285,9 +285,9 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Tjekker alle tiles inde for range 1 og returnere true hvis det er samme instans af {@link Animal} og det pÃ¥gÃ¦ldende objekt har sin {@link #sex} sat til {@link Sex#MALE}.
+     * Tjekker alle tiles inde for range 1 og returnere true hvis det er samme instans af {@link Animal} og det pågældende objekt har sin {@link #sex} sat til {@link Sex#MALE}.
      * @param animal det {@link Animal} objekt der skal tjekkes, om det er {@link Sex#MALE}.
-     * @return boolean som er true, sÃ¥fremt nabo objektet er af samme nedarvning af {@link Animal} som den selv, og den har sin {@link #sex} sat til {@link Sex#MALE}.
+     * @return boolean som er true, såfremt nabo objektet er af samme nedarvning af {@link Animal} som den selv, og den har sin {@link #sex} sat til {@link Sex#MALE}.
      *
      */
     public boolean isNeighbourMale(Animal animal) {
@@ -317,7 +317,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * SÃ¦tter {@link #sex} til enten at vÃ¦re {@link Sex#MALE} eller {@link Sex#FEMALE}, med en 50% chance for hver.
+     * Sætter {@link #sex} til enten at være {@link Sex#MALE} eller {@link Sex#FEMALE}, med en 50% chance for hver.
      */
     public void setRandomSex() {
         switch (rd.nextInt(2)) {
@@ -327,8 +327,8 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * SÃ¦tter {@link #sex} til det input parameter man giver.
-     * @param sex det {@link Sex} man vil sÃ¦tte.
+     * Sætter {@link #sex} til det input parameter man giver.
+     * @param sex det {@link Sex} man vil sætte.
      */
     public void setSex(Sex sex) {
         this.sex = sex;
@@ -343,7 +343,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Tjekker om objektets {@link #pregnant} er sat til true. Hvis ja giver det fÃ¸dsel.
+     * Tjekker om objektets {@link #pregnant} er sat til true. Hvis ja giver det fødsel.
      * Ud fra hvilken nedarvning af {@link Animal} objektet har, placeres et objekt af samme type.
      */
     public void birth() {
@@ -371,15 +371,15 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * SÃ¦tter {@link #canDie}. Parametre bruges til at sige, om objektet kan dÃ¸. Bruges i UnitTests.
-     * @param canDie boolean der sÃ¦ttes.
+     * Sætter {@link #canDie}. Parametre bruges til at sige, om objektet kan dø. Bruges i UnitTests.
+     * @param canDie boolean der sættes.
      */
     public void setCanDie(boolean canDie) {
         this.canDie = canDie;
     }
 
     /**
-     * SÃ¦tter {@link #canGetPregnant}. Parametre bruges til at sige, om objektet kan blive gravid og reproducere. Bruges i UnitTests.
+     * Sætter {@link #canGetPregnant}. Parametre bruges til at sige, om objektet kan blive gravid og reproducere. Bruges i UnitTests.
      * @param canGetPregnant
      */
     public void setCanGetPregnant(boolean canGetPregnant) {
@@ -395,7 +395,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * setAge sÃ¦tter dyrets {@link #age}.
+     * setAge sætter dyrets {@link #age}.
      * @param age
      */
     public void setAge(int age) {
@@ -420,7 +420,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * GÃ¸r dyret Ã¦ldre hver gange der er gÃ¥et 1 dag (20 steps) ved kald til {@link World#getCurrentTime()}
+     * Gør dyret ældre hver gange der er gået 1 dag (20 steps) ved kald til {@link World#getCurrentTime()}
      */
     public void ageAnimal() {
         if (world.getCurrentTime() == 0) {
@@ -430,7 +430,7 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * Ligger et antal af {@link #hitpoints} til dyrets nuvÃ¦rende {@link #hitpoints}, den kan ikke nÃ¥ over {@link #maxHitpoints}.
+     * Ligger et antal af {@link #hitpoints} til dyrets nuværende {@link #hitpoints}, den kan ikke nå over {@link #maxHitpoints}.
      * @param heal det int som skal ligges til {@link #hitpoints}
      */
     protected void healHitPoints(int heal) {
@@ -458,30 +458,30 @@ public abstract class Animal implements Actor, DynamicDisplayInformationProvider
     }
 
     /**
-     * SÃ¦tter {@link #energy}.
-     * @param energy den energi som {@link #energy} skal sÃ¦ttes til.
+     * Sætter {@link #energy}.
+     * @param energy den energi som {@link #energy} skal sættes til.
      */
     public void setEnergy(int energy) {
         this.energy = energy;
     }
 
     /**
-     * Returnere true eller false baseret pÃ¥ om {@link Animal} er pÃ¥ mappet.
+     * Returnere true eller false baseret på om {@link Animal} er på mappet.
      * @return boolean
      */
     public boolean getIsOnMap() {
         return isOnMap;
     }
     /**
-     * SÃ¦tter {@link #hitpoints}
-     * @param hitpoints de hitpoints som {@link #hitpoints} skal sÃ¦ttes til.
+     * Sætter {@link #hitpoints}
+     * @param hitpoints de hitpoints som {@link #hitpoints} skal sættes til.
      */
     public void setHitpoints(int hitpoints) {
         this.hitpoints = hitpoints;
     }
     /**
-     * SÃ¦tter {@link #canEnergyDecrease}. Hvis den er false, kan hitpoints ikke decreases.
-     * @param canEnergyDecrease boolean som skal sÃ¦ttes.
+     * Sætter {@link #canEnergyDecrease}. Hvis den er false, kan hitpoints ikke decreases.
+     * @param canEnergyDecrease boolean som skal sættes.
      */
     public void setCanEnergyDecrease(boolean canEnergyDecrease) {
         this.canEnergyDecrease = canEnergyDecrease;

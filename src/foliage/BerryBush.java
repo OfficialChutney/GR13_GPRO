@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.Random;
 
 /**
- * BerryBush er klassen som styre adfÃ¦ret af buskene i simulationen.
+ * BerryBush er klassen som styre adfæret af buskene i simulationen.
  */
 public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationProvider {
     private Location tileLocation;
@@ -22,7 +22,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
     }
 
     /**
-     * act tjekker om busken har bÃ¦r, hvis den ikke har kalder den chanceToGrowBerries.
+     * act tjekker om busken har bær, hvis den ikke har kalder den chanceToGrowBerries.
      * @param world den verden som objektet befinder sig i.
      */
     @Override
@@ -33,7 +33,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
     }
 
     /**
-     * chanceToGrowBerries har en chance for at sÃ¦tte hasBerries til True.
+     * chanceToGrowBerries har en chance for at sætte hasBerries til True.
      */
     private void chanceToGrowBerries() {
         Random rand = new Random();
@@ -55,7 +55,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
     }
 
     /**
-     * eatBerries sÃ¦tter hasBerries til False.
+     * eatBerries sætter hasBerries til False.
      */
     public void eatBerries(){
         hasBerries = false;
@@ -70,7 +70,7 @@ public class BerryBush implements Actor, NonBlocking, DynamicDisplayInformationP
     }
 
     /**
-     * getInformation retunere den nÃ¸dvendige DisplayInformation ud fra busken status.
+     * getInformation retunere den nødvendige DisplayInformation ud fra busken status.
      * @return DisplayInformation
      */
     @Override

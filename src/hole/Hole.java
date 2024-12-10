@@ -11,7 +11,7 @@ import java.awt.*;
 
 
 /**
- * En abstrakt klasse som hÃ¥ndtere placeringen af huller
+ * En abstrakt klasse som håndtere placeringen af huller
  */
 public abstract class Hole implements NonBlocking {
 
