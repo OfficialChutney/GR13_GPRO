@@ -19,17 +19,17 @@ import java.util.Map;
  * antallet af typerne af objekter, selve {@link World} og {@link Program} objekterne som simulationen blev kørt på.
  */
 public class TestPackage {
-    World world;
-    Program program;
-    Map<Object, Location> entities;
-    Map<Rabbit, Location> rabbits;
-    Map<Bear, Location> bears;
-    Map<Wolf, Location> wolves;
-    Map<Grass, Location> grass;
-    Map<BerryBush, Location> berrybushes;
-    Map<RabbitHole, Location> rabbitHoles;
-    Map<Cadavar, Location> cadaversWithoutFungi;
-    Map<Cadavar, Location> cadaversWithFungi;
+    private World world;
+    private Program program;
+    private Map<Object, Location> entities;
+    private Map<Rabbit, Location> rabbits;
+    private Map<Bear, Location> bears;
+    private Map<Wolf, Location> wolves;
+    private Map<Grass, Location> grass;
+    private Map<BerryBush, Location> berrybushes;
+    private Map<RabbitHole, Location> rabbitHoles;
+    private Map<Cadavar, Location> cadaversWithoutFungi;
+    private Map<Cadavar, Location> cadaversWithFungi;
 
     public TestPackage(World world, Program program, Map<Object, Location> entities) {
         this.world = world;
