@@ -53,7 +53,7 @@ public class Wolf extends Animal {
         chanceToGetPregnant = 0.3f;
     }
 
-    Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
+    public Wolf(World world, int wolfPackID, WolfPack pack, Wolf leader) {
         super(30, world);
         this.wolfPackID = wolfPackID;
         this.pack = pack;
